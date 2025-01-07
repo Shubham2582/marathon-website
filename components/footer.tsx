@@ -1,5 +1,7 @@
+'use client'
+
 import Link from 'next/link'
-import { Facebook, Twitter, Instagram, Youtube } from 'lucide-react'
+import { Facebook, Twitter, Instagram, MessageCircle} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export function Footer() {
@@ -52,13 +54,13 @@ export function Footer() {
             <h3 className="font-serif font-bold text-2xl text-white mb-6">Contact Us</h3>
             <ul className="space-y-4 text-neutral-400">
               <li className="flex items-center gap-2">
-                <span className="font-semibold text-white">Phone:</span> +1234567890
+                <span className="font-semibold text-white">Phone:</span> +91 94791 50759
               </li>
               <li className="flex items-center gap-2">
-                <span className="font-semibold text-white">Email:</span> info@peacemarathon.com
+                <span className="font-semibold text-white">Email:</span> marathonabujhmad@gmail.com
               </li>
               <li className="flex items-center gap-2">
-                <span className="font-semibold text-white">Address:</span> Marathon HQ, City, Country
+                <span className="font-semibold text-white">Address:</span> Narayanpur,chhattigarh,india
               </li>
             </ul>
           </div>
@@ -68,15 +70,38 @@ export function Footer() {
           <p className="text-neutral-400">&copy; 2024 Peace Marathon. All rights reserved.</p>
           <div className="flex gap-6">
             {[
-              { id: 'facebook', Icon: Facebook },
-              { id: 'twitter', Icon: Twitter },
-              { id: 'instagram', Icon: Instagram },
-              { id: 'youtube', Icon: Youtube }
-            ].map(({ id, Icon }) => (
+              {
+                id: 'facebook',
+                Icon: Facebook,
+                url: 'https://www.facebook.com/profile.php?id=61571143190587&mibextid=wwXIfr&rdid=zmvwjSUPVjjRCBD1&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F15ptyfBNnX%2F%3Fmibextid%3DwwXIfr',
+                label: 'Visit our Facebook page'
+              },
+              {
+                id: 'twitter',
+                Icon: Twitter,
+                url: 'https://x.com/i/flow/login?redirect_after_login=%2FAbujhmadRun',
+                label: 'Follow us on X (Twitter)'
+              },
+              {
+                id: 'instagram',
+                Icon: Instagram,
+                url: 'https://www.instagram.com/abujhmadmarathon2025/profilecard/',
+                label: 'Follow us on Instagram'
+              },
+              {
+                id: 'whatsapp',
+                Icon: MessageCircle,
+                url: 'https://chat.whatsapp.com/EsakdHLKTpJ4SQ6VzVA2FQ',
+                label: 'Join our WhatsApp group'
+              }
+            ].map(({ id, Icon, url, label }) => (
               <Link
                 key={id}
-                href="#"
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-neutral-400 hover:text-primary transition-colors duration-200"
+                aria-label={label}
               >
                 <Icon className="w-6 h-6" />
               </Link>
@@ -105,4 +130,3 @@ export function Footer() {
     </footer>
   )
 }
-

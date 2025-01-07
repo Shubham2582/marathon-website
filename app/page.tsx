@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { MapPin, Play, ChevronRight, Calendar, Users, Trophy } from 'lucide-react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
+import ImageCarousel from '@/components/image-carousel' 
 
 export default function Home() {
   const targetRef = useRef(null)
@@ -133,51 +134,86 @@ export default function Home() {
             Capture the Moment
           </motion.h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { id: 'videos1', type: 'Videos' },
-              { id: 'images', type: 'Images' },
-              { id: 'videos2', type: 'Videos' }
-            ].map((item) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="group"
-              >
-                <div className="bg-white rounded-3xl shadow-xl overflow-hidden transition-transform duration-300 hover:-translate-y-2">
-                  <div className="relative aspect-[4/3] bg-gray-900">
-                    <Image
-                      src={item.type === 'Videos' 
-                        ? "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w_rbbt4iTX6YYUPRiuvnTA.jpg-o3r8KUgeBqEqobjawY5sujNlitOqGu.jpeg"
-                        : "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/llCUVWh1ToOja6tui6fHwg.jpg-cyJ3ROUXFZpLX5L4MeZEdLRhvzXdy3.jpeg"}
-                      alt={item.type === 'Videos' 
-                        ? "Runners in motion through a sunlit forest path with dramatic lighting and shadows"
-                        : "Marathon runners silhouetted against golden sunbeams breaking through trees in early morning light"}
-                      fill
-                      className="object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-                    />
-                    {item.type === 'Videos' && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-20 h-20 rounded-full bg-primary/90 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                          <Play className="w-8 h-8 text-white" />
-                        </div>
+            {/* First Video Component */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="group"
+            >
+              <div className="bg-white rounded-3xl shadow-xl overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                <div className="relative aspect-[4/3] bg-gray-900">
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w_rbbt4iTX6YYUPRiuvnTA.jpg-o3r8KUgeBqEqobjawY5sujNlitOqGu.jpeg"  // Your original running image URL
+                    alt="Runners in motion through a sunlit forest path"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 bg-black/70 rounded-full flex items-center justify-center backdrop-blur-sm">
+                        <Play className="w-8 h-8 text-white" />
                       </div>
-                    )}
-                  </div>
-                  <div className="p-8 text-center">
-                    <h3 className="text-2xl font-bold mb-4">{item.type}</h3>
-                    <Button
-                      variant="outline"
-                      className="border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
-                    >
-                      {item.type === 'Images' ? 'View Gallery' : 'Watch All'}
-                    </Button>
+                    </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
+                <div className="p-8 text-center">
+                  <h3 className="text-2xl font-bold mb-4">Videos</h3>
+                  <Button
+                    variant="outline"
+                    className="border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
+                    onClick={() => window.open('https://drive.google.com/drive/folders/13wcKOSmK2rm3vwE2YiuTZDMXsV0Lx6Ov?usp=sharing', '_blank')}
+                  >
+                    Watch All
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Image Carousel Component */}
+            <ImageCarousel />
+
+            {/* Second Video Component - Using same image */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="group"
+            >
+              <div className="bg-white rounded-3xl shadow-xl overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                <div className="relative aspect-[4/3] bg-gray-900">
+                  <Image
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/w_rbbt4iTX6YYUPRiuvnTA.jpg-o3r8KUgeBqEqobjawY5sujNlitOqGu.jpeg"  // Your original running image URL
+                    alt="Runners in motion through a sunlit forest path"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-black/20 hover:bg-black/10 transition-colors">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-20 h-20 bg-black/70 rounded-full flex items-center justify-center backdrop-blur-sm">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-8 text-center">
+                  <h3 className="text-2xl font-bold mb-4">Videos</h3>
+                  <Button
+                    variant="outline"
+                    className="border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
+                    onClick={() => window.open('https://drive.google.com/drive/folders/13wcKOSmK2rm3vwE2YiuTZDMXsV0Lx6Ov?usp=sharing', '_blank')}
+                  >
+                    Watch All
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -196,7 +232,7 @@ export default function Home() {
             </h2>
             <div className="relative aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/iDhpY8AhRtyrF1Cda4R5Hg-ldnmyG9cmdenCTGB1pB9iDHBpTk5qV.webp"
+                src="/images/track.jpg"
                 alt="3D aerial view of the marathon track route winding through scenic mountainous terrain"
                 fill
                 className="object-cover"
@@ -241,25 +277,68 @@ export default function Home() {
               Our Esteemed Sponsors
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {['sponsor1', 'sponsor2', 'sponsor3', 'sponsor4'].map((sponsorId) => (
-                <motion.div
-                  key={sponsorId}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: parseInt(sponsorId.slice(-1)) * 0.1 }}
-                  className="bg-white rounded-3xl shadow-lg p-8 transition-transform duration-300 hover:-translate-y-2"
-                >
-                  <div className="aspect-[3/2] relative">
-                    <Image
-                      src={`/placeholder.svg?height=300&width=450`}
-                      alt={`Sponsor ${sponsorId}`}
-                      fill
-                      className="object-contain"
-                    />
-                  </div>
-                </motion.div>
-              ))}
+              {/* First Logo */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="bg-white rounded-3xl shadow-lg p-8 transition-transform duration-300 hover:-translate-y-2"
+              >
+                <div className="aspect-[3/2] relative">
+                  <Image
+                    src="/images/logo1.png"
+                    alt="Sponsor Logo 1"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </motion.div>
+
+              {/* Second Logo */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="bg-white rounded-3xl shadow-lg p-8 transition-transform duration-300 hover:-translate-y-2"
+              >
+                <div className="aspect-[3/2] relative">
+                  <Image
+                    src="/images/logo2.png"
+                    alt="Sponsor Logo 2"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </motion.div>
+
+              {/* Empty Placeholder Slots */}
+              <motion.div
+                className="bg-white rounded-3xl shadow-lg p-8 opacity-30"
+              >
+                <div className="aspect-[3/2] relative">
+                  <Image
+                    src="/placeholder.svg"
+                    alt="Future Sponsor"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="bg-white rounded-3xl shadow-lg p-8 opacity-30"
+              >
+                <div className="aspect-[3/2] relative">
+                  <Image
+                    src="/placeholder.svg"
+                    alt="Future Sponsor"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+              </motion.div>
             </div>
           </motion.div>
         </div>

@@ -1,20 +1,19 @@
 import { google } from 'googleapis'
 
-const auth = new google.auth.GoogleAuth({
-  credentials: {
-    client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-  },
-  scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-})
+const API_KEY = 'AIzaSyBfln3MbHZnBv8wL7BNf1_hNTakXfT8S38'
 
-const drive = google.drive({ version: 'v3', auth })
+const drive = google.drive({ 
+  version: 'v3', 
+  auth: API_KEY 
+})
 
 export async function listDriveFiles(folderId: string) {
   try {
     const response = await drive.files.list({
       q: `'${folderId}' in parents and mimeType contains 'image/'`,
-      fields: 'files(id, name, webViewLink, thumbnailLink)',
+      fields: 'files(id, name, webContentLink, thumbnailLink)',
+      pageSize: 100,
+      orderBy: 'name',
     })
     return response.data.files
   } catch (error) {
