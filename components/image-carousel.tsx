@@ -101,12 +101,12 @@ const ImageCarousel = () => {
               onClick={handleGalleryClick}
               style={{ cursor: 'pointer' }}
             >
-              <Image
-                src={images[currentIndex].webContentLink || '/placeholder.jpg'}
+              {/* <Image
+                src={images[currentIndex].webContentLink || '/images/Placeholder.webp'}
                 alt={`Gallery image ${currentIndex + 1}`}
                 fill
                 className="object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-              />
+              /> */}
             </motion.div>
           </AnimatePresence>
         </div>
