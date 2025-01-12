@@ -8,8 +8,12 @@ import { motion, AnimatePresence } from 'framer-motion'
 const GALLERY_FOLDER_ID = '1z3bfxfqIG0DBsMFPpv1ER6VvZKGSINit'
 const CLICK_FOLDER_ID = '1hqXmr7u29tmbrDkB5uAU51M-IqlUdAQe'
 
+interface DriveImage {
+  webContentLink: string;
+}
+
 const ImageCarousel = () => {
-  const [images, setImages] = useState([])
+  const [images, setImages] = useState<DriveImage[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -101,12 +105,12 @@ const ImageCarousel = () => {
               onClick={handleGalleryClick}
               style={{ cursor: 'pointer' }}
             >
-              {/* <Image
+              <Image
                 src={images[currentIndex].webContentLink || '/images/Placeholder.webp'}
                 alt={`Gallery image ${currentIndex + 1}`}
                 fill
                 className="object-cover opacity-90 group-hover:opacity-100 transition-opacity"
-              /> */}
+              />
             </motion.div>
           </AnimatePresence>
         </div>
