@@ -98,7 +98,7 @@ export default function Home() {
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
-                { id: 'date', icon: Calendar, title: "February 15, 2025", description: "Mark your calendars" },
+                { id: 'date', icon: Calendar, title: "February , 2025", description: "Mark your calendars" },
                 { id: 'runners', icon: Users, title: "10,000+ Runners", description: "From all over the world" },
                 { id: 'categories', icon: Trophy, title: "5 Categories", description: "For all skill levels" },
               ].map((item) => (
