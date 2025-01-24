@@ -91,4 +91,7 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  section {
+    @apply px-4;
+  }
 }
