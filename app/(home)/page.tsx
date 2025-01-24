@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
 import HeroSection from "./_components/hero-section";
 import Event from "./_components/event";
 import Media from "./_components/media";
