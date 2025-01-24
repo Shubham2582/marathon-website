@@ -1,54 +1,3 @@
-// let userConfig = undefined
-// try {
-//   userConfig = await import('./v0-user-next.config')
-// } catch (e) {
-//   // ignore error
-// }
-
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   eslint: {
-//     ignoreDuringBuilds: true,
-//   },
-//   typescript: {
-//     ignoreBuildErrors: true,
-//   },
-//   images: {
-//     unoptimized: true,
-//   },
-//   experimental: {
-//     webpackBuildWorker: true,
-//     parallelServerBuildTraces: true,
-//     parallelServerCompiles: true,
-//   },
-// }
-
-// mergeConfig(nextConfig, userConfig)
-
-// function mergeConfig(nextConfig, userConfig) {
-//   if (!userConfig) {
-//     return
-//   }
-
-//   for (const key in userConfig) {
-//     if (
-//       typeof nextConfig[key] === 'object' &&
-//       !Array.isArray(nextConfig[key])
-//     ) {
-//       nextConfig[key] = {
-//         ...nextConfig[key],
-//         ...userConfig[key],
-//       }
-//     } else {
-//       nextConfig[key] = userConfig[key]
-//     }
-//   }
-// }
-
-// export default nextConfig
-
-
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -69,6 +18,15 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  env: {
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_PORT: process.env.SMTP_PORT,
+    SMTP_SECURE: process.env.SMTP_SECURE,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_PASS: process.env.SMTP_PASS
+  }
 }
 
 export default nextConfig
