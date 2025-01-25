@@ -25,8 +25,8 @@ export const CashFreePayment = () => {
     // Initialize SDK when component mounts
     const initializeSDK = async () => {
       const config: CashfreeConfig = {
-        mode: "production",
-        redirectTarget: "_modal",
+          mode: "production",
+          redirectTarget: "_self",
         paymentSessionId: "" // This can be empty during initialization
       };
       const cashfreeInstance = await load(config);
@@ -66,7 +66,7 @@ export const CashFreePayment = () => {
       
       const checkoutOptions: CashfreeCheckoutConfig = {
         mode: "production",
-        redirectTarget: "_modal",
+        redirectTarget: "_self",
         paymentSessionId: orderDetails.payment_session_id,
         onSuccess: (data) => {
           console.log("Payment success", data);
