@@ -3,7 +3,6 @@
 import { useStep } from "@/store/useStep";
 import React from "react";
 import { Personel } from "./steps/personel";
-import { Payment } from "./steps/payment";
 import { Verification } from "./steps/verification";
 import { cn } from "@/lib/utils";
 import { CashFreePayment } from "./steps/cashfree-payment";
@@ -21,10 +20,10 @@ const Registration = () => {
         {/* --- Steps --- */}
         <div className="flex gap-x-5">
           {steps.map((step, index: number) => (
-            <div key={index} className="flex gap-x-2 items-center font-medium">
+            <div key={index} className="flex gap-x-2 text-sm items-center font-medium">
               <p
                 className={cn(
-                  "text-sm px-3 py-1 rounded",
+                  "text-sm px-2.5 py-0.5 rounded",
                   currentStep === index + 1
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-600"

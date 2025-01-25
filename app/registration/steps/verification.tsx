@@ -84,6 +84,7 @@ export const Verification = () => {
           type={`${
             verificationMethod === "EMAIL" ? "email" : "text"
           }`}
+          maxLength={10}
           error={error.email || error.mobile}
         />
         <FormField
@@ -106,6 +107,7 @@ export const Verification = () => {
               HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
             >
           ) => setOtp(e.target.value)}
+          maxLength={4}
         />
       </div>
       <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">

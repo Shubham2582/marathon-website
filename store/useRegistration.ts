@@ -42,7 +42,7 @@ export const useRegistrationStore = create<RegistrationStore>((set) => ({
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
-    if (name === "mobile" || name === "emergencyContactNumber" || name === "pincode") {
+    if (name === "mobile" || name === "emergencyContactNumber" || name === "pincode" || name === "otp") {
       if (value === "") {
         set((state) => ({
           form: {
