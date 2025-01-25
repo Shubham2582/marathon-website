@@ -84,7 +84,7 @@ export const Verification = () => {
           type={`${
             verificationMethod === "EMAIL" ? "email" : "text"
           }`}
-          maxLength={10}
+          maxLength={verificationMethod === "EMAIL" ? 100 : 10}
           error={error.email || error.mobile}
         />
         <FormField
