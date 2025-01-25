@@ -37,19 +37,6 @@ export const personelFormDetails = (form: RegistrationForm, handleChange: (e: Re
         maxLength: 10,
     },
     {
-        label: "Gender",
-        name: "gender",
-        fieldType: "select" as const,
-        placeholder: "Select your gender",
-        value: form.gender,
-        handleChange: handleChange,
-        options: [
-            { label: "Male", value: "male" },
-            { label: "Female", value: "female" },
-            { label: "Other", value: "other" },
-        ],
-    },
-    {
         label: "Date of Birth",
         name: "dateOfBirth",
         fieldType: "date" as const,
@@ -82,7 +69,7 @@ export const personelFormDetails = (form: RegistrationForm, handleChange: (e: Re
         placeholder: "Enter your city",
         value: form.city,
         handleChange: handleChange,
-        options: form.state ? citiesByState[form.state].map((city) => ({ label: city, value: city })) : [{label: "Please select your state", value:""}],
+        options: form.state ? citiesByState[form.state].map((city) => ({ label: city, value: city })) : [{ label: "Please select your state", value: "" }],
     },
     {
         label: "Race Category",
@@ -91,9 +78,13 @@ export const personelFormDetails = (form: RegistrationForm, handleChange: (e: Re
         placeholder: "Select your state",
         value: form.raceCategory,
         handleChange: handleChange,
-        options: [
+        options: form.gender === "FEMALE" ? [
+            { label: "5KM", value: "5KM" },
             { label: "10KM", value: "10KM" },
             { label: "21KM", value: "21KM" },
+        ] : [
+            { label: "10KM", value: "10KM" },
+            { label: "21KM", value: "21KM" }
         ],
     },
     {

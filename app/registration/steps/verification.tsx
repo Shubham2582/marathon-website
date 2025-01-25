@@ -5,9 +5,10 @@ import { FormField } from "../_components/form-field";
 import { Button } from "@/components/ui/button";
 import { useRegistrationStore } from "@/store/useRegistration";
 import { useStep } from "@/store/useStep";
+import { Input } from "@/components/ui/input";
 
 export const Verification = () => {
-  const { form, handleChange } = useRegistrationStore();
+  const { form, handleChange, setForm } = useRegistrationStore();
   const [otp, setOtp] = useState("");
   const { nextStep } = useStep();
   const [isOTPSent, setIsOTPSent] = useState(false);
@@ -71,7 +72,7 @@ export const Verification = () => {
       {/* /--- Verification Method --- */}
 
       {/* --- Verification Form --- */}
-      <div className="space-y-4">
+      <div className="space-y-2">
         <FormField
           label={`${verificationMethod === "EMAIL" ? "Email" : "Phone Number"}`}
           name={verificationMethod === "EMAIL" ? "email" : "mobile"}
@@ -86,6 +87,15 @@ export const Verification = () => {
           error={error.email || error.mobile}
         />
         <FormField
+          label="Gender"
+          name="gender"
+          placeholder="Choose your gender"
+          value={form.gender}
+          handleChange={handleChange}
+          fieldType="select"
+          options={[{label: "Male", value: "MALE"}, {label: "Female", value: "FEMALE"}]}
+        />
+        <FormField
           label="OTP"
           name="otp"
           disabled={!isOTPSent}
@@ -98,6 +108,17 @@ export const Verification = () => {
           ) => setOtp(e.target.value)}
         />
       </div>
+      <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
+          <Input
+            className="size-4"
+            type="checkbox"
+            name="naranpur"
+            id="isFromNarayanpur"
+            checked={form.isFromNarayanpur}
+            onChange={() => setForm("isFromNarayanpur", !form.isFromNarayanpur)}
+          />
+          <label htmlFor="isFromNarayanpur">Are you from Narayanpur?</label>
+        </div>
       {/* /--- Verification Form --- */}
       <div className="flex justify-end">
         <Button type="submit" variant="primary">

@@ -59,13 +59,13 @@ export const Personel = () => {
             name="accomodation"
             id="needsAccommodation"
             checked={form.needsAccommodation}
-            onClick={() => setForm("needsAccommodation", !form.needsAccommodation)}
+            onChange={() => setForm("needsAccommodation", !form.needsAccommodation)}
           />
           <label htmlFor="needsAccommodation">Do you need accommodation?</label>
         </div>
       </div>
       <div className="mt-4 flex justify-between">
-        <Button onClick={previousStep} variant="secondary">
+        <Button type="button" onClick={previousStep} variant="secondary">
           Back
         </Button>
         <Button type="submit" variant="primary">

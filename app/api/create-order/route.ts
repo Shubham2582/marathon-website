@@ -30,7 +30,7 @@ export async function POST() {
           customer_phone: "9999999999"
         },
         order_meta: {
-            return_url: "https://test.cashfree.com/pgappsdemos/return.php?order_id=order_123"
+            return_url: "http://localhost:3000/registration/payment-success"
           },
           order_note: ""
       })
