@@ -11,7 +11,7 @@ const Mission = () => {
         transition={{ duration: 0.6 }}
         className="max-w-6xl mx-auto"
       >
-        <h2 className="font-serif text-5xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <h2 className="text-center bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
           Mission & Vision
         </h2>
 
@@ -28,7 +28,7 @@ const Mission = () => {
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                 <Target className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
+              <h3>Our Mission</h3>
               <p className="text-gray-600 leading-relaxed">
                 To create a transformative sporting event that brings together
                 communities, promotes peace, and showcases the natural beauty of
@@ -71,7 +71,7 @@ const Mission = () => {
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
                 <Eye className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
+              <h3>Our Vision</h3>
               <p className="text-gray-600 leading-relaxed">
                 To establish the Abujhmad Marathon as a symbol of peace and
                 unity, making it a premier international sporting event that

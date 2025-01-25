@@ -11,7 +11,7 @@ export function Footer() {
       <div className="container mx-auto px-4 py-20 relative">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
           <div>
-            <h3 className="font-serif font-bold text-2xl text-white mb-6">
+            <h3 className="text-white">
               Important Links
             </h3>
             <ul className="space-y-4">
@@ -33,7 +33,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-serif font-bold text-2xl text-white mb-6">
+            <h3 className="text-white">
               Quick Links
             </h3>
             <ul className="space-y-4">
@@ -55,7 +55,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h3 className="font-serif font-bold text-2xl text-white mb-6">
+            <h3 className="text-white">
               Contact Us
             </h3>
             <ul className="space-y-4 text-neutral-400">
@@ -121,9 +121,9 @@ export function Footer() {
         </div>
 
         <div className="mt-12 text-center">
-          <h4 className="font-serif text-2xl font-bold text-white mb-4">
+          <h3 className="text-white mb-4">
             Stay Updated
-          </h4>
+          </h3>
           <p className="text-neutral-400 mb-6">
             Subscribe to our newsletter for the latest updates and offers
           </p>

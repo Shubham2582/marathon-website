@@ -38,7 +38,7 @@ const HeroSection = () => {
         transition={{ duration: 0.8, delay: 0.2 }}
         className="relative text-center text-white px-4 max-w-5xl mx-auto"
       >
-        <h1 className="font-serif text-6xl md:text-8xl font-bold mb-6 leading-tight">
+        <h1 className="leading-tight">
           Ready to Run in
           <span className="block text-primary">February</span>
         </h1>

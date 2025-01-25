@@ -13,42 +13,56 @@ const defaultFormState: RegistrationForm = {
   state: "",
   city: "",
   occupation: "",
-  paymentMethod: "UPI",
-  cardNumber: "",
-  cardName: "",
-  expiryDate: null,
-  cvv: null,
   raceCategory: "",
   tShirtSize: "",
   emergencyContactNumber: "",
   emergencyContactName: "",
   bloodGroup: "",
   selfie: null,
-  otp: "",
-  isFromBastar: false,
+  isFromNarayanpur: false,
   needsAccommodation: false,
 };
 
 interface RegistrationStore {
   form: RegistrationForm;
-  isOtpVerified: boolean;
-  setOtpVerified: (value: boolean) => void;
   setForm: <K extends keyof RegistrationForm>(field: K, value: RegistrationForm[K] | File) => void;
   resetForm: () => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 }
 
 export const useRegistrationStore = create<RegistrationStore>((set) => ({
   form: defaultFormState,
-  isOtpVerified: false,
-  setOtpVerified: (value) => set({ isOtpVerified: value }),
+
   setForm: (field, value) =>
     set((state) => ({
       form: { ...state.form, [field]: value },
     })),
   resetForm: () => set({ form: defaultFormState }),
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+
+    if (name === "mobile" || name === "emergencyContactNumber" || name === "pincode") {
+      if (value === "") {
+        set((state) => ({
+          form: {
+            ...state.form,
+            [name]: "",
+          },
+        }));
+        return;
+      }
+      if (!/^\d*$/.test(value)) return;
+
+      set((state) => ({
+        form: {
+          ...state.form,
+          [name]: value,
+        },
+      }));
+      return;
+    }
+
     set((state) => ({
       form: {
         ...state.form,

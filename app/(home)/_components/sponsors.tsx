@@ -11,7 +11,7 @@ const Sponsors = () => {
         transition={{ duration: 0.6 }}
         className="text-center"
       >
-        <h2 className="font-serif text-5xl md:text-6xl font-bold mb-16 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <h2 className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
           Our Esteemed Sponsors
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
