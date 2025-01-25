@@ -26,7 +26,7 @@ export const CashFreePayment = () => {
     const initializeSDK = async () => {
       const config: CashfreeConfig = {
         mode: "PRODUCTION",
-        redirectTarget: "_self",
+        redirectTarget: "_modal",
         paymentSessionId: "" // This can be empty during initialization
       };
       const cashfreeInstance = await load(config);
@@ -58,6 +58,7 @@ export const CashFreePayment = () => {
       }
 
       const orderDetails = await response.json();
+      console.log(orderDetails);
 
       if (!orderDetails.payment_session_id) {
         throw new Error('Payment session ID not found');
@@ -65,7 +66,7 @@ export const CashFreePayment = () => {
       
       const checkoutOptions: CashfreeCheckoutConfig = {
         mode: "PRODUCTION",
-        redirectTarget: "_self",
+        redirectTarget: "_modal",
         paymentSessionId: orderDetails.payment_session_id,
         onSuccess: (data) => {
           console.log("Payment success", data);
