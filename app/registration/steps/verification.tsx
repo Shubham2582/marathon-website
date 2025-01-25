@@ -43,6 +43,7 @@ export const Verification = () => {
   const sendOTP = async () => {
     setIsSendingOTP(true);
     setOtpError("");
+    setError({});
 
     try {
       const newOTP = Math.floor(1000 + Math.random() * 9000).toString();
@@ -102,7 +103,11 @@ export const Verification = () => {
         const responseData = await response.json();
 
         if (!response.ok) {
-          throw new Error(responseData.message || "Failed to send WhatsApp OTP");
+          // Handle specific error messages from WhatsApp OTP service
+          const errorMessage = responseData.message || "Failed to send WhatsApp OTP";
+          setError({ mobile: errorMessage });
+          setIsSendingOTP(false);
+          return;
         }
       }
 
