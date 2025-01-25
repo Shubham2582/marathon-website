@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 export const CashFreePayment = () => {
   const [cashfree, setCashfree] = useState<CashfreeInstance | null>(null);
   const { form } = useRegistrationStore();
-  const { nextStep, previousStep } = useStep();
+  const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const registrationFee = form.isFromNarayanpur ? 0 : 299;
@@ -26,7 +26,7 @@ export const CashFreePayment = () => {
     const initializeSDK = async () => {
       const config: CashfreeConfig = {
         mode: "PRODUCTION",
-        redirectTarget: "_modal",
+        redirectTarget: "_self",
         paymentSessionId: "" // This can be empty during initialization
       };
       const cashfreeInstance = await load(config);
@@ -35,32 +35,6 @@ export const CashFreePayment = () => {
 
     initializeSDK();
   }, []);
-
-  const createPaymentSession = async () => {
-    try {
-      const response = await fetch('your-backend-api/create-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          amount: '100',
-          currency: 'INR',
-          customerDetails: {
-            customerId: 'customer123',
-            customerEmail: 'customer@example.com',
-            customerPhone: '9999999999'
-          }
-        })
-      });
-
-      const data = await response.json();
-      return data.paymentSessionId;
-    } catch (error) {
-      console.error('Error creating payment session:', error);
-      throw error;
-    }
-  };
 
   const doPayment = async (): Promise<void> => {
     try {
@@ -71,6 +45,12 @@ export const CashFreePayment = () => {
       // Call your API route
       const response = await fetch('/api/create-order', {
         method: 'POST',
+        body: JSON.stringify({
+          amount: registrationFee,
+          name: form.firstName + " " + form.lastName,
+          email: form.email,
+          phone: form.mobile,
+        })
       });
       
       if (!response.ok) {

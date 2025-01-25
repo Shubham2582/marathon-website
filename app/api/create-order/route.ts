@@ -5,10 +5,10 @@ interface OrderResponse {
   order_id: string;
 }
 
-
-export async function POST() {
+export async function POST(req: Request) {
   try {
-    // Generate a unique order ID
+    const { amount, name, email, phone } = await req.json();
+    // Generate a unique order ID  
     const orderId = `order_${Date.now()}`;
 
     const response = await fetch('https://sandbox.cashfree.com/pg/orders', { // Use sandbox URL for testing
@@ -21,13 +21,13 @@ export async function POST() {
       },
       body: JSON.stringify({
         order_id: orderId,
-        order_amount: 1,
+        order_amount: amount,
         order_currency: "INR",
         customer_details: {
           customer_id: "customer_" + Date.now(),
-          customer_name: "John Doe",
-          customer_email: "john@example.com",
-          customer_phone: "9999999999"
+          customer_name: name,
+          customer_email: email,
+          customer_phone: phone
         },
         order_meta: {
             return_url: `${process.env.NEXT_PUBLIC_APP_URL}/registration/payment-success`
