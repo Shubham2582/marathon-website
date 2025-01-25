@@ -3,6 +3,7 @@ import { ChevronRight } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import { useRef } from "react";
+import { useRouter } from "next/navigation";
 
 const HeroSection = () => {
   const targetRef = useRef(null);
@@ -10,14 +11,13 @@ const HeroSection = () => {
     target: targetRef,
     offset: ["start start", "end start"],
   });
+  const router = useRouter();
+
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
 
   return (
-    <section
-      ref={targetRef}
-      className="relative h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden"
-    >
+    <section ref={targetRef} className="relative h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden">
       <motion.div style={{ scale }} className="absolute inset-0">
         <Image
           src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/eZrFJlydSNihm_tVCa5gNA-A8bGs0EEWe739K1TpiWhbl7QxnwYV5.webp"
@@ -28,10 +28,7 @@ const HeroSection = () => {
           className="object-cover"
         />
       </motion.div>
-      <motion.div
-        style={{ opacity }}
-        className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40"
-      />
+      <motion.div style={{ opacity }} className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/40" />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -40,25 +37,17 @@ const HeroSection = () => {
       >
         <h1 className="leading-tight">
           Ready to Run in
-          <span className="block text-primary">February</span>
+          <span className="block text-primary">March</span>
         </h1>
         <p className="text-xl md:text-2xl text-gray-200 mb-12 max-w-3xl mx-auto">
-          Join thousands in the most scenic marathon that celebrates peace and
-          unity. Experience the serenity of Abujhmad while pushing your limits.
+          Join thousands in the most scenic marathon that celebrates peace and unity. Experience the serenity of Abujhmad while pushing your limits.
         </p>
         <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          <Button
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-white text-lg px-10 h-16 rounded-full"
-          >
+          <Button onClick={() => router.push("/registration")} size="lg" className="bg-primary hover:bg-primary/90 text-white text-lg px-10 h-16 rounded-full">
             Register Now
-            <ChevronRight className="ml-2" />
           </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-white text-black hover:bg-white/20 text-lg px-10 h-16 rounded-full transition-colors"
-          >
+          <ChevronRight className="ml-2" />
+          <Button variant="outline" size="lg" className="border-white text-black hover:bg-white/20 text-lg px-10 h-16 rounded-full transition-colors">
             Learn More
             <ChevronRight className="ml-2" />
           </Button>
