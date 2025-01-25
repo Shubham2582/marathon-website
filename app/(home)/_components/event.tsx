@@ -11,7 +11,7 @@ const Event = () => {
         transition={{ duration: 0.6 }}
         className="max-w-4xl mx-auto text-center"
       >
-        <h2 className="font-serif text-5xl md:text-6xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <h2 className="mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
           EVENT OVERVIEW
         </h2>
         <p className="text-gray-600 text-xl md:text-2xl leading-relaxed mb-12">
@@ -53,7 +53,7 @@ const Event = () => {
               <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <item.icon className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+              <h4>{item.title}</h4>
               <p className="text-gray-600">{item.description}</p>
             </motion.div>
           ))}

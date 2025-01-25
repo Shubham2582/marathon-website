@@ -12,7 +12,7 @@ const Media = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="font-serif text-5xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
+        className="text-center mb-16 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
       >
         Capture the Moment
       </motion.h2>
@@ -44,7 +44,7 @@ const Media = () => {
               </div>
             </div>
             <div className="p-8 text-center">
-              <h3 className="text-2xl font-bold mb-4">Videos</h3>
+              <h3>Videos</h3>
               <Button
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"
@@ -91,7 +91,7 @@ const Media = () => {
               </div>
             </div>
             <div className="p-8 text-center">
-              <h3 className="text-2xl font-bold mb-4">Videos</h3>
+              <h3>Videos</h3>
               <Button
                 variant="outline"
                 className="border-primary text-primary hover:bg-primary hover:text-white transition-colors duration-300"

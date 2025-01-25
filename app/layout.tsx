@@ -1,13 +1,14 @@
-import { Playfair_Display, Montserrat } from "next/font/google";
+import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
 });
-const montserrat = Montserrat({
+
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-inter",
 });
 
 export default function RootLayout({
@@ -18,9 +19,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`scroll-smooth ${playfair.variable} ${montserrat.variable}`}
+      className={`scroll-smooth ${playfair.variable} ${inter.variable}`}
     >
-      <body className={`font-sans antialiased bg-neutral-50 text-neutral-900`}>
+      <body className={`font-playfair antialiased bg-neutral-50 text-neutral-900`}>
         {children}
       </body>
     </html>

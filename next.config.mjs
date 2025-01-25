@@ -25,7 +25,9 @@ const nextConfig = {
     SMTP_PORT: process.env.SMTP_PORT,
     SMTP_SECURE: process.env.SMTP_SECURE,
     SMTP_USER: process.env.SMTP_USER,
-    SMTP_PASS: process.env.SMTP_PASS
+    SMTP_PASS: process.env.SMTP_PASS,
+    CASHFREE_CLIENT_ID: process.env.CASHFREE_CLIENT_ID,
+    CASHFREE_CLIENT_SECRET: process.env.CASHFREE_CLIENT_SECRET
   }
 }
 

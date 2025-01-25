@@ -12,7 +12,7 @@ const Track = () => {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="font-serif text-5xl md:text-6xl font-bold text-center mb-16 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+        <h2 className="text-center bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
           Discover the Track
         </h2>
         <div className="relative aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl">
