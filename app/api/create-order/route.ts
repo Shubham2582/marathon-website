@@ -30,7 +30,7 @@ export async function POST() {
           customer_phone: "9999999999"
         },
         order_meta: {
-            return_url: "http://localhost:3000/registration/payment-success"
+            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/registration/payment-success`
           },
           order_note: ""
       })
