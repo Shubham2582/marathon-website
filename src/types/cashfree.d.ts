@@ -1,6 +1,6 @@
 declare module "@cashfreepayments/cashfree-js" {
   export interface CashfreeConfig {
-    mode: "PRODUCTION" | "TEST";
+    mode: "production" | "test";
     redirectTarget: "_self" | "_blank" | "_top" | "_modal";
     paymentSessionId: string;
     orderToken?: string;
