@@ -21,6 +21,8 @@ const defaultFormState: RegistrationForm = {
   selfie: null,
   isFromNarayanpur: false,
   needsAccommodation: false,
+  idType: "",
+  idNumber: "",
 };
 
 interface RegistrationStore {

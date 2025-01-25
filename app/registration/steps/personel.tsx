@@ -6,7 +6,7 @@ import { useStep } from "@/store/useStep";
 import { Input } from "@/components/ui/input";
 import { personelFormDetails } from "@/data/personel-fields";
 import { fetchAddressFromPincode } from "@/services/pincodeService";
-
+import { validateIdNumber } from "@/utils/idValidation";
 
 export const Personel = () => {
   const { form, handleChange, setForm } = useRegistrationStore();
@@ -15,17 +15,25 @@ export const Personel = () => {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     // Get all form fields from personelFormDetails
     const fields = personelFormDetails(form, handleChange);
-    
+
     fields.forEach((field) => {
       const value = form[field.name as keyof typeof form];
-      
-      if (!value || value.toString().trim() === '') {
+
+      if (!value || value.toString().trim() === "") {
         newErrors[field.name] = `${field.label} is required`;
       }
     });
+
+    // Add ID validation
+    if (form.idType) {
+      const idError = validateIdNumber(form.idType, form.idNumber);
+      if (idError) {
+        newErrors.idNumber = idError;
+      }
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -33,7 +41,7 @@ export const Personel = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       nextStep();
     }
@@ -68,20 +76,13 @@ export const Personel = () => {
       <div>
         <div className="grid grid-cols-2 gap-2 gap-x-4">
           {/* --- Verification Form --- */}
-          {personelFormDetails(form, handleChange).map((detail, index) => (
-            detail.name === "pincode" 
-            ? <FormField 
-              key={index}
-              onChange={handlePincodeChange}
-              {...detail} 
-              error={errors[detail.name]}
-            />
-            : <FormField 
-              key={index} 
-              {...detail} 
-              error={errors[detail.name]}
-            />
-          ))}
+          {personelFormDetails(form, handleChange).map((detail, index) =>
+            detail.name === "pincode" ? (
+              <FormField key={index} onChange={handlePincodeChange} {...detail} error={errors[detail.name]} />
+            ) : (
+              <FormField key={index} {...detail} error={errors[detail.name]} />
+            )
+          )}
           {/* /--- Verification Form --- */}
         </div>
         <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">

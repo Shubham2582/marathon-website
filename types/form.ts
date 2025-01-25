@@ -1,23 +1,16 @@
 import { BloodGroup } from "@/data/bloodGroups";
 
-export interface FormFieldType
-extends React.InputHTMLAttributes<
-  HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-> {
-label: string;
-name: string;
-placeholder: string;
-value: string;
-handleChange: (
-  e: React.ChangeEvent<
-    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-  >
-) => void;
-disabled?: boolean;
-fieldDataType?: "text" | "numeric";
-fieldType?: "text" | "date" | "select" | "textarea";
-options?: { label: string; value: string }[];
-error?: string;
+export interface FormFieldType extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
+  label: string;
+  name: string;
+  placeholder: string;
+  value: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  disabled?: boolean;
+  fieldDataType?: "text" | "numeric";
+  fieldType?: "text" | "date" | "select" | "textarea";
+  options?: { label: string; value: string }[];
+  error?: string;
 }
 
 export interface RegistrationForm {
@@ -35,6 +28,8 @@ export interface RegistrationForm {
   occupation: string;
   bloodGroup: BloodGroup | "";
   selfie: File | null;
+  idType: "AADHAR" | "PAN" | "VOTER" | "DRIVING_LICENSE" | "";
+  idNumber: string;
 
   // --- REGISTRATION DETAILS ---
   isFromNarayanpur: boolean;

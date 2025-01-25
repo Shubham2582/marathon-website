@@ -10,7 +10,7 @@ import { CashFreePayment } from "./steps/cashfree-payment";
 const Registration = () => {
   const { currentStep, totalSteps } = useStep();
 
-  const steps = ["Verification", "Personel", "Payment"];
+  const steps = ["Verification", "Personal", "Payment"];
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -21,23 +21,10 @@ const Registration = () => {
         <div className="flex gap-x-5">
           {steps.map((step, index: number) => (
             <div key={index} className="flex gap-x-2 text-sm items-center font-medium">
-              <p
-                className={cn(
-                  "text-sm px-2.5 py-0.5 rounded",
-                  currentStep === index + 1
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-600"
-                )}
-              >
+              <p className={cn("text-sm px-2.5 py-0.5 rounded", currentStep === index + 1 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600")}>
                 {index + 1}
               </p>
-              <p
-                className={
-                  currentStep === index + 1 ? "text-blue-600" : "text-gray-600"
-                }
-              >
-                {step}
-              </p>
+              <p className={currentStep === index + 1 ? "text-blue-600" : "text-gray-600"}>{step}</p>
             </div>
           ))}
         </div>
