@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     // Generate a unique order ID  
     const orderId = `order_${Date.now()}`;
 
-    const response = await fetch('https://sandbox.cashfree.com/pg/orders', { // Use sandbox URL for testing
+    const response = await fetch('https://api.cashfree.com/pg/orders', { // Use sandbox URL for testing
       method: 'POST',
       headers: {
         'x-client-id': process.env.CASHFREE_CLIENT_ID!,
