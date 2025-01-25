@@ -1,10 +1,11 @@
 import { useRegistrationStore } from "@/store/useRegistration";
-import React from "react";
+import React, { useEffect } from "react";
 import { FormField } from "../_components/form-field";
 import { Button } from "@/components/ui/button";
 import { useStep } from "@/store/useStep";
 import { Input } from "@/components/ui/input";
 import { personelFormDetails } from "@/data/personel-fields";
+import { fetchAddressFromPincode } from "@/services/pincodeService";
 
 
 export const Personel = () => {
@@ -38,13 +39,44 @@ export const Personel = () => {
     }
   };
 
+  const handlePincodeChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    handleChange(e);
+    const pincode = e.target.value;
+
+    if (!pincode) {
+      setForm("state", "");
+      setForm("city", "");
+      return;
+    }
+
+    if (pincode.length === 6) {
+      try {
+        const addressData = await fetchAddressFromPincode(pincode);
+        if (addressData) {
+          setForm("state", addressData.State);
+          setForm("city", addressData.District);
+        }
+      } catch (error) {
+        setForm("state", "");
+        setForm("city", "");
+      }
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <div className="grid grid-cols-2 gap-2 gap-x-4">
           {/* --- Verification Form --- */}
           {personelFormDetails(form, handleChange).map((detail, index) => (
-            <FormField 
+            detail.name === "pincode" 
+            ? <FormField 
+              key={index}
+              onChange={handlePincodeChange}
+              {...detail} 
+              error={errors[detail.name]}
+            />
+            : <FormField 
               key={index} 
               {...detail} 
               error={errors[detail.name]}

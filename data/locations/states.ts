@@ -6,7 +6,7 @@ export const statesByCountry: Record<Country, string[]> = {
     "Arunachal Pradesh",
     "Assam",
     "Bihar",
-    "Chhattisgarh",
+    "Chattisgarh",
     "Goa",
     "Gujarat",
     "Haryana",

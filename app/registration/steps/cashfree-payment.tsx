@@ -111,7 +111,7 @@ export const CashFreePayment = () => {
       alert("Please accept the terms and conditions");
       return;
     }
-    nextStep();
+    doPayment();
   };
 
   return (
