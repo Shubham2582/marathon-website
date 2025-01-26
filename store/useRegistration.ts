@@ -22,7 +22,7 @@ const defaultFormState: RegistrationForm = {
   isFromNarayanpur: false,
   needsAccommodation: false,
   idType: "",
-  idNumber: "",
+  govtId: "",
 };
 
 interface RegistrationStore {
