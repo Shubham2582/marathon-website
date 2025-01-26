@@ -3,7 +3,7 @@ export const citiesByState: Record<string, string[]> = {
   "Arunachal Pradesh": ["Itanagar", "Naharlagun", "Pasighat", "Tawang", "Ziro", "Bomdila", "Aalo", "Tezu", "Roing", "Namsai"],
   Assam: ["Guwahati", "Silchar", "Dibrugarh", "Jorhat", "Nagaon", "Tinsukia", "Tezpur", "Karimganj", "Dhubri", "Bongaigaon"],
   Bihar: ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia", "Darbhanga", "Bihar Sharif", "Arrah", "Begusarai", "Katihar"],
-  Chattisgarh: ["Raipur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Durg", "Jagdalpur", "Ambikapur", "Chirmiri"],
+  Chattisgarh: ["Raipur", "Kanker", "Narayanpur", "Bhilai", "Bilaspur", "Korba", "Rajnandgaon", "Raigarh", "Durg", "Jagdalpur", "Ambikapur", "Chirmiri", "Bhatapara", "Bijapur"],
   Goa: ["Panaji", "Margao", "Vasco da Gama", "Mapusa", "Ponda", "Bicholim", "Curchorem", "Cuncolim", "Canacona", "Pernem"],
   Gujarat: ["Ahmedabad", "Surat", "Vadodara", "Rajkot", "Bhavnagar", "Jamnagar", "Junagadh", "Gandhinagar", "Anand", "Nadiad"],
   Haryana: ["Faridabad", "Gurgaon", "Panipat", "Ambala", "Yamunanagar", "Rohtak", "Hisar", "Karnal", "Sonipat", "Panchkula"],

@@ -7,7 +7,7 @@ interface OrderResponse {
 
 export async function POST(req: Request) {
   try {
-    const { amount, name, email, phone } = await req.json();
+    const { amount, name, email, phone, identification_number } = await req.json();
     // Generate a unique order ID  
     const orderId = `order_${Date.now()}`;
 
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
           customer_phone: phone
         },
         order_meta: {
-            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/registration/payment-success`
+            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/registration/payment-success?identification_number=${identification_number}`
           },
           order_note: ""
       })
