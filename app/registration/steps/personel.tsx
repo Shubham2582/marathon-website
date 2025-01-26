@@ -21,7 +21,7 @@ export const Personel = () => {
       const value = form[field.name as keyof typeof form];
 
       // Skip ID validation if user is from Narayanpur
-      if (form.isFromNarayanpur && (field.name === "idType" || field.name === "govtId")) {
+      if (!form.isFromNarayanpur && (field.name === "idType" || field.name === "govtId")) {
         return;
       }
 
