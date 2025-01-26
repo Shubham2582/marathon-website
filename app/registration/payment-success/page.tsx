@@ -1,28 +1,48 @@
 "use client";
 
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, Suspense, useState } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
-interface UserData{
+interface UserData {
   email: string;
   first_name: string;
   last_name: string;
   race_category: string;
   t_shirt_size: string;
+  payment_status: string;
 }
 
 const SuccessContent = () => {
   const searchParams = useSearchParams();
-  const [isUpdated, setIsUpdated] = useState(false);
-  const [userData, setUserData] = useState<UserData | null>(null);
+  const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const identificationNumber = searchParams.get("identification_number");
 
-  const sendSuccessEmail = async () => {
+  // Add window size effect
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    // Initial size
+    handleResize();
+
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const sendSuccessEmail = async (userData: UserData) => {
+    console.log(userData);
     if (!userData) return;
-    
+
     try {
       const emailData = {
         userData: {
@@ -35,6 +55,7 @@ const SuccessContent = () => {
             raceCategory: userData.race_category,
             tShirtSize: userData.t_shirt_size,
           },
+          identification_number: identificationNumber,
         },
       };
 
@@ -58,7 +79,10 @@ const SuccessContent = () => {
     const fetchUserDataAndUpdate = async () => {
       if (identificationNumber) {
         // Fetch user data
-        const { data, error: fetchError } = await supabase
+        const {
+          data,
+          error: fetchError,
+        }: { data: UserData | null; error: Error | null } = await supabase
           .from("registrations")
           .select("*")
           .eq("identification_number", identificationNumber)
@@ -69,7 +93,10 @@ const SuccessContent = () => {
           return;
         }
 
-        setUserData(data);
+        // If payment is already marked as done, don't proceed
+        if (data?.payment_status === "DONE") {
+          return;
+        }
 
         // Update payment status
         const { error: updateError } = await supabase
@@ -77,10 +104,8 @@ const SuccessContent = () => {
           .update({ payment_status: "DONE" })
           .eq("identification_number", identificationNumber);
 
-        if (!updateError) {
-          setIsUpdated(true);
-          // Send email after we have the user data
-          await sendSuccessEmail();
+        if (!updateError && data) {
+          await sendSuccessEmail(data);
         }
       }
     };
@@ -179,13 +204,13 @@ const SuccessContent = () => {
               className="absolute w-2 h-2 bg-blue-500 rounded-full"
               initial={{
                 opacity: 1,
-                x: Math.random() * window.innerWidth,
+                x: Math.random() * (windowSize.width || 0),
                 y: -20,
               }}
               animate={{
                 opacity: 0,
-                y: window.innerHeight + 20,
-                x: Math.random() * window.innerWidth,
+                y: (windowSize.height || 0) + 20,
+                x: Math.random() * (windowSize.width || 0),
               }}
               transition={{
                 duration: Math.random() * 2 + 1,
