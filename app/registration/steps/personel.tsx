@@ -12,7 +12,7 @@ export const Personel = () => {
   const { form, handleChange, setForm } = useRegistrationStore();
   const { nextStep, previousStep } = useStep();
   const [errors, setErrors] = React.useState<Record<string, string>>({});
-
+  
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     const fields = personelFormDetails(form, handleChange);
@@ -33,6 +33,7 @@ export const Personel = () => {
     // Add ID validation only for non-Narayanpur residents
     if (!form.isFromNarayanpur && form.idType) {
       const idError = validateIdNumber(form.idType, form.govtId);
+      console.log(idError)
       if (idError) {
         newErrors.govtId = idError;
       }
