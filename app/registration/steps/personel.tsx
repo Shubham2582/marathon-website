@@ -29,9 +29,10 @@ export const Personel = () => {
 
     // Add ID validation
     if (form.idType) {
-      const idError = validateIdNumber(form.idType, form.idNumber);
+      console.log(form.govtId)
+      const idError = validateIdNumber(form.idType, form.govtId);
       if (idError) {
-        newErrors.idNumber = idError;
+        newErrors.govtId = idError;
       }
     }
 
@@ -79,14 +80,14 @@ export const Personel = () => {
           {personelFormDetails(form, handleChange).map((detail, index) =>
             detail.name === "pincode" ? (
               <FormField key={index} onChange={handlePincodeChange} {...detail} error={errors[detail.name]} />
-            ) : (
+            ) : !form.isFromNarayanpur && (detail.name === "idType" || detail.name === "idNumber") ? null : (
               <FormField key={index} {...detail} error={errors[detail.name]} />
             )
           )}
           {/* /--- Verification Form --- */}
         </div>
-        <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
-          <Input
+        {!form.isFromNarayanpur && <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
+        <Input
             className="size-4"
             type="checkbox"
             name="accomodation"
@@ -95,7 +96,7 @@ export const Personel = () => {
             onChange={() => setForm("needsAccommodation", !form.needsAccommodation)}
           />
           <label htmlFor="needsAccommodation">Do you need accommodation?</label>
-        </div>
+        </div>}
       </div>
       <div className="mt-4 flex justify-between">
         <Button type="button" onClick={previousStep} variant="secondary">

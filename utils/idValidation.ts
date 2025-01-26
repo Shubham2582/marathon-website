@@ -1,8 +1,9 @@
-export const validateIdNumber = (idType: string, idNumber: string): string => {
+export const validateIdNumber = (idType: string, govtId: string): string => {
   idType = idType.trim().toUpperCase();
-  idNumber = idNumber.trim().toUpperCase();
+  console.log(govtId)
+  govtId = govtId.trim().toUpperCase();
 
-  if (!idNumber) return "ID number is required";
+  if (!govtId) return "ID number is required";
 
   const validations: Record<string, { regex: RegExp; message: string }> = {
     AADHAR: {
@@ -27,7 +28,7 @@ export const validateIdNumber = (idType: string, idNumber: string): string => {
   const validation = validations[idType];
   if (!validation) return "Please select a valid ID type";
 
-  if (!validation.regex.test(idNumber)) return validation.message;
+  if (!validation.regex.test(govtId)) return validation.message;
 
   return "";
 };

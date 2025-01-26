@@ -57,6 +57,7 @@ export const CashFreePayment = () => {
       is_from_narayanpur: form.isFromNarayanpur,
       needs_accommodation: form.needsAccommodation,
       identification_number: identificationNumber,
+      govt_id: form.govtId,
       payment_status: "PENDING",
     };
 

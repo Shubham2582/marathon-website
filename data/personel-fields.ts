@@ -172,7 +172,6 @@ export const personelFormDetails = (
     handleChange: handleChange,
     fieldType: "select",
     options: [
-      { label: "Select ID Type", value: "" },
       { label: "Aadhar Card", value: "AADHAR" },
       { label: "PAN Card", value: "PAN" },
       { label: "Voter ID", value: "VOTER" },
@@ -181,9 +180,9 @@ export const personelFormDetails = (
   },
   {
     label: "ID Number",
-    name: "idNumber",
+    name: "govtId",
     placeholder: "Enter your ID number",
-    value: form.idNumber,
+    value: form.govtId,
     handleChange: handleChange,
     fieldType: "text",
     maxLength: form.idType === "AADHAR" ? 12 : form.idType === "PAN" ? 10 : form.idType === "VOTER" ? 10 : form.idType === "DRIVING_LICENSE" ? 15 : undefined,

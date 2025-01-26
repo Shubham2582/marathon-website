@@ -29,7 +29,7 @@ export interface RegistrationForm {
   bloodGroup: BloodGroup | "";
   selfie: File | null;
   idType: "AADHAR" | "PAN" | "VOTER" | "DRIVING_LICENSE" | "";
-  idNumber: string;
+  govtId: string;
 
   // --- REGISTRATION DETAILS ---
   isFromNarayanpur: boolean;
