@@ -1,34 +1,33 @@
 export const validateIdNumber = (idType: string, idNumber: string): string => {
+  idType = idType.trim().toUpperCase();
+  idNumber = idNumber.trim().toUpperCase();
+
   if (!idNumber) return "ID number is required";
 
-  switch (idType) {
-    case "AADHAR":
-      if (!/^\d{12}$/.test(idNumber)) {
-        return "Aadhar number must be 12 digits";
-      }
-      break;
+  const validations: Record<string, { regex: RegExp; message: string }> = {
+    AADHAR: {
+      regex: /^\d{12}$/,
+      message: "Aadhar number must be 12 digits",
+    },
+    PAN: {
+      // Updated PAN regex to handle the format better
+      regex: /^[A-Z]{5}[0-9]{4}[A-Z]$/,
+      message: "Invalid PAN format (e.g., ABCDE1234F)",
+    },
+    VOTER: {
+      regex: /^[A-Z]{3}[0-9]{7}$/,
+      message: "Invalid Voter ID format (e.g., ABC1234567)",
+    },
+    DRIVING_LICENSE: {
+      regex: /^([A-Z]{2}[0-9]{2}[ -]?((19|20)[0-9]{2})[0-9]{7})$/,
+      message: "Invalid Driving License format",
+    },
+  };
 
-    case "PAN":
-      if (!/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/.test(idNumber)) {
-        return "Invalid PAN format (e.g., ABCDE1234F)";
-      }
-      break;
+  const validation = validations[idType];
+  if (!validation) return "Please select a valid ID type";
 
-    case "VOTER":
-      if (!/^[A-Z]{3}[0-9]{7}$/.test(idNumber)) {
-        return "Invalid Voter ID format (e.g., ABC1234567)";
-      }
-      break;
-
-    case "DRIVING_LICENSE":
-      if (!/^(([A-Z]{2}[0-9]{2})( )|([A-Z]{2}-[0-9]{2}))((19|20)[0-9][0-9])[0-9]{7}$/.test(idNumber)) {
-        return "Invalid Driving License format";
-      }
-      break;
-
-    default:
-      return "Please select an ID type";
-  }
+  if (!validation.regex.test(idNumber)) return validation.message;
 
   return "";
 };
