@@ -13,6 +13,7 @@ interface UserData {
   race_category: string;
   t_shirt_size: string;
   payment_status: string;
+  mobile: string;
 }
 
 const SuccessContent = () => {
@@ -20,7 +21,6 @@ const SuccessContent = () => {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const identificationNumber = searchParams.get("identification_number");
 
-  // Add window size effect
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -29,15 +29,28 @@ const SuccessContent = () => {
       });
     };
 
-    // Initial size
     handleResize();
-
-    // Add event listener
     window.addEventListener("resize", handleResize);
-
-    // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const sendWhatsAppMessage = async (phoneNumber: string) => {
+    try {
+      const response = await fetch("https://runabujhmaad.in/send-marathon-message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phoneNumber }),
+      });
+
+      if (!response.ok) {
+        console.error("Failed to send WhatsApp message");
+      }
+    } catch (error) {
+      console.error("Error sending WhatsApp message:", error);
+    }
+  };
 
   const sendSuccessEmail = async (userData: UserData) => {
     console.log(userData);
@@ -70,6 +83,9 @@ const SuccessContent = () => {
       if (!emailResponse.ok) {
         console.error("Failed to send confirmation email");
       }
+      if (userData.mobile) {
+        await sendWhatsAppMessage("91" + userData.mobile);
+      }
     } catch (emailError) {
       console.error("Error sending confirmation email:", emailError);
     }
@@ -78,7 +94,6 @@ const SuccessContent = () => {
   useEffect(() => {
     const fetchUserDataAndUpdate = async () => {
       if (identificationNumber) {
-        // Fetch user data
         const {
           data,
           error: fetchError,
@@ -93,12 +108,10 @@ const SuccessContent = () => {
           return;
         }
 
-        // If payment is already marked as done, don't proceed
         if (data?.payment_status === "DONE") {
           return;
         }
 
-        // Update payment status
         const { error: updateError } = await supabase
           .from("registrations")
           .update({ payment_status: "DONE" })
@@ -116,7 +129,6 @@ const SuccessContent = () => {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
-        {/* Success checkmark animation */}
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -191,7 +203,6 @@ const SuccessContent = () => {
           </motion.div>
         </motion.div>
 
-        {/* Confetti animation */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
