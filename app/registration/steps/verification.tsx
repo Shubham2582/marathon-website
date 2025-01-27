@@ -88,7 +88,7 @@ export const Verification = () => {
           return;
         }
 
-        const response = await fetch("http://157.245.100.93:3001/send-otp", {
+        const response = await fetch("https://runabujhmaad.in/send-otp", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
