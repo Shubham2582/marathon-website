@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { personelFormDetails } from "@/data/personel-fields";
 import { fetchAddressFromPincode } from "@/services/pincodeService";
 import { validateIdNumber } from "@/utils/idValidation";
+import { validateEmail } from "@/utils/validation";
 
 export const Personel = () => {
   const { form, handleChange, setForm } = useRegistrationStore();
@@ -27,6 +28,12 @@ export const Personel = () => {
 
       if (!value || value.toString().trim() === "") {
         newErrors[field.name] = `${field.label} is required`;
+      } else{
+        if (field.name === "emergencyContactNumber" || field.name === "mobile") {
+          if (value?.toString.length !== 10) {
+            newErrors.emergencyContactNumber = "Phone number must be 10 digits long";
+          }
+        }
       }
     });
 

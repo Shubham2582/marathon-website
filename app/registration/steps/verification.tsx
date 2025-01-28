@@ -40,6 +40,13 @@ export const Verification = () => {
     }, 1000);
   };
 
+  const handleIsFromNarayanpur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm("isFromNarayanpur", e.target.checked);
+    setForm("pincode", e.target.checked ? "494661" : "");
+    setForm("city", e.target.checked ? "Narayanpur" : "");
+    setForm("state", e.target.checked ? "Chattisgarh" : "");
+  };
+
   const sendOTP = async () => {
     setIsSendingOTP(true);
     setOtpError("");
@@ -184,6 +191,7 @@ export const Verification = () => {
             { label: "Male", value: "MALE" }, 
             { label: "Female", value: "FEMALE" }
           ]}
+          required
         />
 
         <div className="space-y-2">
@@ -228,7 +236,7 @@ export const Verification = () => {
             name="isFromNarayanpur"
             id="isFromNarayanpur"
             checked={form.isFromNarayanpur}
-            onChange={() => setForm("isFromNarayanpur", !form.isFromNarayanpur)}
+            onChange={handleIsFromNarayanpur}
           />
           <label htmlFor="isFromNarayanpur">Are you from Narayanpur?</label>
         </div>

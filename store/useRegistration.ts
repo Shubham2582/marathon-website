@@ -21,7 +21,7 @@ const defaultFormState: RegistrationForm = {
   selfie: null,
   isFromNarayanpur: false,
   needsAccommodation: false,
-  idType: "",
+  idType: "AADHAR",
   govtId: "",
 };
 
@@ -63,6 +63,10 @@ export const useRegistrationStore = create<RegistrationStore>((set) => ({
         },
       }));
       return;
+    }
+
+    if (name === "emergencyContactName") {
+      if (!/^[a-zA-Z ]*$/.test(value)) return;
     }
 
     set((state) => ({

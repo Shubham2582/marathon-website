@@ -26,7 +26,7 @@ const Event = () => {
             {
               id: "date",
               icon: Calendar,
-              title: "February , 2025",
+              title: "2 March , 2025",
               description: "Mark your calendars",
             },
             {
