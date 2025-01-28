@@ -54,6 +54,8 @@ export const CashFreePayment = () => {
       identification_number: identificationNumber,
       govt_id: form.govtId,
       payment_status: "PENDING",
+      previous_marathon_name: form.previousMarathonName || null,
+      previous_marathon_rank: form.previousMarathonRank || null,
     };
 
     const { error } = await supabase.from("registrations").insert([registrationData]).select("id");

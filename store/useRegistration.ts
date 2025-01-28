@@ -23,6 +23,9 @@ const defaultFormState: RegistrationForm = {
   needsAccommodation: false,
   idType: "AADHAR",
   govtId: "",
+  isRunner: false,
+  previousMarathonName: "",
+  previousMarathonRank: "",
 };
 
 interface RegistrationStore {

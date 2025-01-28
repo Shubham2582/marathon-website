@@ -34,6 +34,9 @@ export interface RegistrationForm {
   // --- REGISTRATION DETAILS ---
   isFromNarayanpur: boolean;
   needsAccommodation: boolean;
+  isRunner: boolean;
+  previousMarathonName?: string;
+  previousMarathonRank?: string;
 
   // --- MARATHON DETAILS ---
   raceCategory: string;

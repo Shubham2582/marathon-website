@@ -28,7 +28,7 @@ export const Personel = () => {
 
       if (!value || value.toString().trim() === "") {
         newErrors[field.name] = `${field.label} is required`;
-      } else{
+      } else {
         if (field.name === "emergencyContactNumber" || field.name === "mobile") {
           if (value?.toString().length !== 10) {
             newErrors.emergencyContactNumber = "Phone number must be 10 digits long";
@@ -99,6 +99,40 @@ export const Personel = () => {
             );
           })}
         </div>
+
+        <div className="space-y-3 mt-4">
+          <div className="flex items-center gap-x-2 text-sm font-medium">
+            <Input className="size-4" type="checkbox" id="isRunner" checked={form.isRunner} onChange={() => setForm("isRunner", !form.isRunner)} />
+            <label htmlFor="isRunner">Have you ever participated in marathons?</label>
+          </div>
+
+          {form.isRunner && (
+            <div className="ml-6 space-y-2 p-3 border rounded-md bg-gray-50">
+              <div className="space-y-1">
+                <label className="block text-sm font-medium">Previous Marathon Name</label>
+                <Input
+                  type="text"
+                  placeholder="Enter marathon name"
+                  value={form.previousMarathonName || ""}
+                  onChange={(e) => setForm("previousMarathonName", e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="block text-sm font-medium">Previous Marathon Rank</label>
+                <Input
+                  type="number"
+                  placeholder="Ex: 45"
+                  value={form.previousMarathonRank || ""}
+                  onChange={(e) => setForm("previousMarathonRank", e.target.value)}
+                  min="1"
+                  className="w-full"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
         {!form.isFromNarayanpur && (
           <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
             <Input
