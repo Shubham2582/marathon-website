@@ -43,10 +43,14 @@ const HeroSection = () => {
           Join thousands in the most scenic marathon that celebrates peace and unity. Experience the serenity of Abujhmad while pushing your limits.
         </p>
         <div className="flex flex-col sm:flex-row gap-6 justify-center">
-          <Button onClick={() => router.push("/registration")} size="lg" className="bg-primary hover:bg-primary/90 text-white text-lg px-10 h-16 rounded-full">
+          <Button
+            onClick={() => router.push("/registration")}
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-white text-lg px-10 mr-10 h-16 rounded-full"
+          >
             Register Now
+            <ChevronRight className="ml-2" />
           </Button>
-          <ChevronRight className="ml-2" />
           <Button variant="outline" size="lg" className="border-white text-black hover:bg-white/20 text-lg px-10 h-16 rounded-full transition-colors">
             Learn More
             <ChevronRight className="ml-2" />
@@ -58,9 +62,7 @@ const HeroSection = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 1 }}
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-      >
-        <ChevronRight className="w-12 h-12 text-white animate-bounce rotate-90" />
-      </motion.div>
+      ></motion.div>
     </section>
   );
 };
