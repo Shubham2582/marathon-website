@@ -30,7 +30,7 @@ export const Personel = () => {
         newErrors[field.name] = `${field.label} is required`;
       } else{
         if (field.name === "emergencyContactNumber" || field.name === "mobile") {
-          if (value?.toString.length !== 10) {
+          if (value?.toString().length !== 10) {
             newErrors.emergencyContactNumber = "Phone number must be 10 digits long";
           }
         }

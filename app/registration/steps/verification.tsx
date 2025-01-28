@@ -151,9 +151,9 @@ export const Verification = () => {
       className="space-y-6"
     >
       <div className="flex flex-col">
-        <div className="p-2 mb-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h4 className="font-medium text-lg mb-1">Important Notes:</h4>
-          <ul className="space-y-2 list-disc pl-5">
+        <div className="p-3 mb-4 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 className="font-medium text-lg mb-1">Important Links:</h4>
+          <ul className="space-y-2 list-disc pl-5 text-sm">
             <li>
               <Link href="https://youtu.be/gJ3kS9t8-nE" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
                 Watch registration tutorial video
