@@ -6,6 +6,7 @@ import { useRegistrationStore } from "@/store/useRegistration";
 import { useStep } from "@/store/useStep";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 export const Verification = () => {
   const { form, handleChange, setForm } = useRegistrationStore();
@@ -102,7 +103,7 @@ export const Verification = () => {
           },
           body: JSON.stringify({
             phoneNumber: `91${form.mobile}`,
-            otp: newOTP
+            otp: newOTP,
           }),
         });
 
@@ -142,27 +143,37 @@ export const Verification = () => {
     }`;
 
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      verifyOTP();
-    }} className="space-y-6">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        verifyOTP();
+      }}
+      className="space-y-6"
+    >
       <div className="flex flex-col">
+        <div className="p-2 mb-4 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 className="font-medium text-lg mb-1">Important Notes:</h4>
+          <ul className="space-y-2 list-disc pl-5">
+            <li>
+              <Link href="https://youtu.be/gJ3kS9t8-nE" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
+                Watch registration tutorial video
+              </Link>
+            </li>
+            <li>
+              <Link href="https://forms.gle/LFVcYJ9uJZ3SzYrQ9" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
+                Apply for Pacer or Marshal position in the marathon
+              </Link>
+            </li>
+          </ul>
+        </div>
         <h3 className="text-lg font-medium mb-4">Choose Verification Method</h3>
         <div className="grid grid-cols-2 gap-4">
-          <Button
-            type="button"
-            className={verificationMethodClass("EMAIL")}
-            onClick={() => setVerificationMethod("EMAIL")}
-          >
+          <Button type="button" className={verificationMethodClass("EMAIL")} onClick={() => setVerificationMethod("EMAIL")}>
             <IoMailOutline className="size-7" />
             <span>Email OTP</span>
           </Button>
 
-          <Button
-            type="button"
-            className={verificationMethodClass("WHATSAPP")}
-            onClick={() => setVerificationMethod("WHATSAPP")}
-          >
+          <Button type="button" className={verificationMethodClass("WHATSAPP")} onClick={() => setVerificationMethod("WHATSAPP")}>
             <IoLogoWhatsapp className="size-7" />
             <span>WhatsApp OTP</span>
           </Button>
@@ -188,8 +199,8 @@ export const Verification = () => {
           handleChange={handleChange}
           fieldType="select"
           options={[
-            { label: "Male", value: "MALE" }, 
-            { label: "Female", value: "FEMALE" }
+            { label: "Male", value: "MALE" },
+            { label: "Female", value: "FEMALE" },
           ]}
           required
         />
@@ -209,24 +220,16 @@ export const Verification = () => {
               maxLength={4}
               className="flex-grow"
             />
-            <Button 
-              type="button" 
-              onClick={sendOTP} 
-              disabled={
-                cooldown > 0 || 
-                (verificationMethod === "EMAIL" ? !validateEmail(form.email) : !validateMobile(form.mobile)) || 
-                isSendingOTP
-              }
+            <Button
+              type="button"
+              onClick={sendOTP}
+              disabled={cooldown > 0 || (verificationMethod === "EMAIL" ? !validateEmail(form.email) : !validateMobile(form.mobile)) || isSendingOTP}
               // variant="blue"
             >
-              {isSendingOTP ? "Sending..." : 
-               cooldown > 0 ? `Resend OTP (${cooldown}s)` : 
-               "Send OTP"}
+              {isSendingOTP ? "Sending..." : cooldown > 0 ? `Resend OTP (${cooldown}s)` : "Send OTP"}
             </Button>
           </div>
-          {otpError && (
-            <p className="text-red-500 text-sm mt-1">{otpError}</p>
-          )}
+          {otpError && <p className="text-red-500 text-sm mt-1">{otpError}</p>}
         </div>
 
         <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
@@ -243,11 +246,7 @@ export const Verification = () => {
       </div>
 
       <div className="flex justify-end">
-        <Button 
-          type="submit" 
-          variant="primary" 
-          disabled={!isOtpSent || otp.length !== 4}
-        >
+        <Button type="submit" variant="primary" disabled={!isOtpSent || otp.length !== 4}>
           Verify OTP
         </Button>
       </div>
