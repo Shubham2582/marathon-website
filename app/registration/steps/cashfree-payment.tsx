@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { doPayment, initializeSDK } from "@/lib/cashfree";
 import { useRouter } from "next/navigation";
 import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
+import { useTranslation } from "@/store/useLanguage";
 
 export const CashFreePayment = () => {
   const [cashfree, setCashfree] = useState<CashfreeInstance | null>(null);
@@ -17,6 +18,8 @@ export const CashFreePayment = () => {
   const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const router = useRouter();
+
+  const t = useTranslation();
 
   const registrationFee = form.isFromNarayanpur ? 0 : 299;
 
@@ -77,52 +80,52 @@ export const CashFreePayment = () => {
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Registration Fee Details</CardTitle>
+          <CardTitle>{t.payment.fee_details}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center py-2 border-b">
-            <span>Registration Fee</span>
+            <span>{t.payment.registration_fee}</span>
             <span>₹{registrationFee}</span>
           </div>
-          {form.isFromNarayanpur && <p className="text-sm text-green-600">* No registration fee for participants from Narayanpur</p>}
+          {form.isFromNarayanpur && <p className="text-sm text-green-600">* {t.payment.narayanpur_note}</p>}
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Terms and Conditions</CardTitle>
+          <CardTitle>{t.payment.terms_conditions}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="h-48 overflow-y-auto p-4 bg-gray-50 rounded-md text-sm space-y-2">
-            <p>1. Participant Agreement:</p>
+            <p>{t.payment.participant_agreement.title}</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>I confirm that I am medically fit to participate in the marathon.</li>
-              <li>I understand that participating in this event involves risks.</li>
-              <li>I agree to follow all race rules and organizer instructions.</li>
+              <li>{t.payment.participant_agreement.medical_fit}</li>
+              <li>{t.payment.participant_agreement.risks}</li>
+              <li>{t.payment.participant_agreement.rules}</li>
             </ul>
 
-            <p>2. Liability Waiver:</p>
+            <p>{t.payment.liability_waiver.title}</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>I waive all claims against the organizers for any injuries or losses.</li>
-              <li>I am responsible for my personal belongings during the event.</li>
+              <li>{t.payment.liability_waiver.claims}</li>
+              <li>{t.payment.liability_waiver.belongings}</li>
             </ul>
 
-            <p>3. Media Rights:</p>
+            <p>{t.payment.media_rights.title}</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>I grant permission to use my photographs taken during the event.</li>
-              <li>These may be used for promotional purposes.</li>
+              <li>{t.payment.media_rights.photos}</li>
+              <li>{t.payment.media_rights.promotional}</li>
             </ul>
 
-            <p>4. Prize Distribution Requirements:</p>
+            <p>{t.payment.prize_distribution.title}</p>
             <ul className="list-disc pl-5 space-y-1">
-              <li>Participants must bring the same ID proof submitted during registration to claim prizes during the prize distribution.</li>
+              <li>{t.payment.prize_distribution.id_proof}</li>
             </ul>
           </div>
 
           <div className="flex items-center gap-2">
             <Input type="checkbox" id="terms" className="w-4 h-4" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} />
             <label htmlFor="terms" className="text-sm">
-              I have read and agree to the terms and conditions
+              {t.payment.accept_terms}
             </label>
           </div>
         </CardContent>
@@ -130,10 +133,10 @@ export const CashFreePayment = () => {
 
       <div className="flex justify-between">
         <Button onClick={previousStep} variant="secondary">
-          Back
+          {t.payment.back_button}
         </Button>
         <Button type="submit" variant="primary" disabled={!acceptedTerms}>
-          {registrationFee === 0 ? "Continue" : "Proceed to Payment"}
+          {registrationFee === 0 ? t.payment.continue_button : t.payment.proceed_button}
         </Button>
       </div>
     </form>

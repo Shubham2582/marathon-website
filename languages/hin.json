@@ -1,0 +1,115 @@
+{
+    "title": "हिन्दी",
+    "page_title": "मैरेथन पंजीकरण",
+    "steps": {
+        "1": "सत्यापन",
+        "2": "व्यक्तिगत जानकारी",
+        "3": "भुगतान"
+    },
+    "verification": {
+        "important_links_title": "महत्वपूर्ण लिंक",
+        "watch_registration_tutorial_video": "रजिस्ट्रेशन ट्यूटोरियल वीडियो देखें",
+        "apply_for_pacer_or_marshal_position_in_the_marathon": "पैसरर या मार्शल पंजीकरण करें",
+        "step_label": "चरण 1 / 3",
+        "title": "सत्यापन",
+        "method_label": "सत्यापन विधि चुनें",
+        "email": "ईमेल",
+        "mobile": "मोबाइल",
+        "email_otp": "ईमेल OTP",
+        "whatsapp_otp": "व्हाट्सएप OTP",
+        "email_placeholder": "example@mail.com",
+        "mobile_placeholder": "10 अंकों का मोबाइल नंबर",
+        "gender_label": "लिंग",
+        "male": "पुरुष",
+        "female": "महिला",
+        "otp_placeholder": "4-अंकों का OTP दर्ज करें",
+        "sending_otp": "भेज रहा है...",
+        "send_otp": "OTP भेजें",
+        "verify_otp_button": "OTP सत्यापित करें",
+        "resend_otp": "OTP पुनः भेजें",
+        "are_you_from_narayanpur": "क्या आप नारायणपुर से हैं?"
+    },
+    "personal": {
+        "step_label": "चरण 2 / 3",
+        "title": "व्यक्तिगत जानकारी",
+        "fields": {
+            "first_name": "पहला नाम",
+            "first_name_placeholder": "अपना पहला नाम दर्ज करें",
+            "last_name": "अंतिम नाम",
+            "last_name_placeholder": "अपना अंतिम नाम दर्ज करें",
+            "email": "ईमेल",
+            "email_placeholder": "अपना ईमेल दर्ज करें",
+            "mobile": "मोबाइल",
+            "mobile_placeholder": "10 अंकों का मोबाइल नंबर",
+            "dob": "जन्म तिथि",
+            "dob_placeholder": "अपनी जन्म तिथि दर्ज करें",
+            "pin_code": "पिन कोड",
+            "pin_code_placeholder": "अपना पिन कोड दर्ज करें",
+            "state": "राज्य",
+            "state_placeholder": "अपना राज्य चुनें",
+            "city": "शहर",
+            "city_placeholder": "अपना शहर दर्ज करें",
+            "race_category": "दौड़ श्रेणी",
+            "race_category_placeholder": "अपनी दौड़ श्रेणी चुनें",
+            "tshirt_size": "टी-शर्ट आकार",
+            "tshirt_size_placeholder": "अपना टी-शर्ट आकार दर्ज करें",
+            "occupation": "पेशा",
+            "occupation_placeholder": "अपना पेशा दर्ज करें",
+            "emergency_contact_name": "आपातकालीन संपर्क नाम",
+            "emergency_contact_name_placeholder": "आपातकालीन संपर्क नाम दर्ज करें",
+            "emergency_contact_number": "आपातकालीन संपर्क नंबर",
+            "emergency_contact_number_placeholder": "आपातकालीन संपर्क नंबर दर्ज करें",
+            "blood_group": "रक्त समूह",
+            "blood_group_placeholder": "अपना रक्त समूह चुनें",
+            "have_you_participated_in_marathons": "क्या आपने पिछले मैराथन में भाग लिया है?",
+            "previous_marathon_name": "पिछला मैराथन नाम",
+            "previous_marathon_name_placeholder": "पिछला मैराथन नाम दर्ज करें",
+            "previous_marathon_rank": "पिछला मैराथन रैंक",
+            "previous_marathon_rank_placeholder": "पिछला मैराथन रैंक दर्ज करें",
+            "id_type": "पहचान प्रकार",
+            "id_type_placeholder": "पहचान प्रकार चुनें",
+            "id_type_options": {
+                "aadhar": "आधार कार्ड",
+                "pan": "पैन कार्ड",
+                "voter": "वोटर आईडी",
+                "driving_license": "ड्राइविंग लाइसेंस"
+            },
+            "id_number": "पहचान संख्या",
+            "id_number_placeholder": "अपना पहचान संख्या दर्ज करें",
+            "need_accommodation": "क्या आपको आवास की आवश्यकता है?"
+        },
+        "back_button": "वापस",
+        "next_button": "अगला"
+    },
+    "payment": {
+        "step_label": "चरण 3 / 3",
+        "fee_details": "पंजीकरण शुल्क विवरण",
+        "registration_fee": "पंजीकरण शुल्क",
+        "narayanpur_note": "* नारायणपुर के प्रतिभागियों के लिए कोई पंजीकरण शुल्क नहीं",
+        "terms_conditions": "नियम और शर्तें",
+        "participant_agreement": {
+            "title": "1. प्रतिभागी समझौता:",
+            "medical_fit": "मैं पुष्टि करता/करती हूं कि मैं मैराथन में भाग लेने के लिए चिकित्सकीय रूप से फिट हूं।",
+            "risks": "मैं समझता/समझती हूं कि इस कार्यक्रम में भाग लेने में जोखिम शामिल हैं।",
+            "rules": "मैं सभी दौड़ नियमों और आयोजक निर्देशों का पालन करने के लिए सहमत हूं।"
+        },
+        "liability_waiver": {
+            "title": "2. दायित्व माफी:",
+            "claims": "मैं किसी भी चोट या नुकसान के लिए आयोजकों के खिलाफ सभी दावों को माफ करता/करती हूं।",
+            "belongings": "कार्यक्रम के दौरान मैं अपनी व्यक्तिगत वस्तुओं के लिए जिम्मेदार हूं।"
+        },
+        "media_rights": {
+            "title": "3. मीडिया अधिकार:",
+            "photos": "मैं कार्यक्रम के दौरान ली गई मेरी तस्वीरों के उपयोग की अनुमति देता/देती हूं।",
+            "promotional": "इनका उपयोग प्रचार उद्देश्यों के लिए किया जा सकता है।"
+        },
+        "prize_distribution": {
+            "title": "4. पुरस्कार वितरण आवश्यकताएं:",
+            "id_proof": "पुरस्कार वितरण के दौरान पुरस्कार प्राप्त करने के लिए प्रतिभागियों को पंजीकरण के दौरान जमा किया गया वही पहचान प्रमाण लाना होगा।"
+        },
+        "accept_terms": "मैंने नियम और शर्तों को पढ़ और स्वीकार कर लिया है",
+        "back_button": "वापस",
+        "proceed_button": "भुगतान के लिए आगे बढ़ें",
+        "continue_button": "जारी रखें"
+    }
+}

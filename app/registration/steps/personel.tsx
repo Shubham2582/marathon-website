@@ -8,15 +8,19 @@ import { personelFormDetails } from "@/data/personel-fields";
 import { fetchAddressFromPincode } from "@/services/pincodeService";
 import { validateIdNumber } from "@/utils/idValidation";
 import { validateEmail } from "@/utils/validation";
+import { useLanguage, useTranslation } from "@/store/useLanguage";
 
 export const Personel = () => {
   const { form, handleChange, setForm } = useRegistrationStore();
   const { nextStep, previousStep } = useStep();
   const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const { language } = useLanguage();
+  const t = useTranslation();
+
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    const fields = personelFormDetails(form, handleChange);
+    const fields = personelFormDetails(form, handleChange, t.personal);
 
     fields.forEach((field) => {
       const value = form[field.name as keyof typeof form];
@@ -27,11 +31,11 @@ export const Personel = () => {
       }
 
       if (!value || value.toString().trim() === "") {
-        newErrors[field.name] = `${field.label} is required`;
+        newErrors[field.name] = language === "en" ? `${field.label} is required` : `${field.label} आवश्यक है`;
       } else {
         if (field.name === "emergencyContactNumber" || field.name === "mobile") {
           if (value?.toString().length !== 10) {
-            newErrors.emergencyContactNumber = "Phone number must be 10 digits long";
+            newErrors.emergencyContactNumber = language === "en" ? "Phone number must be 10 digits long" : "फोन नंबर 10 अंकों का होना चाहिए";
           }
         }
       }
@@ -39,8 +43,7 @@ export const Personel = () => {
 
     // Add ID validation only for non-Narayanpur residents
     if (form.isFromNarayanpur && form.idType) {
-      const idError = validateIdNumber(form.idType, form.govtId);
-      console.log(idError);
+      const idError = validateIdNumber(form.idType, form.govtId, language);
       if (idError) {
         newErrors.govtId = idError;
       }
@@ -86,7 +89,7 @@ export const Personel = () => {
     <form onSubmit={handleSubmit}>
       <div>
         <div className="grid grid-cols-2 gap-2 gap-x-4">
-          {personelFormDetails(form, handleChange).map((detail, index) => {
+          {personelFormDetails(form, handleChange, t.personal).map((detail, index) => {
             // Skip ID fields if user is from Narayanpur
             if (!form.isFromNarayanpur && (detail.name === "idType" || detail.name === "govtId")) {
               return null;
@@ -103,26 +106,26 @@ export const Personel = () => {
         <div className="space-y-3 mt-4">
           <div className="flex items-center gap-x-2 text-sm font-medium">
             <Input className="size-4" type="checkbox" id="isRunner" checked={form.isRunner} onChange={() => setForm("isRunner", !form.isRunner)} />
-            <label htmlFor="isRunner">Have you ever participated in marathons?</label>
+            <label htmlFor="isRunner">{t.personal.fields.have_you_participated_in_marathons}</label>
           </div>
 
           {form.isRunner && (
-            <div className="ml-6 space-y-2 p-3 border rounded-md bg-gray-50">
+            <div className="space-y-2 p-3 border rounded-md bg-gray-50">
               <div className="space-y-1">
-                <label className="block text-sm font-medium">Previous Marathon Name</label>
+                <label className="block text-sm font-medium">{t.personal.fields.previous_marathon_name}</label>
                 <Input
                   type="text"
-                  placeholder="Enter marathon name"
+                  placeholder={t.personal.fields.previous_marathon_name_placeholder}
                   value={form.previousMarathonName || ""}
                   onChange={(e) => setForm("previousMarathonName", e.target.value)}
                   className="w-full"
                 />
               </div>
               <div className="space-y-1">
-                <label className="block text-sm font-medium">Previous Marathon Rank</label>
+                <label className="block text-sm font-medium">{t.personal.fields.previous_marathon_rank}</label>
                 <Input
                   type="number"
-                  placeholder="Ex: 45"
+                  placeholder={t.personal.fields.previous_marathon_rank_placeholder}
                   value={form.previousMarathonRank || ""}
                   onChange={(e) => setForm("previousMarathonRank", e.target.value)}
                   min="1"
@@ -134,7 +137,7 @@ export const Personel = () => {
         </div>
 
         {!form.isFromNarayanpur && (
-          <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
+          <div className="flex items-center gap-x-2 text-sm font-medium mt-4">
             <Input
               className="size-4"
               type="checkbox"
@@ -143,16 +146,16 @@ export const Personel = () => {
               checked={form.needsAccommodation}
               onChange={() => setForm("needsAccommodation", !form.needsAccommodation)}
             />
-            <label htmlFor="needsAccommodation">Do you need accommodation?</label>
+            <label htmlFor="needsAccommodation">{t.personal.fields.need_accommodation}</label>
           </div>
         )}
       </div>
       <div className="mt-4 flex justify-between">
         <Button type="button" onClick={previousStep} variant="secondary">
-          Back
+          {t.personal.back_button}
         </Button>
         <Button type="submit" variant="primary">
-          Next
+          {t.personal.next_button}
         </Button>
       </div>
     </form>

@@ -7,6 +7,7 @@ import { useStep } from "@/store/useStep";
 import { Input } from "@/components/ui/input";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
+import { useTranslation } from "@/store/useLanguage";
 
 export const Verification = () => {
   const { form, handleChange, setForm } = useRegistrationStore();
@@ -19,6 +20,8 @@ export const Verification = () => {
   const [otpError, setOtpError] = useState("");
   const [error, setError] = useState<{ email?: string; mobile?: string }>({});
   const [verificationMethod, setVerificationMethod] = useState<"EMAIL" | "WHATSAPP">("EMAIL");
+
+  const t = useTranslation();
 
   const validateEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -152,39 +155,39 @@ export const Verification = () => {
     >
       <div className="flex flex-col">
         <div className="p-3 mb-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h4 className="font-medium text-lg mb-1">Important Links:</h4>
+          <h4 className="font-medium text-lg mb-1">{t.verification.important_links_title}</h4>
           <ul className="space-y-2 list-disc pl-5 text-sm">
             <li>
               <Link href="https://youtu.be/gJ3kS9t8-nE" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
-                Watch registration tutorial video
+                {t.verification.watch_registration_tutorial_video}
               </Link>
             </li>
             <li>
               <Link href="https://forms.gle/LFVcYJ9uJZ3SzYrQ9" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
-                Apply for Pacer or Marshal position in the marathon
+                {t.verification.apply_for_pacer_or_marshal_position_in_the_marathon}
               </Link>
             </li>
           </ul>
         </div>
-        <h3 className="text-lg font-medium mb-4">Choose Verification Method</h3>
+        <h3 className="text-lg font-medium mb-4">{t.verification.method_label}</h3>
         <div className="grid grid-cols-2 gap-4">
           <Button type="button" className={verificationMethodClass("EMAIL")} onClick={() => setVerificationMethod("EMAIL")}>
             <IoMailOutline className="size-7" />
-            <span>Email OTP</span>
+            <span>{t.verification.email_otp}</span>
           </Button>
 
           <Button type="button" className={verificationMethodClass("WHATSAPP")} onClick={() => setVerificationMethod("WHATSAPP")}>
             <IoLogoWhatsapp className="size-7" />
-            <span>WhatsApp OTP</span>
+            <span>{t.verification.whatsapp_otp}</span>
           </Button>
         </div>
       </div>
 
       <div className="space-y-2">
         <FormField
-          label={verificationMethod === "EMAIL" ? "Email" : "Phone Number"}
+          label={verificationMethod === "EMAIL" ? t.verification.email : t.verification.mobile}
           name={verificationMethod === "EMAIL" ? "email" : "mobile"}
-          placeholder={verificationMethod === "EMAIL" ? "example@mail.com" : "XXXXXXXXXX"}
+          placeholder={verificationMethod === "EMAIL" ? t.verification.email_placeholder : t.verification.mobile_placeholder}
           value={verificationMethod === "EMAIL" ? form.email : form.mobile}
           handleChange={handleChange}
           type={verificationMethod === "EMAIL" ? "email" : "tel"}
@@ -192,15 +195,15 @@ export const Verification = () => {
         />
 
         <FormField
-          label="Gender"
+          label={t.verification.gender_label}
           name="gender"
-          placeholder="Choose your gender"
+          placeholder={t.verification.gender_label}
           value={form.gender}
           handleChange={handleChange}
           fieldType="select"
           options={[
-            { label: "Male", value: "MALE" },
-            { label: "Female", value: "FEMALE" },
+            { label: t.verification.male, value: "MALE" },
+            { label: t.verification.female, value: "FEMALE" },
           ]}
           required
         />
@@ -210,7 +213,7 @@ export const Verification = () => {
           <div className="flex space-x-2">
             <Input
               type="text"
-              placeholder="Enter 4-digit OTP"
+              placeholder={t.verification.otp_placeholder}
               value={otp}
               onChange={(e) => {
                 setOtp(e.target.value);
@@ -224,9 +227,8 @@ export const Verification = () => {
               type="button"
               onClick={sendOTP}
               disabled={cooldown > 0 || (verificationMethod === "EMAIL" ? !validateEmail(form.email) : !validateMobile(form.mobile)) || isSendingOTP}
-              // variant="blue"
             >
-              {isSendingOTP ? "Sending..." : cooldown > 0 ? `Resend OTP (${cooldown}s)` : "Send OTP"}
+              {isSendingOTP ? t.verification.sending_otp : cooldown > 0 ? `${t.verification.resend_otp} (${cooldown}s)` : t.verification.send_otp}
             </Button>
           </div>
           {otpError && <p className="text-red-500 text-sm mt-1">{otpError}</p>}
@@ -241,13 +243,13 @@ export const Verification = () => {
             checked={form.isFromNarayanpur}
             onChange={handleIsFromNarayanpur}
           />
-          <label htmlFor="isFromNarayanpur">Are you from Narayanpur?</label>
+          <label htmlFor="isFromNarayanpur">{t.verification.are_you_from_narayanpur}</label>
         </div>
       </div>
 
       <div className="flex justify-end">
         <Button type="submit" variant="primary" disabled={!isOtpSent || otp.length !== 4}>
-          Verify OTP
+          {t.verification.verify_otp_button}
         </Button>
       </div>
     </form>

@@ -1,0 +1,117 @@
+{
+    "title": "English",
+    "page_title": "Marathon Registration",
+    "steps": {
+        "1": "Verification",
+        "2": "Personal",
+        "3": "Payment"
+    },
+    "verification": {
+        "important_links_title": "Important Links",
+        "watch_registration_tutorial_video": "Watch Registration Tutorial Video",
+        "apply_for_pacer_or_marshal_position_in_the_marathon": "Apply for Pacer or Marshal Position in the Marathon",
+        "step_label": "Step 1 / 3",
+        "title": "Verification",
+        "method_label": "Choose Verification Method",
+        "email": "Email",
+        "mobile": "Mobile",
+        "email_otp": "Email OTP",
+        "whatsapp_otp": "WhatsApp OTP",
+        "email_placeholder": "example@mail.com",
+        "mobile_placeholder": "10 digit mobile number",
+        "gender_label": "Gender",
+        "male": "Male",
+        "female": "Female",
+        "otp_placeholder": "Enter 4-digit OTP",
+        "sending_otp": "Sending...",
+        "send_otp": "Send OTP",
+        "verify_otp_button": "Verify OTP",
+        "resend_otp": "Resend OTP",
+        "are_you_from_narayanpur": "Are you from Narayanpur?"
+    },
+    "personal": {
+        "step_label": "Step 2 / 3",
+        "title": "Personal",
+        "fields": {
+            "first_name": "First Name",
+            "first_name_placeholder": "Enter your first name",
+            "last_name": "Last Name",
+            "last_name_placeholder": "Enter your last name",
+            "email": "Email",
+            "email_placeholder": "Enter your email",
+            "mobile": "Mobile",
+            "mobile_placeholder": "10 digit mobile number",
+            "dob": "Date of Birth",
+            "dob_placeholder": "Enter your date of birth",
+            "pin_code": "Pin Code",
+            "pin_code_placeholder": "Enter your pin code",
+            "state": "State",
+            "state_placeholder": "Select your state",
+            "city": "City",
+            "city_placeholder": "Enter your city",
+            "race_category": "Race Category",
+            "race_category_placeholder": "Select race category",
+            "tshirt_size": "T-Shirt Size",
+            "tshirt_size_placeholder": "Enter your t-shirt size",
+            "occupation": "Occupation",
+            "occupation_placeholder": "Enter your occupation",
+            "emergency_contact_name": "Emergency Contact Name",
+            "emergency_contact_name_placeholder": "Enter your emergency contact name",
+            "emergency_contact_number": "Emergency Contact Number",
+            "emergency_contact_number_placeholder": "Enter your emergency contact number",
+            "blood_group": "Blood Group",
+            "blood_group_placeholder": "Select your blood group",
+            "have_you_participated_in_marathons": "Have you ever participated in marathons?",
+            "previous_marathon_name": "Previous Marathon Name",
+            "previous_marathon_name_placeholder": "Enter previous marathon name",
+            "previous_marathon_rank": "Previous Marathon Rank",
+            "previous_marathon_rank_placeholder": "Enter previous marathon rank",
+            "id_type": "ID Type",
+            "id_type_placeholder": "Select ID Type",
+            "id_number": "ID Number",
+            "id_number_placeholder": "Enter your ID number",
+            "id_type_options": {
+                "aadhar": "Aadhar Card",
+                "pan": "PAN Card",
+                "voter": "Voter ID",
+                "driving_license": "Driving License"
+            },
+            "need_accommodation": "Do you need accommodation?"
+            
+        },
+        "back_button": "Back",
+        "next_button": "Next"
+    },
+    "payment": {
+        "step_label": "Step 3 / 3",
+        "fee_details": "Registration Fee Details",
+        "registration_fee": "Registration Fee",
+        "narayanpur_note": "* No registration fee for participants from Narayanpur",
+        "terms_conditions": "Terms and Conditions",
+        "terms_conditions_agreement": "I have read and agree to the terms and conditions",
+        "participant_agreement": {
+            "title": "1. Participant Agreement:",
+            "medical_fit": "I confirm that I am medically fit to participate in the marathon.",
+            "risks": "I understand that participating in this event involves risks.",
+            "rules": "I agree to follow all race rules and organizer instructions."
+        },
+        "liability_waiver": {
+            "title": "2. Liability Waiver:",
+            "claims": "I waive all claims against the organizers for any injuries or losses.",
+            "belongings": "I am responsible for my personal belongings during the event."
+        },
+        "media_rights": {
+            "title": "3. Media Rights:",
+            "photos": "I grant permission to use my photographs taken during the event.",
+            "promotional": "These may be used for promotional purposes."
+        },
+        "prize_distribution": {
+            "title": "4. Prize Distribution Requirements:",
+            "id_proof": "Participants must bring the same ID proof submitted during registration to claim prizes during the prize distribution."
+        },
+        "accept_terms": "I have read and agree to the terms and conditions",
+        "back_button": "Back",
+        "proceed_button": "Proceed to Payment",
+        "continue_button": "Continue"
+    }
+}
