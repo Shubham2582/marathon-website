@@ -34,16 +34,30 @@ const SuccessContent = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const sendWhatsAppMessage = async (phoneNumber: string) => {
+  const sendWhatsAppMessage = async (
+    phoneNumber: string,
+    raceCategory: string,
+    tShirtSize: string,
+    identificationNumber: string | null,
+    firstName: string,
+    lastName: string
+  ) => {
     try {
       const response = await fetch("https://runabujhmaad.in/send-marathon-message", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ phoneNumber }),
+        body: JSON.stringify({
+          phoneNumber,
+          raceCategory,
+          tShirtSize,
+          identificationNumber,
+          firstName,
+          lastName
+        }),
       });
-
+  
       if (!response.ok) {
         console.error("Failed to send WhatsApp message");
       }
@@ -84,7 +98,14 @@ const SuccessContent = () => {
         console.error("Failed to send confirmation email");
       }
       if (userData.mobile) {
-        await sendWhatsAppMessage("91" + userData.mobile);
+        await sendWhatsAppMessage(
+          "91" + userData.mobile,
+          userData.race_category,
+          userData.t_shirt_size,
+          identificationNumber,
+          userData.first_name,
+          userData.last_name
+        );
       }
     } catch (emailError) {
       console.error("Error sending confirmation email:", emailError);
