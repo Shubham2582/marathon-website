@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import { useRegistrationStore } from "@/store/useRegistration";
+import { useStep } from "@/store/useStep";
 
 interface UserData {
   email: string;
@@ -20,6 +22,8 @@ const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const identificationNumber = searchParams.get("identification_number");
+  const {resetForm} = useRegistrationStore();
+  const {resetStep} = useStep();
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,6 +34,9 @@ const SuccessContent = () => {
     };
 
     handleResize();
+    resetForm();
+    resetStep();
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
