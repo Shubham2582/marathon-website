@@ -145,7 +145,7 @@ const Track = () => {
             {/* Main Map Container */}
             <div className="relative h-[500px] mt-20 md:mt-0 rounded-2xl overflow-hidden">
               <Image
-                src="/track-map.jpg"
+                src="/images/track.jpg"
                 alt="Marathon Track Map"
                 fill
                 className="object-cover"

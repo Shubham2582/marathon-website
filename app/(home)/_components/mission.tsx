@@ -40,10 +40,11 @@ const Mission = () => {
       >
         <h2 className="text-primary text-center">Mission & Vision</h2>
 
-        <div className="grid md:grid-cols-2 gap-4 md:gap-12 mt-10 md:mt-20">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-8 lg:gap-12 mt-10 md:mt-20">
           {/* Mission Card */}
           {missons.map((mission) => (
             <motion.div
+              key={mission.title}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}

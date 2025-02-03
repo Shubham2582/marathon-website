@@ -80,9 +80,9 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <span className="text-white drop-shadow">Abujhmad Peace</span>
+          <span className="text-white drop-shadow font-bold">Abujhmad Peace</span>
           <br />
-          <span className="text-primary ">Half Marathon</span>
+          <span className="text-primary font-bold">Half Marathon</span>
           <br />
           {/* <span className="text-white drop-shadow"> 2025</span> */}
         </motion.h1>
