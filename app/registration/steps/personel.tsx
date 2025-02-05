@@ -88,7 +88,7 @@ export const Personel = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <div className="grid grid-cols-2 gap-2 gap-x-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 gap-x-4">
           {personelFormDetails(form, handleChange, t.personal).map((detail, index) => {
             // Skip ID fields if user is from Narayanpur
             if (!form.isFromNarayanpur && (detail.name === "idType" || detail.name === "govtId")) {

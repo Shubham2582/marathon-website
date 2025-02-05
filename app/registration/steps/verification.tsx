@@ -19,7 +19,9 @@ export const Verification = () => {
   const [isSendingOTP, setIsSendingOTP] = useState(false);
   const [otpError, setOtpError] = useState("");
   const [error, setError] = useState<{ email?: string; mobile?: string }>({});
-  const [verificationMethod, setVerificationMethod] = useState<"EMAIL" | "WHATSAPP">("EMAIL");
+  const [verificationMethod, setVerificationMethod] = useState<
+    "EMAIL" | "WHATSAPP"
+  >("EMAIL");
 
   const t = useTranslation();
 
@@ -113,11 +115,17 @@ export const Verification = () => {
         const responseData = await response.json();
 
         if (!response.ok) {
-          throw new Error(responseData.message || "Failed to send WhatsApp OTP");
+          throw new Error(
+            responseData.message || "Failed to send WhatsApp OTP"
+          );
         }
       }
 
-      toast.success(`OTP sent to your ${verificationMethod === "EMAIL" ? "email" : "WhatsApp"}`);
+      toast.success(
+        `OTP sent to your ${
+          verificationMethod === "EMAIL" ? "email" : "WhatsApp"
+        }`
+      );
       setIsOtpSent(true);
       startCooldown();
     } catch (error) {
@@ -155,39 +163,74 @@ export const Verification = () => {
     >
       <div className="flex flex-col">
         <div className="p-3 mb-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h4 className="font-medium text-lg mb-1">{t.verification.important_links_title}</h4>
+          <h4 className="font-medium text-lg mb-1">
+            {t.verification.important_links_title}
+          </h4>
           <ul className="space-y-2 list-disc pl-5 text-sm">
             <li>
-              <Link href="https://youtu.be/gJ3kS9t8-nE" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
+              <Link
+                href="https://youtu.be/gJ3kS9t8-nE"
+                target="_blank"
+                className="text-blue-600 hover:text-blue-800 hover:underline"
+              >
                 {t.verification.watch_registration_tutorial_video}
               </Link>
             </li>
             <li>
-              <Link href="https://forms.gle/LFVcYJ9uJZ3SzYrQ9" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
-                {t.verification.apply_for_pacer_or_marshal_position_in_the_marathon}
+              <Link
+                href="https://forms.gle/LFVcYJ9uJZ3SzYrQ9"
+                target="_blank"
+                className="text-blue-600 hover:text-blue-800 hover:underline"
+              >
+                {
+                  t.verification
+                    .apply_for_pacer_or_marshal_position_in_the_marathon
+                }
               </Link>
             </li>
           </ul>
         </div>
-        <h3 className="text-lg font-medium mb-4">{t.verification.method_label}</h3>
+
+        {/* --- Verification Method Section */}
+        {/* <h3 className="text-lg font-medium mb-4">
+          {t.verification.method_label}
+        </h3>
         <div className="grid grid-cols-2 gap-4">
-          <Button type="button" className={verificationMethodClass("EMAIL")} onClick={() => setVerificationMethod("EMAIL")}>
+          <Button
+            type="button"
+            className={verificationMethodClass("EMAIL")}
+            onClick={() => setVerificationMethod("EMAIL")}
+          >
             <IoMailOutline className="size-7" />
             <span>{t.verification.email_otp}</span>
           </Button>
 
-          <Button type="button" className={verificationMethodClass("WHATSAPP")} onClick={() => setVerificationMethod("WHATSAPP")}>
+          <Button
+            type="button"
+            className={verificationMethodClass("WHATSAPP")}
+            onClick={() => setVerificationMethod("WHATSAPP")}
+          >
             <IoLogoWhatsapp className="size-7" />
             <span>{t.verification.whatsapp_otp}</span>
           </Button>
-        </div>
+        </div> */}
+        {/* --- Verification Method Section */}
+        
       </div>
 
       <div className="space-y-2">
         <FormField
-          label={verificationMethod === "EMAIL" ? t.verification.email : t.verification.mobile}
+          label={
+            verificationMethod === "EMAIL"
+              ? t.verification.email
+              : t.verification.mobile
+          }
           name={verificationMethod === "EMAIL" ? "email" : "mobile"}
-          placeholder={verificationMethod === "EMAIL" ? t.verification.email_placeholder : t.verification.mobile_placeholder}
+          placeholder={
+            verificationMethod === "EMAIL"
+              ? t.verification.email_placeholder
+              : t.verification.mobile_placeholder
+          }
           value={verificationMethod === "EMAIL" ? form.email : form.mobile}
           handleChange={handleChange}
           type={verificationMethod === "EMAIL" ? "email" : "tel"}
@@ -208,7 +251,8 @@ export const Verification = () => {
           required
         />
 
-        <div className="space-y-2">
+        {/* --- OTP Section */}
+        {/* <div className="space-y-2">
           <label className="block text-sm font-medium">OTP</label>
           <div className="flex space-x-2">
             <Input
@@ -226,13 +270,24 @@ export const Verification = () => {
             <Button
               type="button"
               onClick={sendOTP}
-              disabled={cooldown > 0 || (verificationMethod === "EMAIL" ? !validateEmail(form.email) : !validateMobile(form.mobile)) || isSendingOTP}
+              disabled={
+                cooldown > 0 ||
+                (verificationMethod === "EMAIL"
+                  ? !validateEmail(form.email)
+                  : !validateMobile(form.mobile)) ||
+                isSendingOTP
+              }
             >
-              {isSendingOTP ? t.verification.sending_otp : cooldown > 0 ? `${t.verification.resend_otp} (${cooldown}s)` : t.verification.send_otp}
+              {isSendingOTP
+                ? t.verification.sending_otp
+                : cooldown > 0
+                ? `${t.verification.resend_otp} (${cooldown}s)`
+                : t.verification.send_otp}
             </Button>
           </div>
           {otpError && <p className="text-red-500 text-sm mt-1">{otpError}</p>}
-        </div>
+        </div> */}
+        {/* --- OTP Section */}
 
         <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
           <Input
@@ -243,13 +298,20 @@ export const Verification = () => {
             checked={form.isFromNarayanpur}
             onChange={handleIsFromNarayanpur}
           />
-          <label htmlFor="isFromNarayanpur">{t.verification.are_you_from_narayanpur}</label>
+          <label htmlFor="isFromNarayanpur">
+            {t.verification.are_you_from_narayanpur}
+          </label>
         </div>
       </div>
 
       <div className="flex justify-end">
-        <Button type="submit" variant="primary" disabled={!isOtpSent || otp.length !== 4}>
-          {t.verification.verify_otp_button}
+        <Button
+          type="submit"
+          variant="primary"
+          // disabled={!isOtpSent || otp.length !== 4}
+        >
+          {/* {t.verification.verify_otp_button} */}
+          {t.personal.next_button}
         </Button>
       </div>
     </form>

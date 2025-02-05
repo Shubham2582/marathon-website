@@ -4,7 +4,7 @@ import { Language, LanguageState } from "@/types/language";
 import { translations } from "@/languages";
 
 export const useLanguage = create<LanguageState>((set) => ({
-    language: Language.EN,
+    language: Language.HIN,
     setLanguage: (language: Language) => set({ language }),
 })); 
 

@@ -11,7 +11,8 @@ import { Select, SelectContent, SelectItem } from "@/components/ui/select";
 import { SelectTrigger } from "@radix-ui/react-select";
 import { useLanguage, useTranslation } from "@/store/useLanguage";
 import { Language } from "@/types/language";
-import {translations} from "@/languages";
+import { translations } from "@/languages";
+import { Button } from "@/components/ui/button";
 
 const Registration = () => {
   const { currentStep, totalSteps } = useStep();
@@ -23,23 +24,9 @@ const Registration = () => {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gray-100">
       <section className="max-w-2xl w-full bg-white shadow-md rounded-xl p-5">
-        <div className="flex justify-between items-center mb-8">
-          <h2 className="text-4xl mb-0">{t.page_title}</h2>
-          <div className="flex items-center gap-x-2">
-            <Select onValueChange={(value) => setLanguage(value as Language)}>
-              <SelectTrigger>
-                <LucideLanguages />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={Language.EN}>English</SelectItem>
-                <SelectItem value={Language.HIN}>Hindi</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
+        <h2 className="text-4xl mb-0">{t.page_title}</h2>
         {/* --- Steps --- */}
-        <div className="flex gap-x-5">
+        <div className="flex gap-x-5 mt-5">
           {steps.map((step, index: number) => (
             <div
               key={index}
@@ -70,9 +57,24 @@ const Registration = () => {
         <hr className="my-5" />
 
         {/* --- Steps Count --- */}
-        <p className="text-sm text-gray-500 font-medium">
-          {currentStep === 1 ? t.verification.step_label : currentStep === 2 ? t.personal.step_label : t.payment.step_label}
-        </p>
+        <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-500 font-medium">
+            {currentStep === 1
+              ? t.verification.step_label
+              : currentStep === 2
+              ? t.personal.step_label
+              : t.payment.step_label}
+          </p>
+          <Select onValueChange={(value) => setLanguage(value as Language)}>
+            <SelectTrigger className="my-2 bg-blue-600 text-sm text-white p-1.5 px-3 rounded-md">
+                {language === Language.EN ? "Change Language" : "भाषा बदलें"}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={Language.EN}>English</SelectItem>
+              <SelectItem value={Language.HIN}>Hindi</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
         {/* /--- Steps Count --- */}
 
         {/* --- Steps Content --- */}
