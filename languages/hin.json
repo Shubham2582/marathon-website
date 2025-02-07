@@ -111,5 +111,17 @@
         "back_button": "वापस",
         "proceed_button": "भुगतान के लिए आगे बढ़ें",
         "continue_button": "जारी रखें"
+    },
+    "qr_payment": {
+        "title": "भुगतान के लिए QR कोड स्कैन करें",
+        "amount_to_pay": "भुगतान राशि",
+        "qr_code_alt": "भुगतान QR कोड",
+        "transaction_id_label": "लेन-देन आईडी दर्ज करें",
+        "transaction_id_placeholder": "अपने भुगतान से लेन-देन आईडी दर्ज करें",
+        "enter_transaction_id_note": "कृपया भुगतान के बाद प्राप्त लेन-देन आईडी दर्ज करें",
+        "confirm_payment_button": "भुगतान की पुष्टि करें",
+        "error_invalid_details": "अमान्य भुगतान विवरण",
+        "error_no_id": "कोई पहचान संख्या नहीं मिली",
+        "error_no_transaction": "कृपया लेन-देन आईडी दर्ज करें"
     }
 }

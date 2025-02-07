@@ -113,5 +113,17 @@
         "back_button": "Back",
         "proceed_button": "Proceed to Payment",
         "continue_button": "Continue"
+    },
+    "qr_payment": {
+        "title": "Scan QR Code to Pay",
+        "amount_to_pay": "Amount to pay",
+        "qr_code_alt": "Payment QR Code",
+        "transaction_id_label": "Enter Transaction ID",
+        "transaction_id_placeholder": "Enter the transaction ID from your payment",
+        "enter_transaction_id_note": "Please enter the transaction ID received after payment",
+        "confirm_payment_button": "Confirm Payment",
+        "error_invalid_details": "Invalid payment details",
+        "error_no_id": "No identification number found",
+        "error_no_transaction": "Please enter the transaction ID"
     }
 }
