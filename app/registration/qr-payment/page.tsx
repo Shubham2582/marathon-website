@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "@/store/useLanguage";
 import { supabase } from "@/lib/supabase";
 
-export default function QRPaymentPage() {
+const QRPaymentContent = () => {
   const t = useTranslation();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -107,5 +107,25 @@ export default function QRPaymentPage() {
         </CardContent>
       </Card>
     </div>
+  );
+};
+
+export default function QRPaymentPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container max-w-2xl mx-auto py-8">
+          <Card>
+            <CardContent>
+              <div className="flex justify-center items-center h-32">
+                <p>Loading...</p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      }
+    >
+      <QRPaymentContent />
+    </Suspense>
   );
 }
