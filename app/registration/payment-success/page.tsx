@@ -22,8 +22,8 @@ const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const identificationNumber = searchParams.get("identification_number");
-  const {resetForm} = useRegistrationStore();
-  const {resetStep} = useStep();
+  const { resetForm } = useRegistrationStore();
+  const { resetStep } = useStep();
 
   useEffect(() => {
     const handleResize = () => {
@@ -61,10 +61,10 @@ const SuccessContent = () => {
           tShirtSize,
           identificationNumber,
           firstName,
-          lastName
+          lastName,
         }),
       });
-  
+
       if (!response.ok) {
         console.error("Failed to send WhatsApp message");
       }
@@ -122,10 +122,7 @@ const SuccessContent = () => {
   useEffect(() => {
     const fetchUserDataAndUpdate = async () => {
       if (identificationNumber) {
-        const {
-          data,
-          error: fetchError,
-        }: { data: UserData | null; error: Error | null } = await supabase
+        const { data, error: fetchError }: { data: UserData | null; error: Error | null } = await supabase
           .from("registrations")
           .select("*")
           .eq("identification_number", identificationNumber)
@@ -136,7 +133,10 @@ const SuccessContent = () => {
           return;
         }
 
-        if (data?.payment_status === "DONE") {
+        if (data?.payment_status === "DONE" || data?.payment_status === "QR") {
+          if (data) {
+            await sendSuccessEmail(data);
+          }
           return;
         }
 
@@ -178,50 +178,23 @@ const SuccessContent = () => {
               duration: 0.5,
             }}
           >
-            <motion.path
-              d="M5 13l4 4L19 7"
-              stroke="currentColor"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+            <motion.path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
           </motion.svg>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-center space-y-4"
-        >
-          <h1 className="text-3xl font-bold text-gray-800">
-            Payment Successful!
-          </h1>
-          <p className="text-gray-600">
-            Thank you for your registration. Your payment has been processed
-            successfully.
-          </p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-center space-y-4">
+          <h1 className="text-3xl font-bold text-gray-800">Payment Successful!</h1>
+          <p className="text-gray-600">Thank you for your registration. Your payment has been processed successfully.</p>
 
           {identificationNumber && (
             <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <p className="text-sm text-gray-600">
-                Your Identification Number
-              </p>
-              <p className="text-2xl font-mono font-bold text-blue-600 tracking-wider">
-                {identificationNumber}
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Please save this number for future reference
-              </p>
+              <p className="text-sm text-gray-600">Your Identification Number</p>
+              <p className="text-2xl font-mono font-bold text-blue-600 tracking-wider">{identificationNumber}</p>
+              <p className="text-sm text-gray-500 mt-2">Please save this number for future reference</p>
             </div>
           )}
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="mt-8"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-8">
             <Link
               href="/"
               className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
@@ -257,9 +230,7 @@ const SuccessContent = () => {
                 delay: Math.random() * 2,
               }}
               style={{
-                backgroundColor: ["#60A5FA", "#34D399", "#F59E0B", "#EC4899"][
-                  Math.floor(Math.random() * 4)
-                ],
+                backgroundColor: ["#60A5FA", "#34D399", "#F59E0B", "#EC4899"][Math.floor(Math.random() * 4)],
               }}
             />
           ))}

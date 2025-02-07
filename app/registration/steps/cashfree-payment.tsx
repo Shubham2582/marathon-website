@@ -73,7 +73,9 @@ export const CashFreePayment = () => {
       return;
     }
 
-    cashfree && doPayment(cashfree, registrationFee, form, identificationNumber);
+    // cashfree && doPayment(cashfree, registrationFee, form, identificationNumber);
+
+    router.push(`/registration/qr-payment?identification_number=${identificationNumber}&amount=${registrationFee}`);
   };
 
   return (
