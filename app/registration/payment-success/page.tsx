@@ -21,7 +21,7 @@ interface UserData {
 const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const identificationNumber = searchParams.get("identification_number");
+  const identificationNumber = searchParams?.get("identification_number") ?? null;
   const { resetForm } = useRegistrationStore();
   const { resetStep } = useStep();
 
@@ -121,38 +121,48 @@ const SuccessContent = () => {
 
   useEffect(() => {
     const fetchUserDataAndUpdate = async () => {
-      if (identificationNumber) {
-        const { data, error: fetchError }: { data: UserData | null; error: Error | null } = await supabase
-          .from("registrations")
-          .select("*")
-          .eq("identification_number", identificationNumber)
-          .single();
+      if (!identificationNumber) {
+        console.error("No identification number provided");
+        return;
+      }
 
-        if (fetchError) {
-          console.error("Error fetching user data:", fetchError);
-          return;
-        }
+      const { data, error: fetchError }: { data: UserData | null; error: Error | null } = await supabase
+        .from("registrations")
+        .select("*")
+        .eq("identification_number", identificationNumber)
+        .single();
 
-        if (data?.payment_status === "DONE" || data?.payment_status === "QR") {
-          if (data) {
-            await sendSuccessEmail(data);
-          }
-          return;
-        }
+      if (fetchError) {
+        console.error("Error fetching user data:", fetchError);
+        return;
+      }
 
-        const { error: updateError } = await supabase
-          .from("registrations")
-          .update({ payment_status: "DONE" })
-          .eq("identification_number", identificationNumber);
-
-        if (!updateError && data) {
+      if (data?.payment_status === "DONE" || data?.payment_status === "QR") {
+        if (data) {
           await sendSuccessEmail(data);
         }
+        return;
+      }
+
+      const { error: updateError } = await supabase.from("registrations").update({ payment_status: "DONE" }).eq("identification_number", identificationNumber);
+
+      if (!updateError && data) {
+        await sendSuccessEmail(data);
       }
     };
 
     fetchUserDataAndUpdate();
   }, [identificationNumber]);
+
+  if (!identificationNumber) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+          <h1 className="text-xl text-red-500 text-center">Invalid or missing identification number</h1>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
