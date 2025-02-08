@@ -61,7 +61,7 @@ export function Footer() {
             </li>
             <li className="flex items-center gap-2">
               <span className="font-semibold text-white">Address:</span>{" "}
-              Narayanpur,chhattigarh,india
+              011 , Mawily Nagar, Thelkabod , Kanker 494334 , chhattisgarh
             </li>
           </ul>
         </div>
