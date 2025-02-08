@@ -91,6 +91,10 @@ export function Footer() {
         <p className="text-neutral-400 text-sm md:text-base">
           &copy; 2024 Peace Marathon. All rights reserved.
         </p>
+    <p className="text-neutral-400 text-sm md:text-base">
+      Event organised by Baster Event Management  
+    </p>
+
         <div className="flex gap-3 md:gap-6">
           {[
             {
