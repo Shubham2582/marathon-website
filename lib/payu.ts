@@ -13,7 +13,7 @@ export const initiatePayment = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: 1 || registrationFee,
+        amount: registrationFee,
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         phone: formData.mobile,
