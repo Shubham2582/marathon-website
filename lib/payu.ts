@@ -13,7 +13,7 @@ export const initiatePayment = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: registrationFee,
+        amount: 1 || registrationFee,
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
         phone: formData.mobile,
@@ -30,7 +30,7 @@ export const initiatePayment = async (
     // Create a hidden form for PayU submission
     const paymentForm = document.createElement('form');
     paymentForm.method = 'POST';
-    paymentForm.action = process.env.NEXT_PUBLIC_PAYU_URL || 'https://secure.payu.in/_payment';
+    paymentForm.action = 'https://secure.payu.in/_payment';
 
     // Add all required fields
     Object.entries(paymentData).forEach(([key, value]) => {

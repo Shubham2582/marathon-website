@@ -18,29 +18,14 @@ interface UserData {
   mobile: string;
 }
 
-interface PayUResponse {
-  status: string;
-  txnid: string;
-  amount: string;
-  hash: string;
-  firstname: string;
-  email: string;
-  phone: string;
-  productinfo: string;
-  mihpayid: string;
-}
-
 const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const [paymentVerified, setPaymentVerified] = useState(false);
-  
+
   // Get both identification number and PayU parameters
-  const identificationNumber = searchParams?.get("identification_number") ?? null;
-  const status = searchParams?.get("status");
-  const txnid = searchParams?.get("txnid");
-  const payuHash = searchParams?.get("hash");
-  
+  const identificationNumber =
+    searchParams?.get("identification_number") ?? null;
+
   const { resetForm } = useRegistrationStore();
   const { resetStep } = useStep();
 
@@ -60,28 +45,6 @@ const SuccessContent = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const verifyPayUHash = async (responseParams: any) => {
-    try {
-      const response = await fetch('/api/verify-hash', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(responseParams)
-      });
-
-      if (!response.ok) {
-        throw new Error('Hash verification failed');
-      }
-
-      const { isValid } = await response.json();
-      return isValid;
-    } catch (error) {
-      console.error('Error verifying hash:', error);
-      return false;
-    }
-  };
-
   const sendWhatsAppMessage = async (
     phoneNumber: string,
     raceCategory: string,
@@ -91,20 +54,23 @@ const SuccessContent = () => {
     lastName: string
   ) => {
     try {
-      const response = await fetch("https://runabujhmaad.in/send-marathon-message", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          phoneNumber,
-          raceCategory,
-          tShirtSize,
-          identificationNumber,
-          firstName,
-          lastName,
-        }),
-      });
+      const response = await fetch(
+        "https://runabujhmaad.in/send-marathon-message",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phoneNumber,
+            raceCategory,
+            tShirtSize,
+            identificationNumber,
+            firstName,
+            lastName,
+          }),
+        }
+      );
 
       if (!response.ok) {
         console.error("Failed to send WhatsApp message");
@@ -144,7 +110,7 @@ const SuccessContent = () => {
       if (!emailResponse.ok) {
         console.error("Failed to send confirmation email");
       }
-      
+
       if (userData.mobile) {
         await sendWhatsAppMessage(
           "91" + userData.mobile,
@@ -167,23 +133,10 @@ const SuccessContent = () => {
         return;
       }
 
-      // Verify PayU response if status and hash are present
-      if (status && payuHash) {
-        const isValidHash = await verifyPayUHash({
-          status,
-          txnid,
-          hash: payuHash,
-          // Add other required parameters
-        });
-
-        if (!isValidHash) {
-          console.error("Invalid payment hash");
-          return;
-        }
-        setPaymentVerified(true);
-      }
-
-      const { data, error: fetchError }: { data: UserData | null; error: Error | null } = await supabase
+      const {
+        data,
+        error: fetchError,
+      }: { data: UserData | null; error: Error | null } = await supabase
         .from("registrations")
         .select("*")
         .eq("identification_number", identificationNumber)
@@ -195,33 +148,29 @@ const SuccessContent = () => {
       }
 
       if (data?.payment_status === "DONE") {
-        if (data) {
-          await sendSuccessEmail(data);
-        }
         return;
       }
 
-      // Update payment status only if PayU verification passed or it's a QR payment
-      if (paymentVerified || data?.payment_status === "QR") {
-        const { error: updateError } = await supabase
-          .from("registrations")
-          .update({ payment_status: "DONE" })
-          .eq("identification_number", identificationNumber);
+      const { error: updateError } = await supabase
+        .from("registrations")
+        .update({ payment_status: "DONE" })
+        .eq("identification_number", identificationNumber);
 
-        if (!updateError && data) {
-          await sendSuccessEmail(data);
-        }
+      if (!updateError && data) {
+        await sendSuccessEmail(data);
       }
     };
 
     fetchUserDataAndUpdate();
-  }, [identificationNumber, status, txnid, payuHash, paymentVerified]);
+  }, [identificationNumber]);
 
   if (!identificationNumber) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-xl text-red-500 text-center">Invalid or missing identification number</h1>
+          <h1 className="text-xl text-red-500 text-center">
+            Invalid or missing identification number
+          </h1>
         </div>
       </main>
     );
@@ -251,23 +200,50 @@ const SuccessContent = () => {
               duration: 0.5,
             }}
           >
-            <motion.path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            <motion.path
+              d="M5 13l4 4L19 7"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </motion.svg>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-center space-y-4">
-          <h1 className="text-3xl font-bold text-gray-800">Payment Successful!</h1>
-          <p className="text-gray-600">Thank you for your registration. Your payment has been processed successfully.</p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="text-center space-y-4"
+        >
+          <h1 className="text-3xl font-bold text-gray-800">
+            Payment Successful!
+          </h1>
+          <p className="text-gray-600">
+            Thank you for your registration. Your payment has been processed
+            successfully.
+          </p>
 
           {identificationNumber && (
             <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <p className="text-sm text-gray-600">Your Identification Number</p>
-              <p className="text-2xl font-mono font-bold text-blue-600 tracking-wider">{identificationNumber}</p>
-              <p className="text-sm text-gray-500 mt-2">Please save this number for future reference</p>
+              <p className="text-sm text-gray-600">
+                Your Identification Number
+              </p>
+              <p className="text-2xl font-mono font-bold text-blue-600 tracking-wider">
+                {identificationNumber}
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                Please save this number for future reference
+              </p>
             </div>
           )}
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="mt-8"
+          >
             <Link
               href="/"
               className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
@@ -303,7 +279,9 @@ const SuccessContent = () => {
                 delay: Math.random() * 2,
               }}
               style={{
-                backgroundColor: ["#60A5FA", "#34D399", "#F59E0B", "#EC4899"][Math.floor(Math.random() * 4)],
+                backgroundColor: ["#60A5FA", "#34D399", "#F59E0B", "#EC4899"][
+                  Math.floor(Math.random() * 4)
+                ],
               }}
             />
           ))}
