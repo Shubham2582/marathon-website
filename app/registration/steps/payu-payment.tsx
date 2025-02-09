@@ -1,31 +1,25 @@
+// app/registration/steps/payu-payment.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { load, CashfreeInstance, CashfreeConfig, CashfreeCheckoutConfig } from "@cashfreepayments/cashfree-js";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useStep } from "@/store/useStep";
 import { useRegistrationStore } from "@/store/useRegistration";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { doPayment, initializeSDK } from "@/lib/cashfree";
 import { useRouter } from "next/navigation";
 import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
 import { useTranslation } from "@/store/useLanguage";
+import { initiatePayment } from "@/lib/payu";
 
-export const CashFreePayment = () => {
-  const [cashfree, setCashfree] = useState<CashfreeInstance | null>(null);
+export const PayUPayment = () => {
   const { form } = useRegistrationStore();
   const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const router = useRouter();
-
   const t = useTranslation();
 
   const registrationFee = form.isFromNarayanpur ? 0 : 299;
-
-  useEffect(() => {
-    initializeSDK().then(setCashfree);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,21 +55,24 @@ export const CashFreePayment = () => {
       previous_marathon_rank: form.previousMarathonRank || null,
     };
 
-    const { error } = await supabase.from("registrations").insert([registrationData]).select("id");
+    try {
+      const { error } = await supabase.from("registrations").insert([registrationData]).select("id");
 
-    if (error) {
-      console.error("Supabase insertion error:", error);
-      throw error;
+      if (error) {
+        console.error("Supabase insertion error:", error);
+        throw error;
+      }
+
+      if (form.isFromNarayanpur) {
+        router.push(`/registration/payment-success?identification_number=${identificationNumber}`);
+        return;
+      }
+
+      await initiatePayment(registrationFee, form, identificationNumber);
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("An error occurred during payment initiation. Please try again.");
     }
-
-    if (form.isFromNarayanpur) {
-      router.push(`/registration/payment-success?identification_number=${identificationNumber}`);
-      return;
-    }
-
-    // cashfree && doPayment(cashfree, registrationFee, form, identificationNumber);
-
-    router.push(`/registration/qr-payment?identification_number=${identificationNumber}&amount=${registrationFee}`);
   };
 
   return (
@@ -125,7 +122,13 @@ export const CashFreePayment = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Input type="checkbox" id="terms" className="w-4 h-4" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} />
+            <Input 
+              type="checkbox" 
+              id="terms" 
+              className="w-4 h-4" 
+              checked={acceptedTerms} 
+              onChange={(e) => setAcceptedTerms(e.target.checked)} 
+            />
             <label htmlFor="terms" className="text-sm">
               {t.payment.accept_terms}
             </label>

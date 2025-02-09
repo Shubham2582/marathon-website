@@ -18,10 +18,29 @@ interface UserData {
   mobile: string;
 }
 
+interface PayUResponse {
+  status: string;
+  txnid: string;
+  amount: string;
+  hash: string;
+  firstname: string;
+  email: string;
+  phone: string;
+  productinfo: string;
+  mihpayid: string;
+}
+
 const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
+  const [paymentVerified, setPaymentVerified] = useState(false);
+  
+  // Get both identification number and PayU parameters
   const identificationNumber = searchParams?.get("identification_number") ?? null;
+  const status = searchParams?.get("status");
+  const txnid = searchParams?.get("txnid");
+  const payuHash = searchParams?.get("hash");
+  
   const { resetForm } = useRegistrationStore();
   const { resetStep } = useStep();
 
@@ -40,6 +59,28 @@ const SuccessContent = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const verifyPayUHash = async (responseParams: any) => {
+    try {
+      const response = await fetch('/api/verify-hash', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(responseParams)
+      });
+
+      if (!response.ok) {
+        throw new Error('Hash verification failed');
+      }
+
+      const { isValid } = await response.json();
+      return isValid;
+    } catch (error) {
+      console.error('Error verifying hash:', error);
+      return false;
+    }
+  };
 
   const sendWhatsAppMessage = async (
     phoneNumber: string,
@@ -74,7 +115,6 @@ const SuccessContent = () => {
   };
 
   const sendSuccessEmail = async (userData: UserData) => {
-    console.log(userData);
     if (!userData) return;
 
     try {
@@ -104,6 +144,7 @@ const SuccessContent = () => {
       if (!emailResponse.ok) {
         console.error("Failed to send confirmation email");
       }
+      
       if (userData.mobile) {
         await sendWhatsAppMessage(
           "91" + userData.mobile,
@@ -126,6 +167,22 @@ const SuccessContent = () => {
         return;
       }
 
+      // Verify PayU response if status and hash are present
+      if (status && payuHash) {
+        const isValidHash = await verifyPayUHash({
+          status,
+          txnid,
+          hash: payuHash,
+          // Add other required parameters
+        });
+
+        if (!isValidHash) {
+          console.error("Invalid payment hash");
+          return;
+        }
+        setPaymentVerified(true);
+      }
+
       const { data, error: fetchError }: { data: UserData | null; error: Error | null } = await supabase
         .from("registrations")
         .select("*")
@@ -137,22 +194,28 @@ const SuccessContent = () => {
         return;
       }
 
-      if (data?.payment_status === "DONE" || data?.payment_status === "QR") {
+      if (data?.payment_status === "DONE") {
         if (data) {
           await sendSuccessEmail(data);
         }
         return;
       }
 
-      const { error: updateError } = await supabase.from("registrations").update({ payment_status: "DONE" }).eq("identification_number", identificationNumber);
+      // Update payment status only if PayU verification passed or it's a QR payment
+      if (paymentVerified || data?.payment_status === "QR") {
+        const { error: updateError } = await supabase
+          .from("registrations")
+          .update({ payment_status: "DONE" })
+          .eq("identification_number", identificationNumber);
 
-      if (!updateError && data) {
-        await sendSuccessEmail(data);
+        if (!updateError && data) {
+          await sendSuccessEmail(data);
+        }
       }
     };
 
     fetchUserDataAndUpdate();
-  }, [identificationNumber]);
+  }, [identificationNumber, status, txnid, payuHash, paymentVerified]);
 
   if (!identificationNumber) {
     return (

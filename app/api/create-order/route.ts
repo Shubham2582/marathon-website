@@ -1,49 +1,41 @@
 import { NextResponse } from 'next/server';
+import crypto from 'crypto';
 
-interface OrderResponse {
-  payment_session_id: string;
-  order_id: string;
+interface PayUOrderRequest {
+  amount: number;
+  name: string;
+  email: string;
+  phone: string;
+  identification_number: string;
 }
+
+const generateHash = (params: PayUOrderRequest, txnid: string) => {
+  const salt = process.env.PAYU_SALT!;
+  const hashString = `${process.env.PAYU_KEY}|${txnid}|${params.amount}|Marathon Registration|${params.name}|${params.email}|||||||||||${salt}`;
+  return crypto.createHash('sha512').update(hashString).digest('hex');
+};
 
 export async function POST(req: Request) {
   try {
-    const { amount, name, email, phone, identification_number } = await req.json();
-    // Generate a unique order ID  
-    const orderId = `order_${Date.now()}`;
+    const params: PayUOrderRequest = await req.json();
+    const txnid = `txn_${Date.now()}`;
+    
+    const hash = generateHash(params, txnid);
 
-    const response = await fetch('https://api.cashfree.com/pg/orders', { // Use sandbox URL for testing
-      method: 'POST',
-      headers: {
-        'x-client-id': process.env.CASHFREE_CLIENT_ID!,
-        'x-client-secret': process.env.CASHFREE_CLIENT_SECRET!,
-        'x-api-version': '2022-09-01',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        order_id: orderId,
-        order_amount: amount,
-        order_currency: "INR",
-        customer_details: {
-          customer_id: "customer_" + Date.now(),
-          customer_name: name,
-          customer_email: email,
-          customer_phone: phone
-        },
-        order_meta: {
-            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/registration/payment-success?identification_number=${identification_number}`
-          },
-          order_note: ""
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Cashfree API error:', errorData);
-      throw new Error(`HTTP error! status: ${response.status}, message: ${JSON.stringify(errorData)}`);
-    }
-
-    const data: OrderResponse = await response.json();
-    return NextResponse.json(data);
+    const paymentData = {
+      key: process.env.PAYU_KEY,
+      txnid,
+      amount: params.amount,
+      productinfo: "Marathon Registration",
+      firstname: params.name,
+      email: params.email,
+      phone: params.phone,
+      surl: encodeURI(`${process.env.NEXT_PUBLIC_APP_URL}/registration/payment-success?identification_number=${params.identification_number}`),
+      furl: encodeURI(`${process.env.NEXT_PUBLIC_APP_URL}/registration/payment-failure?identification_number=${params.identification_number}`),
+      hash,
+    };
+    
+    return NextResponse.json(paymentData);
   } catch (error) {
     console.error('Error creating order:', error);
     return NextResponse.json(
@@ -51,4 +43,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-} 
+}

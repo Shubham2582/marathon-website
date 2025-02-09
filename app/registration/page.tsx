@@ -5,7 +5,7 @@ import React from "react";
 import { Personel } from "./steps/personel";
 import { Verification } from "./steps/verification";
 import { cn } from "@/lib/utils";
-import { CashFreePayment } from "./steps/cashfree-payment";
+import { PayUPayment } from "./steps/payu-payment";
 import { Select, SelectContent, SelectItem } from "@/components/ui/select";
 import { SelectTrigger } from "@radix-ui/react-select";
 import { useLanguage, useTranslation } from "@/store/useLanguage";
@@ -59,7 +59,7 @@ const Registration = () => {
           <h3 className="mt-2">{steps[currentStep - 1]}</h3>
           {currentStep === 1 && <Verification />}
           {currentStep === 2 && <Personel />}
-          {currentStep === 3 && <CashFreePayment />}
+          {currentStep === 3 && <PayUPayment />}
         </>
         {/* /--- Steps Content --- */}
       </section>
