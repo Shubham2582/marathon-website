@@ -112,7 +112,9 @@
         "accept_terms": "I have read and agree to the terms and conditions",
         "back_button": "Back",
         "proceed_button": "Proceed to Payment",
-        "continue_button": "Continue"
+        "continue_button": "Continue",
+        "pay_at_event": "Pay at Event",
+        "pay_at_event_note": "* You will need to pay the registration fee at the event venue"
     },
     "qr_payment": {
         "title": "Scan QR Code to Pay",
