@@ -75,6 +75,51 @@ export const PayUPayment = () => {
     }
   };
 
+  const handleOfflinePayment = async () => {
+    if (!acceptedTerms) {
+      alert("Please accept the terms and conditions");
+      return;
+    }
+
+    try {
+      const identificationNumber = await getUniqueIdentificationNumber();
+
+      const registrationData = {
+        first_name: form.firstName,
+        last_name: form.lastName,
+        email: form.email,
+        mobile: form.mobile,
+        gender: form.gender,
+        date_of_birth: form.dateOfBirth,
+        country: form.country,
+        state: form.state,
+        city: form.city,
+        occupation: form.occupation,
+        race_category: form.raceCategory,
+        t_shirt_size: form.tShirtSize,
+        emergency_contact_name: form.emergencyContactName || null,
+        emergency_contact_number: form.emergencyContactNumber || null,
+        blood_group: form.bloodGroup || null,
+        is_from_narayanpur: form.isFromNarayanpur,
+        needs_accommodation: form.needsAccommodation,
+        identification_number: identificationNumber,
+        govt_id: form.govtId,
+        payment_status: "OFFLINE",
+        previous_marathon_name: form.previousMarathonName || null,
+        previous_marathon_rank: form.previousMarathonRank || null,
+      };
+
+      const { error } = await supabase.from("registrations").insert([registrationData]);
+
+      if (error) throw error;
+
+      await router.push(`/registration/payment-success?identification_number=${identificationNumber}`);
+    } catch (error) {
+      console.error("Registration error:", error);
+      throw error;
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <Card>
@@ -122,13 +167,7 @@ export const PayUPayment = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Input 
-              type="checkbox" 
-              id="terms" 
-              className="w-4 h-4" 
-              checked={acceptedTerms} 
-              onChange={(e) => setAcceptedTerms(e.target.checked)} 
-            />
+            <Input type="checkbox" id="terms" className="w-4 h-4" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} />
             <label htmlFor="terms" className="text-sm">
               {t.payment.accept_terms}
             </label>
@@ -140,9 +179,23 @@ export const PayUPayment = () => {
         <Button onClick={previousStep} variant="secondary">
           {t.payment.back_button}
         </Button>
-        <Button type="submit" variant="primary" disabled={!acceptedTerms}>
-          {registrationFee === 0 ? t.payment.continue_button : t.payment.proceed_button}
-        </Button>
+        <div className="flex gap-2">
+          {!form.isFromNarayanpur && (
+            <>
+              <Button type="button" variant="outline" onClick={handleOfflinePayment} disabled={!acceptedTerms}>
+                {t.payment.pay_at_event}
+              </Button>
+              <Button type="submit" variant="primary" disabled={!acceptedTerms}>
+                {t.payment.proceed_button}
+              </Button>
+            </>
+          )}
+          {form.isFromNarayanpur && (
+            <Button type="submit" variant="primary" disabled={!acceptedTerms}>
+              {t.payment.continue_button}
+            </Button>
+          )}
+        </div>
       </div>
     </form>
   );
