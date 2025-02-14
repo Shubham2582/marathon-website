@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import { Play, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import ImageCarousel from "@/components/image-carousel";
 

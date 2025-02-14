@@ -64,15 +64,26 @@ const HeroSection = () => {
         priority
       />
 
-      <div className="w-full min-h-screen flex flex-col justify-center px-8 md:px-16 lg:px-24">
+      <div className="w-full min-h-screen flex flex-col justify-center md:px-16 lg:px-24">
         {/* Hashtag */}
-        <motion.p
+
+       <motion.p
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center md:text-xl lg:text-2xl text-[#FF4949] font-semibold md:mb-4"
+          className="text-center md:text-xl lg:text-2xl text-[#FF4949] font-semibold"
         >
           #RUNFORMAAD
         </motion.p>
+
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-2 md:mb-4"
+        >
+          <span className="text-2xl md:text-4xl text-primary font-bold">
+            Central India's Biggest Marathon
+          </span>
+        </motion.h2>
 
         {/* Main Title */}
         <motion.h1
@@ -80,26 +91,16 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <span className="text-white drop-shadow font-bold">Abujhmad Peace</span>
+          <span className="text-white drop-shadow font-bold">
+            Abujhmad Peace
+          </span>
           <br />
           <span className="text-primary font-bold">Half Marathon</span>
           <br />
-          {/* <span className="text-white drop-shadow"> 2025</span> */}
         </motion.h1>
 
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center text-white drop-shadow text-sm md:text-lg lg:text-xl max-w-3xl mx-auto font-medium"
-        >
-          Experience the thrill of running through the historic streets of
-          Abujhmad. Join elite athletes and passionate runners in this
-          spectacular urban marathon.
-        </motion.p>
-
-        <div className="mx-auto mt-10">
-          <div className="grid grid-cols-4 gap-8">
+        <div className="mx-auto md:mt-5">
+          <div className="grid grid-cols-4 gap-4 md:gap-8">
             {[
               { value: timeLeft.days, unit: "Days" },
               { value: timeLeft.hours, unit: "Hours" },

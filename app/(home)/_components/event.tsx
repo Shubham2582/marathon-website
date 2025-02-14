@@ -13,7 +13,7 @@ const eventDetails = [
   {
     icon: MapPin,
     title: "Location",
-    description: "Abujhmad Marathon Route",
+    description: "High School Ground, Narayanpur",
     highlight: "Scenic Trail Course",
   },
   {
@@ -28,6 +28,22 @@ const eventDetails = [
     description: "Multiple Distances",
     highlight: "21KM | 10KM | 5KM",
   },
+];
+
+const scheduleData = [
+  { time: "5:00 AM", activity: "Reporting: All Participants", details: "All runners (21 KM, 10 KM, 5 KM) must report at the venue" },
+  { time: "5:30 AM to 5:50 AM", activity: "Warm-Up Session", details: "Stretching & warm-up exercises for all runners" },
+  { time: "5:50 AM", activity: "Reporting: 21 KM Half Marathon Participants", details: "All 21 KM runners must be at the start line" },
+  { time: "6:00 AM", activity: "Flag-Off: 21 KM Half Marathon", details: "Open, Women, District Level" },
+  { time: "6:10 AM", activity: "Reporting: 10 KM Competitive Run Participants", details: "All 10 KM runners must be at the start line" },
+  { time: "6:30 AM", activity: "Flag-Off: 10 KM Competitive Run", details: "Open, Women" },
+  { time: "6:40 AM", activity: "Reporting: 5 KM Fun Run Participants", details: "All 5 KM runners must be at the start line" },
+  { time: "7:00 AM", activity: "Flag-Off: 5 KM Fun Run", details: "Women" },
+  { time: "7:45 AM", activity: "Cut-Off: 5 KM Fun Run Ends", details: "Finishers receive medals" },
+  { time: "8:00 AM", activity: "Cut-Off: 10 KM Run Ends", details: "Prize distribution for 10 KM category" },
+  { time: "9:30 AM", activity: "Cut-Off: 21 KM Half Marathon Ends", details: "Prize distribution for 21 KM category" },
+  { time: "10:00 AM", activity: "Closing Ceremony & Winner Announcements", details: "Felicitation of top runners" },
+  { time: "10:30 AM", activity: "Event Wrap-Up & Participant Departure", details: "Refreshments & networking" },
 ];
 
 const Event = () => {
@@ -75,7 +91,7 @@ const Event = () => {
               {/* Add a radial gradient to the background */}
               <div
                 className="bg-primary/10 border border-primary/50 backdrop-blur-sm rounded-2xl p-4 md:p-8 
-                transition-all duration-300 hover:bg-primary/15"
+                transition-all duration-300 hover:bg-primary/15 md:min-h-[280px]"
               >
                 {/* Icon */}
                 <div className="bg-primary/10 border border-primary/50 rounded-lg md:rounded-2xl p-2 md:p-4 inline-block mb-2 md:mb-6">
@@ -96,6 +112,50 @@ const Event = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Schedule Section */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="mt-16 md:mt-24"
+        >
+          <div className="text-center mb-10">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="font-bold text-primary mb-2 md:mb-6"
+            >
+              Event Schedule
+            </motion.h2>
+          </div>
+
+          <div className="overflow-x-auto border border-primary/10 rounded-lg">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-primary/10">
+                  <th className="py-3 md:py-4 px-3 md:px-6 text-left font-semibold text-primary">Time</th>
+                  <th className="py-3 md:py-4 px-3 md:px-6 text-left font-semibold text-primary">Activity</th>
+                  <th className="py-3 md:py-4 px-3 md:px-6 text-left font-semibold text-primary">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {scheduleData.map((item, index) => (
+                  <motion.tr
+                    key={index}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    className="border-b text-sm md:text-base border-primary/10 hover:bg-primary/5 transition-colors"
+                  >
+                    <td className="py-1.5 md:py-4 px-3 md:px-6 font-medium">{item.time}</td>
+                    <td className="py-1.5 md:py-4 px-3 md:px-6">{item.activity}</td>
+                    <td className="py-1.5 md:py-4 px-3 md:px-6 text-gray-500">{item.details}</td>
+                  </motion.tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

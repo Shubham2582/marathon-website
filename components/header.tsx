@@ -60,11 +60,10 @@ export function Header() {
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
                 <Link
-                  href="/race-categories.jpeg"
-                  target="_blank"
+                  href="/faq"
                   className="text-sm font-medium hover:text-primary transition-colors relative group"
                 >
-                  <div className="flex items-center gap-2">Race Categories</div>
+                  <div className="flex items-center gap-2">FAQ</div>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
                 </Link>
               </motion.div>
@@ -77,7 +76,7 @@ export function Header() {
                   href="https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing"
                   className="text-sm font-medium hover:text-primary transition-colors relative group"
                 >
-                  News & Media
+                  Media
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
                 </Link>
               </motion.div>
@@ -87,10 +86,10 @@ export function Header() {
                 transition={{ duration: 0.6, delay: 0.3 }}
               >
                 <Link
-                  href="https://www.abujhmadmarathon.profsys.in/index.php"
+                  href="/recent-events"
                   className="text-sm font-medium hover:text-primary transition-colors relative group"
                 >
-                  Past Winners
+                  Recent Events
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
                 </Link>
               </motion.div>
@@ -135,23 +134,22 @@ export function Header() {
           >
             <nav className="flex flex-col text-sm">
               <Link
-                href="/race-categories.jpeg"
-                target="_blank"
+                href="/faq"
                 className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
               >
-                <div className="flex items-center gap-2">Race Categories</div>
+                <div className="flex items-center gap-2">FAQ</div>
               </Link>
               <Link
                 href="https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing"
                 className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
               >
-                News & Media
+                Media
               </Link>
               <Link
-                href="https://www.abujhmadmarathon.profsys.in/index.php"
+                href="/recent-events"
                 className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
               >
-                Past Winners
+                Recent Events
               </Link>
               <Link
                 href="/registration"
