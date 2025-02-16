@@ -1,18 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const router = useRouter();
+
+  const routes: { label: string; href: string }[] = [
+    { label: "Home", href: "/" },
+    { label: "Prices", href: "/prices" },
+    { label: "Contact", href: "/contact" },
+    { label: "FAQ", href: "/faq" },
+    {
+      label: "Media",
+      href: "https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing",
+    },
+    { label: "Recent Events", href: "/recent-events" },
+  ];
 
   useEffect(() => {
     if (window.scrollY > 20) {
@@ -54,59 +63,22 @@ export function Header() {
             </button>
 
             <nav className="hidden lg:flex items-center gap-8">
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-              >
-                <Link
-                  href="/faq"
-                  className="text-sm font-medium hover:text-primary transition-colors relative group"
+              {routes.map((route) => (
+                <motion.div
+                  key={route.href}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
                 >
-                  <div className="flex items-center gap-2">FAQ</div>
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-                </Link>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-              >
-                <Link
-                  href="https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing"
-                  className="text-sm font-medium hover:text-primary transition-colors relative group"
-                >
-                  Media
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-                </Link>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-              >
-                <Link
-                  href="/recent-events"
-                  className="text-sm font-medium hover:text-primary transition-colors relative group"
-                >
-                  Recent Events
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-                </Link>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-              >
-                <Button
-                  onClick={() => router.push("/registration")}
-                  variant="outline"
-                  size="lg"
-                  className="border-primary text-primary hover:bg-primary hover:text-white transition-colors"
-                >
-                  Register Now
-                </Button>
-              </motion.div>
+                  <Link
+                    href={route.href}
+                    className="text-sm font-medium hover:text-primary transition-colors relative group"
+                  >
+                    <div className="flex items-center gap-2">{route.label}</div>
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+                  </Link>
+                </motion.div>
+              ))}
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -130,33 +102,18 @@ export function Header() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="lg:hidden max-w-2xl z-20 fixed top-16 right-4 bg-white/70 backdrop-blur-md border border-gray-200 p-2 shadow-lg rounded-xl"
+            className="lg:hidden w-48 z-20 fixed top-16 right-4 bg-white/70 backdrop-blur-md border border-gray-200 p-2 shadow-lg rounded-xl"
           >
             <nav className="flex flex-col text-sm">
-              <Link
-                href="/faq"
-                className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
-              >
-                <div className="flex items-center gap-2">FAQ</div>
-              </Link>
-              <Link
-                href="https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing"
-                className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
-              >
-                Media
-              </Link>
-              <Link
-                href="/recent-events"
-                className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
-              >
-                Recent Events
-              </Link>
-              <Link
-                href="/registration"
-                className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
-              >
-                Register Now
-              </Link>
+              {routes.map((route) => (
+                <Link
+                key={route.href}
+                  href={route.href}
+                  className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
+                >
+                  {route.label}
+                </Link>
+              ))}
             </nav>
           </motion.div>
         )}

@@ -97,7 +97,7 @@
     @apply text-4xl md:text-6xl mb-6;
   }
   h2{
-    @apply text-3xl md:text-6xl;
+    @apply text-3xl md:text-5xl;
   }
   h3{
     @apply text-xl md:text-2xl mb-2 md:mb-4;
