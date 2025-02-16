@@ -121,14 +121,14 @@ const Contact = () => {
           <ContactItem
             icon={<FaEnvelope className="w-6 h-6" />}
             label="Email Us At"
-            value="support@runabujhmad.in"
-            link="mailto:support@runabujhmad.in"
+            value="support@runabhujhmad.in"
+            link="mailto:support@runabhujhmad.in"
           />
           <ContactItem
             icon={<Globe className="w-6 h-6" />}
             label="Website"
-            value="www.runabujhmad.in"
-            link="https://www.runabujhmad.in"
+            value="www.runabhujhmad.in"
+            link="https://www.runabhujhmad.in"
           />
           <ContactItem
             icon={<Phone className="w-6 h-6" />}
