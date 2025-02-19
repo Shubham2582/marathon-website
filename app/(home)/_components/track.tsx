@@ -120,7 +120,7 @@ const Track = () => {
             className="relative"
           >
             {/* Elevation Profile */}
-            <div className="absolute  md:-top-10 left-1/2 transform -translate-x-1/2 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 z-10">
+            {/* <div className="absolute  md:-top-10 left-1/2 transform -translate-x-1/2 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 z-10">
               <div className="h-16 w-48">
                 <svg viewBox="0 0 200 60" className="w-full h-full">
                   <path
@@ -140,20 +140,19 @@ const Track = () => {
                   </text>
                 </svg>
               </div>
-            </div>
+            </div> */}
 
             {/* Main Map Container */}
             <div className="relative h-[500px] mt-20 md:mt-0 rounded-2xl overflow-hidden">
-              <Image
-                src="/images/track.jpg"
-                alt="Marathon Track Map"
-                fill
-                className="object-cover"
+              <iframe
+                src="https://www.google.com/maps/d/u/0/embed?mid=1bykZyQAdunOefS-6-Sk9XuyCHdmMMYg&ehbc=2E312F&noprof=1"
+                width="100%"
+                height="100%"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
+              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" /> */}
 
               {/* Distance Markers */}
-              <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10">
+              {/* <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10">
                 <div className="flex items-center space-x-4">
                   <div className="w-2 h-2 rounded-full bg-primary" />
                   <span className="text-white text-sm">Start Point</span>
@@ -162,7 +161,7 @@ const Track = () => {
                   <div className="w-2 h-2 rounded-full bg-red-500" />
                   <span className="text-white text-sm">Finish Line</span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </motion.div>
         </div>

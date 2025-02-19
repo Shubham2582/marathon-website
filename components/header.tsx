@@ -17,6 +17,10 @@ export function Header() {
     { label: "Contact", href: "/contact" },
     { label: "FAQ", href: "/faq" },
     {
+      label: "Runner Guide",
+      href: "https://heyzine.com/flip-book/ad304f7dfd.html",
+    },
+    {
       label: "Media",
       href: "https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing",
     },
@@ -107,7 +111,7 @@ export function Header() {
             <nav className="flex flex-col text-sm">
               {routes.map((route) => (
                 <Link
-                key={route.href}
+                  key={route.href}
                   href={route.href}
                   className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
                 >

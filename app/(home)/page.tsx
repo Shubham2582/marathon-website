@@ -7,6 +7,7 @@ import Media from "./_components/media";
 import Track from "./_components/track";
 import Mission from "./_components/mission";
 import Sponsors from "./_components/sponsors";
+import { ReachNarayanpur } from "./_components/reach-narayanpur";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -44,6 +45,10 @@ export default function Home() {
 
         <motion.div {...fadeInUp}>
           <Mission />
+        </motion.div>
+
+        <motion.div {...fadeInUp}>
+          <ReachNarayanpur />
         </motion.div>
 
         {/* <motion.div {...fadeInUp}>
