@@ -31,19 +31,19 @@ const eventDetails = [
 ];
 
 const scheduleData = [
-  { time: "5:00 AM", activity: "Reporting: All Participants", details: "All runners (21 KM, 10 KM, 5 KM) must report at the venue" },
-  { time: "5:30 AM to 5:50 AM", activity: "Warm-Up Session", details: "Stretching & warm-up exercises for all runners" },
-  { time: "5:50 AM", activity: "Reporting: 21 KM Half Marathon Participants", details: "All 21 KM runners must be at the start line" },
-  { time: "6:00 AM", activity: "Flag-Off: 21 KM Half Marathon", details: "Open, Women, District Level" },
-  { time: "6:10 AM", activity: "Reporting: 10 KM Competitive Run Participants", details: "All 10 KM runners must be at the start line" },
-  { time: "6:30 AM", activity: "Flag-Off: 10 KM Competitive Run", details: "Open, Women" },
-  { time: "6:40 AM", activity: "Reporting: 5 KM Fun Run Participants", details: "All 5 KM runners must be at the start line" },
-  { time: "7:00 AM", activity: "Flag-Off: 5 KM Fun Run", details: "Women" },
-  { time: "7:45 AM", activity: "Cut-Off: 5 KM Fun Run Ends", details: "Finishers receive medals" },
-  { time: "8:00 AM", activity: "Cut-Off: 10 KM Run Ends", details: "Prize distribution for 10 KM category" },
-  { time: "9:30 AM", activity: "Cut-Off: 21 KM Half Marathon Ends", details: "Prize distribution for 21 KM category" },
-  { time: "10:00 AM", activity: "Closing Ceremony & Winner Announcements", details: "Felicitation of top runners" },
-  { time: "10:30 AM", activity: "Event Wrap-Up & Participant Departure", details: "Refreshments & networking" },
+  { time: "4:30 AM", activity: "Reporting: All Participants", details: "All runners (21 KM, 10 KM, 5 KM) must report at the venue" },
+  { time: "4:45 AM", activity: "Warm-Up Session", details: "Stretching & warm-up exercises for all runners" },
+  { time: "5:15 AM", activity: "21 KM Runners at Start Line", details: "All 21 KM runners must be at the start line" },
+  { time: "5:30 AM", activity: "Flag-Off: 21 KM Half Marathon", details: "Official flag-off for the 21 KM Half Marathon" },
+  { time: "5:35 AM", activity: "10 KM Runners Reporting", details: "All 10 KM runners must be at the start line" },
+  { time: "5:45 AM", activity: "Flag-Off: 10 KM Competitive Run", details: "Official flag-off for the 10 KM Competitive Run" },
+  { time: "5:50 AM", activity: "5 KM Runners Reporting", details: "All 5 KM runners must be at the start line" },
+  { time: "6:00 AM", activity: "Flag-Off: 5 KM women", details: "Official flag-off for the 5 KM Fun Run" },
+  { time: "6:45 AM", activity: "5 KM Run Ends", details: "End of 5 KM Run" },
+  { time: "7:15 AM", activity: "10 KM Run Ends", details: "End of 10 KM Run" },
+  { time: "8:30 AM", activity: "21 KM Half Marathon Ends", details: "End of 21 KM Run" },
+  { time: "8:30 AM", activity: "prize distribution and addressing", details: "prize distribution" },
+  { time: "9:00 AM - 9:30 AM", activity: "Closing Ceremony & Wrap-Up", details: "Final announcements, felicitation of winners, and event wrap-up" },
 ];
 
 const Event = () => {
@@ -60,11 +60,7 @@ const Event = () => {
             RACE INFORMATION
           </motion.span>
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="font-bold text-primary mb-2 md:mb-6"
-          >
+          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="font-bold text-primary mb-2 md:mb-6">
             Event Details
           </motion.h2>
 
@@ -73,8 +69,7 @@ const Event = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-gray-600 text-s md:text-lg max-w-2xl mx-auto font-medium"
           >
-            Join us for an unforgettable running experience through the scenic
-            routes of Abujhmad
+            Join us for an unforgettable running experience through the scenic routes of Abujhmad
           </motion.p>
         </div>
 
@@ -99,32 +94,18 @@ const Event = () => {
                 </div>
 
                 {/* Content */}
-                <h3 className="font-semibold text-primary mb-2">
-                  {detail.title}
-                </h3>
-                <p className="text-sm md:text-lg font-semibold">
-                  {detail.description}
-                </p>
-                <p className="text-xs md:text-base font-medium text-gray-500">
-                  {detail.highlight}
-                </p>
+                <h3 className="font-semibold text-primary mb-2">{detail.title}</h3>
+                <p className="text-sm md:text-lg font-semibold">{detail.description}</p>
+                <p className="text-xs md:text-base font-medium text-gray-500">{detail.highlight}</p>
               </div>
             </motion.div>
           ))}
         </div>
 
         {/* Schedule Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="mt-16 md:mt-24"
-        >
+        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-16 md:mt-24">
           <div className="text-center mb-10">
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              className="font-bold text-primary mb-2 md:mb-6"
-            >
+            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="font-bold text-primary mb-2 md:mb-6">
               Event Schedule
             </motion.h2>
           </div>
