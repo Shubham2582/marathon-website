@@ -185,9 +185,9 @@ export const PayUPayment = () => {
               <Button type="button" variant="outline" onClick={handleOfflinePayment} disabled={!acceptedTerms}>
                 {t.payment.pay_at_event}
               </Button>
-              <Button type="submit" variant="primary" disabled={!acceptedTerms}>
+              {/* <Button type="submit" variant="primary" disabled={!acceptedTerms}>
                 {t.payment.proceed_button}
-              </Button>
+              </Button> */}
             </>
           )}
           {form.isFromNarayanpur && (
