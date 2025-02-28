@@ -21,13 +21,17 @@ export const Personel = () => {
     const newErrors: Record<string, string> = {};
     const fields = personelFormDetails(form, handleChange, t.personal);
 
+    // Track if required core fields are filled
+    let coreFieldsFilled = true;
+
     fields.forEach((field) => {
       // Skip validation for ID fields if user is NOT from Narayanpur (including international)
       if (!form.isFromNarayanpur && (field.name === "idType" || field.name === "govtId")) {
         return;
       }
 
-      if (form.isInternational && (field.name === "pincode" || field.name === "state" || field.name === "city")) {
+      // Skip validation for location fields for international participants
+      if (form.isInternational && (field.name === "pincode" || field.name === "state" || field.name === "city" || field.name === "country")) {
         return;
       }
 
@@ -36,12 +40,14 @@ export const Personel = () => {
       // Check if field is required and empty
       if (field.required && (!value || value.toString().trim() === "")) {
         newErrors[field.name] = language === "en" ? `${field.label} is required` : `${field.label} आवश्यक है`;
+        coreFieldsFilled = false;
       }
 
       // Phone number validation - skip length check for international participants
       if (!form.isInternational && value && (field.name === "emergencyContactNumber" || field.name === "mobile")) {
         if (value.toString().length !== 10) {
           newErrors[field.name] = language === "en" ? "Phone number must be 10 digits long" : "फोन नंबर 10 अंकों का होना चाहिए";
+          coreFieldsFilled = false;
         }
       }
 
@@ -49,29 +55,99 @@ export const Personel = () => {
       if (form.isInternational && value && (field.name === "emergencyContactNumber" || field.name === "mobile")) {
         if (!/^\d+$/.test(value.toString())) {
           newErrors[field.name] = language === "en" ? "Phone number must contain only digits" : "फोन नंबर में केवल अंक होने चाहिए";
+          coreFieldsFilled = false;
         }
       }
     });
+
+    // Additional validation for specific fields
 
     // Only validate ID fields for Narayanpur participants
     if (form.isFromNarayanpur) {
       if (!form.idType || form.idType.trim() === "") {
         newErrors.idType = language === "en" ? "ID type is required" : "पहचान प्रकार आवश्यक है";
+        coreFieldsFilled = false;
       }
 
       if (!form.govtId || form.govtId.trim() === "") {
         newErrors.govtId = language === "en" ? "ID number is required" : "पहचान संख्या आवश्यक है";
+        coreFieldsFilled = false;
       } else {
         const idError = validateIdNumber(form.idType, form.govtId, language);
         if (idError) {
           newErrors.govtId = idError;
+          coreFieldsFilled = false;
         }
+      }
+    }
+
+    // Validate that all other required fields are filled
+    if (!form.firstName?.trim()) {
+      newErrors.firstName = language === "en" ? "First name is required" : "पहला नाम आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.lastName?.trim()) {
+      newErrors.lastName = language === "en" ? "Last name is required" : "अंतिम नाम आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.email?.trim()) {
+      newErrors.email = language === "en" ? "Email is required" : "ईमेल आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.mobile?.trim()) {
+      newErrors.mobile = language === "en" ? "Mobile number is required" : "मोबाइल नंबर आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.dateOfBirth?.trim()) {
+      newErrors.dateOfBirth = language === "en" ? "Date of birth is required" : "जन्म तिथि आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.raceCategory?.trim()) {
+      newErrors.raceCategory = language === "en" ? "Race category is required" : "दौड़ श्रेणी आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.tShirtSize?.trim()) {
+      newErrors.tShirtSize = language === "en" ? "T-shirt size is required" : "टी-शर्ट आकार आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.emergencyContactName?.trim()) {
+      newErrors.emergencyContactName = language === "en" ? "Emergency contact name is required" : "आपातकालीन संपर्क नाम आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    if (!form.emergencyContactNumber?.trim()) {
+      newErrors.emergencyContactNumber = language === "en" ? "Emergency contact number is required" : "आपातकालीन संपर्क नंबर आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
+    // Non-international participants need to provide location details
+    if (!form.isInternational) {
+      if (!form.pincode?.trim()) {
+        newErrors.pincode = language === "en" ? "Pin code is required" : "पिन कोड आवश्यक है";
+        coreFieldsFilled = false;
+      }
+
+      if (!form.state?.trim()) {
+        newErrors.state = language === "en" ? "State is required" : "राज्य आवश्यक है";
+        coreFieldsFilled = false;
+      }
+
+      if (!form.city?.trim()) {
+        newErrors.city = language === "en" ? "City is required" : "शहर आवश्यक है";
+        coreFieldsFilled = false;
       }
     }
 
     console.log("Validation errors:", newErrors);
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return coreFieldsFilled && Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -126,9 +202,9 @@ export const Personel = () => {
               return null;
             }
 
-            // For country field, make it required for international participants
+            // For country field, no longer making it required for international participants
             if (detail.name === "country") {
-              return <FormField key={index} {...detail} required={form.isInternational} error={errors[detail.name]} />;
+              return <FormField key={index} {...detail} error={errors[detail.name]} />;
             }
 
             return detail.name === "pincode" ? (
