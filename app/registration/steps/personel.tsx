@@ -22,8 +22,8 @@ export const Personel = () => {
     const fields = personelFormDetails(form, handleChange, t.personal);
 
     fields.forEach((field) => {
-      // Skip validation for fields that aren't visible based on user type
-      if ((form.isFromNarayanpur || form.isInternational) && (field.name === "idType" || field.name === "govtId")) {
+      // Skip validation for ID fields if user is NOT from Narayanpur (including international)
+      if (!form.isFromNarayanpur && (field.name === "idType" || field.name === "govtId")) {
         return;
       }
 
@@ -53,11 +53,19 @@ export const Personel = () => {
       }
     });
 
-    // Add ID validation only for non-Narayanpur and non-international residents
-    if (!form.isFromNarayanpur && !form.isInternational && form.idType) {
-      const idError = validateIdNumber(form.idType, form.govtId, language);
-      if (idError) {
-        newErrors.govtId = idError;
+    // Only validate ID fields for Narayanpur participants
+    if (form.isFromNarayanpur) {
+      if (!form.idType || form.idType.trim() === "") {
+        newErrors.idType = language === "en" ? "ID type is required" : "पहचान प्रकार आवश्यक है";
+      }
+
+      if (!form.govtId || form.govtId.trim() === "") {
+        newErrors.govtId = language === "en" ? "ID number is required" : "पहचान संख्या आवश्यक है";
+      } else {
+        const idError = validateIdNumber(form.idType, form.govtId, language);
+        if (idError) {
+          newErrors.govtId = idError;
+        }
       }
     }
 
@@ -108,8 +116,8 @@ export const Personel = () => {
       <div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 gap-x-4">
           {personelFormDetails(form, handleChange, t.personal).map((detail, index) => {
-            // Skip ID fields if user is from Narayanpur or international
-            if ((!form.isFromNarayanpur || form.isInternational) && (detail.name === "idType" || detail.name === "govtId")) {
+            // CORRECTED: Only show ID fields if the user IS from Narayanpur
+            if (!form.isFromNarayanpur && (detail.name === "idType" || detail.name === "govtId")) {
               return null;
             }
 
