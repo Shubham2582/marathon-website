@@ -38,9 +38,18 @@ export const Personel = () => {
         newErrors[field.name] = language === "en" ? `${field.label} is required` : `${field.label} आवश्यक है`;
       }
 
-      // Additional validations for specific fields
-      if (value && (field.name === "emergencyContactNumber" || field.name === "mobile") && value.toString().length !== 10) {
-        newErrors[field.name] = language === "en" ? "Phone number must be 10 digits long" : "फोन नंबर 10 अंकों का होना चाहिए";
+      // Phone number validation - skip length check for international participants
+      if (!form.isInternational && value && (field.name === "emergencyContactNumber" || field.name === "mobile")) {
+        if (value.toString().length !== 10) {
+          newErrors[field.name] = language === "en" ? "Phone number must be 10 digits long" : "फोन नंबर 10 अंकों का होना चाहिए";
+        }
+      }
+
+      // For international participants, just verify that phone numbers contain only digits
+      if (form.isInternational && value && (field.name === "emergencyContactNumber" || field.name === "mobile")) {
+        if (!/^\d+$/.test(value.toString())) {
+          newErrors[field.name] = language === "en" ? "Phone number must contain only digits" : "फोन नंबर में केवल अंक होने चाहिए";
+        }
       }
     });
 

@@ -36,7 +36,7 @@ interface RegistrationStore {
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
 }
 
-export const useRegistrationStore = create<RegistrationStore>((set) => ({
+export const useRegistrationStore = create<RegistrationStore>((set, get) => ({
   form: defaultFormState,
 
   setForm: (field, value) =>
@@ -49,6 +49,7 @@ export const useRegistrationStore = create<RegistrationStore>((set) => ({
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
+    const form = get().form;
 
     if (name === "mobile" || name === "emergencyContactNumber" || name === "pincode" || name === "otp") {
       if (value === "") {
@@ -60,7 +61,21 @@ export const useRegistrationStore = create<RegistrationStore>((set) => ({
         }));
         return;
       }
-      if (!/^\d*$/.test(value)) return;
+
+      // For international participants, allow any length for phone numbers
+      // Only validate that it's numeric
+      if ((name === "mobile" || name === "emergencyContactNumber") && form.isInternational) {
+        if (!/^\d*$/.test(value)) return;
+      }
+      // For non-international participants or other fields, enforce existing rules
+      else {
+        if (!/^\d*$/.test(value)) return;
+
+        // Enforce 10-digit limit only for Indian phone numbers
+        if ((name === "mobile" || name === "emergencyContactNumber") && value.length > 10 && !form.isInternational) {
+          return;
+        }
+      }
 
       set((state) => ({
         form: {
