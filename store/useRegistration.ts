@@ -20,6 +20,7 @@ const defaultFormState: RegistrationForm = {
   bloodGroup: "",
   selfie: null,
   isFromNarayanpur: false,
+  isInternational: false,
   needsAccommodation: false,
   idType: "AADHAR",
   govtId: "",
@@ -42,10 +43,12 @@ export const useRegistrationStore = create<RegistrationStore>((set) => ({
     set((state) => ({
       form: { ...state.form, [field]: value },
     })),
+
   resetForm: () => set({ form: defaultFormState }),
 
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
 
     if (name === "mobile" || name === "emergencyContactNumber" || name === "pincode" || name === "otp") {
       if (value === "") {
@@ -75,7 +78,7 @@ export const useRegistrationStore = create<RegistrationStore>((set) => ({
     set((state) => ({
       form: {
         ...state.form,
-        [name]: value,
+        [name]: type === "checkbox" ? checked : value,
       },
     }));
   },

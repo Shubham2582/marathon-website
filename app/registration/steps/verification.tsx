@@ -19,9 +19,7 @@ export const Verification = () => {
   const [isSendingOTP, setIsSendingOTP] = useState(false);
   const [otpError, setOtpError] = useState("");
   const [error, setError] = useState<{ email?: string; mobile?: string }>({});
-  const [verificationMethod, setVerificationMethod] = useState<
-    "EMAIL" | "WHATSAPP"
-  >("EMAIL");
+  const [verificationMethod, setVerificationMethod] = useState<"EMAIL" | "WHATSAPP">("EMAIL");
 
   const t = useTranslation();
 
@@ -51,6 +49,26 @@ export const Verification = () => {
     setForm("pincode", e.target.checked ? "494661" : "");
     setForm("city", e.target.checked ? "Narayanpur" : "");
     setForm("state", e.target.checked ? "Chattisgarh" : "");
+
+    // If user is from Narayanpur, they can't be international
+    if (e.target.checked) {
+      setForm("isInternational", false);
+    }
+  };
+
+  const handleIsInternational = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm("isInternational", e.target.checked);
+
+    // If user is international, they can't be from Narayanpur
+    if (e.target.checked) {
+      setForm("isFromNarayanpur", false);
+      setForm("pincode", "");
+      setForm("city", "");
+      setForm("state", "");
+      setForm("country", "");
+    } else {
+      setForm("country", "India");
+    }
   };
 
   const sendOTP = async () => {
@@ -115,17 +133,11 @@ export const Verification = () => {
         const responseData = await response.json();
 
         if (!response.ok) {
-          throw new Error(
-            responseData.message || "Failed to send WhatsApp OTP"
-          );
+          throw new Error(responseData.message || "Failed to send WhatsApp OTP");
         }
       }
 
-      toast.success(
-        `OTP sent to your ${
-          verificationMethod === "EMAIL" ? "email" : "WhatsApp"
-        }`
-      );
+      toast.success(`OTP sent to your ${verificationMethod === "EMAIL" ? "email" : "WhatsApp"}`);
       setIsOtpSent(true);
       startCooldown();
     } catch (error) {
@@ -163,29 +175,16 @@ export const Verification = () => {
     >
       <div className="flex flex-col">
         <div className="p-3 mb-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h4 className="font-medium text-lg mb-1">
-            {t.verification.important_links_title}
-          </h4>
+          <h4 className="font-medium text-lg mb-1">{t.verification.important_links_title}</h4>
           <ul className="space-y-2 list-disc pl-5 text-sm">
             <li>
-              <Link
-                href="https://youtu.be/gJ3kS9t8-nE"
-                target="_blank"
-                className="text-blue-600 hover:text-blue-800 hover:underline"
-              >
+              <Link href="https://youtu.be/gJ3kS9t8-nE" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
                 {t.verification.watch_registration_tutorial_video}
               </Link>
             </li>
             <li>
-              <Link
-                href="https://forms.gle/LFVcYJ9uJZ3SzYrQ9"
-                target="_blank"
-                className="text-blue-600 hover:text-blue-800 hover:underline"
-              >
-                {
-                  t.verification
-                    .apply_for_pacer_or_marshal_position_in_the_marathon
-                }
+              <Link href="https://forms.gle/LFVcYJ9uJZ3SzYrQ9" target="_blank" className="text-blue-600 hover:text-blue-800 hover:underline">
+                {t.verification.apply_for_pacer_or_marshal_position_in_the_marathon}
               </Link>
             </li>
           </ul>
@@ -215,22 +214,13 @@ export const Verification = () => {
           </Button>
         </div> */}
         {/* --- Verification Method Section */}
-        
       </div>
 
       <div className="space-y-2">
         <FormField
-          label={
-            verificationMethod === "EMAIL"
-              ? t.verification.email
-              : t.verification.mobile
-          }
+          label={verificationMethod === "EMAIL" ? t.verification.email : t.verification.mobile}
           name={verificationMethod === "EMAIL" ? "email" : "mobile"}
-          placeholder={
-            verificationMethod === "EMAIL"
-              ? t.verification.email_placeholder
-              : t.verification.mobile_placeholder
-          }
+          placeholder={verificationMethod === "EMAIL" ? t.verification.email_placeholder : t.verification.mobile_placeholder}
           value={verificationMethod === "EMAIL" ? form.email : form.mobile}
           handleChange={handleChange}
           type={verificationMethod === "EMAIL" ? "email" : "tel"}
@@ -289,18 +279,32 @@ export const Verification = () => {
         </div> */}
         {/* --- OTP Section */}
 
-        <div className="flex items-center gap-x-2 text-sm font-medium mt-4 pl-1">
-          <Input
-            className="size-4"
-            type="checkbox"
-            name="isFromNarayanpur"
-            id="isFromNarayanpur"
-            checked={form.isFromNarayanpur}
-            onChange={handleIsFromNarayanpur}
-          />
-          <label htmlFor="isFromNarayanpur">
-            {t.verification.are_you_from_narayanpur}
-          </label>
+        <div className="space-y-2 mt-4">
+          <div className="flex items-center gap-x-2 text-sm font-medium pl-1">
+            <Input
+              className="size-4"
+              type="checkbox"
+              name="isFromNarayanpur"
+              id="isFromNarayanpur"
+              checked={form.isFromNarayanpur}
+              onChange={handleIsFromNarayanpur}
+              disabled={form.isInternational}
+            />
+            <label htmlFor="isFromNarayanpur">{t.verification.are_you_from_narayanpur}</label>
+          </div>
+
+          <div className="flex items-center gap-x-2 text-sm font-medium pl-1">
+            <Input
+              className="size-4"
+              type="checkbox"
+              name="isInternational"
+              id="isInternational"
+              checked={form.isInternational}
+              onChange={handleIsInternational}
+              disabled={form.isFromNarayanpur}
+            />
+            <label htmlFor="isInternational">{t.verification.are_you_international}</label>
+          </div>
         </div>
       </div>
 

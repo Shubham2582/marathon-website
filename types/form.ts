@@ -27,12 +27,14 @@ export interface RegistrationForm {
   city: string;
   occupation: string;
   bloodGroup: BloodGroup | "";
+
   selfie: File | null;
   idType: "AADHAR" | "PAN" | "VOTER" | "DRIVING_LICENSE" | "";
   govtId: string;
 
   // --- REGISTRATION DETAILS ---
   isFromNarayanpur: boolean;
+  isInternational: boolean; // Add international flag
   needsAccommodation: boolean;
   isRunner: boolean;
   previousMarathonName?: string;
