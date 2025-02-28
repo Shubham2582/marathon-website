@@ -13,8 +13,11 @@ export default function CountdownClock() {
     minutes: 0,
     seconds: 0,
   });
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+
     const calculateTimeLeft = () => {
       const difference = +MARATHON_DATE - +new Date();
 
@@ -47,46 +50,42 @@ export default function CountdownClock() {
     return () => clearInterval(timer);
   }, []);
 
-  const formatNumber = (num: number) => {
-    return num < 10 ? `0${num}` : num.toString();
-  };
-
   const clockVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
   };
 
-  const numberVariants = {
-    changed: { scale: 1.1, color: "#ff6b6b", transition: { duration: 0.2 } },
-    unchanged: { scale: 1, color: "#ffffff", transition: { duration: 0.2 } },
+  // Safely render floating particles only on client-side
+  const renderParticles = () => {
+    if (!mounted) return null;
+
+    return Array.from({ length: 50 }).map((_, index) => (
+      <motion.div
+        key={index}
+        className="absolute w-2 h-2 rounded-full bg-white/30"
+        initial={{
+          x: Math.random() * (typeof window !== "undefined" ? window.innerWidth : 1000),
+          y: Math.random() * (typeof window !== "undefined" ? window.innerHeight : 800),
+          opacity: Math.random() * 0.5 + 0.3,
+        }}
+        animate={{
+          x: Math.random() * (typeof window !== "undefined" ? window.innerWidth : 1000),
+          y: Math.random() * (typeof window !== "undefined" ? window.innerHeight : 800),
+          transition: {
+            duration: Math.random() * 20 + 10,
+            repeat: Infinity,
+            repeatType: "reverse",
+          },
+        }}
+        style={{ width: `${Math.random() * 6 + 2}px`, height: `${Math.random() * 6 + 2}px` }}
+      />
+    ));
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900 relative overflow-hidden">
       {/* Floating particles in background */}
-      <div className="absolute inset-0 pointer-events-none">
-        {Array.from({ length: 50 }).map((_, index) => (
-          <motion.div
-            key={index}
-            className="absolute w-2 h-2 rounded-full bg-white/30"
-            initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              opacity: Math.random() * 0.5 + 0.3,
-            }}
-            animate={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
-              transition: {
-                duration: Math.random() * 20 + 10,
-                repeat: Infinity,
-                repeatType: "reverse",
-              },
-            }}
-            style={{ width: `${Math.random() * 6 + 2}px`, height: `${Math.random() * 6 + 2}px` }}
-          />
-        ))}
-      </div>
+      <div className="absolute inset-0 pointer-events-none">{mounted && renderParticles()}</div>
 
       <motion.div initial="hidden" animate="visible" variants={clockVariants} className="text-center z-10">
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-8">Abujhmaad Marathon 2025</h1>
