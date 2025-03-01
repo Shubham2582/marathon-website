@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const MARATHON_DATE = new Date(2025, 2, 2, 5, 30, 0);
+const MARATHON_DATE = new Date(2025, 2, 2, 6, 0, 0);
 
 export default function CountdownClock() {
   const [timeState, setTimeState] = useState({
@@ -132,7 +132,8 @@ export default function CountdownClock() {
       {/* Static particle display */}
       <div className="absolute inset-0 pointer-events-none">{particles}</div>
 
-      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center tracking-tight">21KM</h1>
+      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center tracking-tight">5KM</h1>
+
       {/* Main countdown container with integrated title */}
       <div className="flex flex-col items-center justify-center space-y-8 max-w-4xl w-full px-4">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
