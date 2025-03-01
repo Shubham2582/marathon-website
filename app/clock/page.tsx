@@ -134,11 +134,10 @@ export default function CountdownClock() {
 
       {/* Main countdown container with integrated title */}
       <div className="flex flex-col items-center justify-center space-y-8 max-w-4xl w-full px-4">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="relative">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center tracking-tight">
-            ABUJHMAAD <span className="text-yellow-300">MARATHON</span> 2025
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center tracking-tight">
+            ABUJHMAD <span className="text-yellow-300">PEACE</span> HALF MARATHON <span className="text-primary">2025</span>
           </h1>
-          <div className="mt-2 h-1 w-24 bg-gradient-to-r from-yellow-300 to-green-300 mx-auto rounded-full"></div>
         </motion.div>
 
         <div className="flex gap-4 md:gap-8 justify-center">

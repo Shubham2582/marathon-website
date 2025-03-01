@@ -146,11 +146,10 @@ export default function FullscreenCountdown() {
 
       {/* Main countdown container with integrated title */}
       <div className="flex flex-col items-center justify-center space-y-10 max-w-5xl w-full px-4">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="relative">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white text-center tracking-tight">
-            ABUJHMAAD <span className="text-yellow-300">MARATHON</span> 2025
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center tracking-tight">
+            ABUJHMAD <span className="text-yellow-300">PEACE</span> HALF MARATHON <span className="text-primary inline">2025</span>
           </h1>
-          <div className="mt-3 h-1.5 w-32 bg-gradient-to-r from-yellow-300 to-green-300 mx-auto rounded-full"></div>
         </motion.div>
 
         <div className="flex gap-6 md:gap-10 justify-center">
