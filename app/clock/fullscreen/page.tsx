@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+// Updated: March 2, 2025 at 5:30 AM
 const MARATHON_DATE = new Date(2025, 2, 2, 5, 30, 0);
 
-export default function CountdownClock() {
+export default function FullscreenCountdown() {
   const [timeState, setTimeState] = useState({
     days: 0,
     hours: 0,
@@ -46,10 +47,8 @@ export default function CountdownClock() {
       }
     };
 
-    // Initial calculation
     setTimeState(calculateTime());
 
-    // Update every second
     const timer = setInterval(() => {
       setTimeState(calculateTime());
     }, 1000);
@@ -127,39 +126,52 @@ export default function CountdownClock() {
     setParticles(generateParticles());
   }, [mounted]);
 
+  useEffect(() => {
+    if (mounted && typeof document !== "undefined") {
+      try {
+        // Try to automatically go into fullscreen mode when page loads
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.log("Could not automatically enter fullscreen mode:", err);
+        });
+      } catch (error) {
+        console.log("Fullscreen API not available");
+      }
+    }
+  }, [mounted]);
+
   return (
     <div className="min-h-screen h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-[#0f172a] via-[#1e3a8a] to-[#312e81] relative overflow-hidden">
       {/* Static particle display */}
       <div className="absolute inset-0 pointer-events-none">{particles}</div>
 
       {/* Main countdown container with integrated title */}
-      <div className="flex flex-col items-center justify-center space-y-8 max-w-4xl w-full px-4">
+      <div className="flex flex-col items-center justify-center space-y-10 max-w-5xl w-full px-4">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }} className="relative">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center tracking-tight">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white text-center tracking-tight">
             ABUJHMAAD <span className="text-yellow-300">MARATHON</span> 2025
           </h1>
-          <div className="mt-2 h-1 w-24 bg-gradient-to-r from-yellow-300 to-green-300 mx-auto rounded-full"></div>
+          <div className="mt-3 h-1.5 w-32 bg-gradient-to-r from-yellow-300 to-green-300 mx-auto rounded-full"></div>
         </motion.div>
 
-        <div className="flex gap-4 md:gap-8 justify-center">
+        <div className="flex gap-6 md:gap-10 justify-center">
           <CountdownBox value={timeState.days} label="DAYS" />
           <CountdownBox value={timeState.hours} label="HOURS" />
           <CountdownBox value={timeState.minutes} label="MINUTES" />
           <CountdownBox value={timeState.seconds} label="SECONDS" />
         </div>
 
-        <motion.div className="mt-2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
+        <motion.div className="mt-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }}>
           {timeState.isCountingUp && (
-            <div className="flex items-center justify-center rounded-full bg-green-500/20 px-6 py-2 border border-green-500/30">
-              <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse mr-2"></div>
-              <span className="text-green-400 font-medium">RACE IN PROGRESS</span>
+            <div className="flex items-center justify-center rounded-full bg-green-500/20 px-8 py-3 border border-green-500/30">
+              <div className="w-4 h-4 rounded-full bg-green-500 animate-pulse mr-3"></div>
+              <span className="text-green-400 font-medium text-xl">RACE IN PROGRESS</span>
             </div>
           )}
 
           {!timeState.isCountingUp && (
-            <div className="flex items-center justify-center rounded-full bg-blue-500/20 px-6 py-2 border border-blue-500/30">
-              <div className="w-3 h-3 rounded-full bg-blue-500 animate-ping mr-2"></div>
-              <span className="text-blue-300 font-medium">COUNTDOWN ACTIVE</span>
+            <div className="flex items-center justify-center rounded-full bg-blue-500/20 px-8 py-3 border border-blue-500/30">
+              <div className="w-4 h-4 rounded-full bg-blue-500 animate-ping mr-3"></div>
+              <span className="text-blue-300 font-medium text-xl">COUNTDOWN ACTIVE</span>
             </div>
           )}
         </motion.div>
@@ -173,17 +185,19 @@ function CountdownBox({ value, label }: { value: number; label: string }) {
 
   return (
     <motion.div className="text-center" initial={{ opacity: 0, scale: 0.5 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }}>
-      <div className="bg-gradient-to-br from-black/40 to-black/60 backdrop-blur-md rounded-lg p-2 sm:p-4 w-16 sm:w-24 md:w-32 h-16 sm:h-24 md:h-32 flex items-center justify-center shadow-2xl border border-white/10">
+      <div className="bg-gradient-to-br from-black/40 to-black/60 backdrop-blur-md rounded-xl p-3 sm:p-5 w-20 sm:w-32 md:w-40 h-20 sm:h-32 md:h-40 flex items-center justify-center shadow-2xl border border-white/10">
         <motion.span
           key={value}
-          className="text-2xl sm:text-5xl md:text-6xl font-bold text-white"
+          className="text-3xl sm:text-6xl md:text-7xl font-bold text-white"
           animate={{ scale: [1, 1.08, 1], opacity: [1, 0.9, 1] }} // Increased scale for more noticeable animation
           transition={{ duration: 0.3, ease: "easeInOut" }} // Faster animation
         >
           {formattedValue}
         </motion.span>
       </div>
-      <div className="mt-2 bg-black/30 px-2 py-1 rounded-full text-xs sm:text-sm md:text-base text-white/80 font-medium tracking-wider uppercase">{label}</div>
+      <div className="mt-3 bg-black/30 px-4 py-1.5 rounded-full text-sm sm:text-base md:text-lg text-white/80 font-medium tracking-wider uppercase">
+        {label}
+      </div>
     </motion.div>
   );
 }
