@@ -8,6 +8,7 @@ import Track from "./_components/track";
 import Mission from "./_components/mission";
 import Sponsors from "./_components/sponsors";
 import { ReachNarayanpur } from "./_components/reach-narayanpur";
+import { InstagramFeed } from "./_components/instagram-feed";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -17,20 +18,14 @@ const fadeInUp = {
 
 export default function Home() {
   return (
-    <motion.div
-      className="relative bg-neutral-100"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      <motion.div
-        className="relative z-10 space-y-20 md:space-y-40 pb-20 md:pb-40"
-        initial="initial"
-        animate="animate"
-        viewport={{ once: true }}
-      >
-        <HeroSection />
+    <motion.div className="relative bg-neutral-100" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
+      <HeroSection />
+      
+      <motion.div {...fadeInUp}>
+        <InstagramFeed />
+      </motion.div>
 
+      <motion.div className="relative z-10 space-y-20 md:space-y-40 pb-20 md:pb-40" initial="initial" animate="animate" viewport={{ once: true }}>
         <motion.div {...fadeInUp}>
           <Event />
         </motion.div>
