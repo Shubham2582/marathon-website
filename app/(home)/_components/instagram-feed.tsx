@@ -1,9 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Instagram, ExternalLink, Heart, MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Instagram,
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
+import { MobileFrame } from "@/components/ui/mobile-frame";
 
 const instagramPosts = [
   {
@@ -18,7 +24,7 @@ const instagramPosts = [
     id: 2,
     imageUrl: "/images/instagram/post2.jpeg",
     postUrl: "https://www.instagram.com/p/DGnd98RtDJF/",
-    caption: "छत्तीसगढ़िया सबले बढ़िया",
+    caption: "छत्तीसगढ़िया सबले बढ़िया",
     likes: "189K",
     comments: "1663",
   },
@@ -46,7 +52,6 @@ const instagramPosts = [
     likes: "238",
     comments: "2",
   },
-
   {
     id: 6,
     imageUrl: "/images/instagram/post6.jpeg",
@@ -58,12 +63,49 @@ const instagramPosts = [
 ];
 
 export const InstagramFeed = () => {
-  const [hoveredPost, setHoveredPost] = useState<number | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+
+  // Auto-play: change image every 2 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleNext();
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [currentIndex]);
+
+  const handleNext = () => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % instagramPosts.length);
+  };
+
+  const handlePrev = () => {
+    setDirection(-1);
+    setCurrentIndex(
+      (prev) => (prev - 1 + instagramPosts.length) % instagramPosts.length,
+    );
+  };
+
+  const handleDotClick = (index: number) => {
+    setDirection(index > currentIndex ? 1 : -1);
+    setCurrentIndex(index);
+  };
+
+  const handlePostClick = (postUrl: string) => {
+    window.open(postUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const currentPost = instagramPosts[currentIndex];
+  const prevIndex =
+    (currentIndex - 1 + instagramPosts.length) % instagramPosts.length;
+  const nextIndex = (currentIndex + 1) % instagramPosts.length;
+  const prevPost = instagramPosts[prevIndex];
+  const nextPost = instagramPosts[nextIndex];
 
   return (
     <section className="pb-16 md:pb-24 bg-gradient-to-b from-white to-gray-50 pt-10">
       <div className="container mx-auto px-4">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,6 +114,7 @@ export const InstagramFeed = () => {
           className="text-center mb-12"
         >
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-4">
+            <Instagram className="w-5 h-5" />
             <span className="font-semibold">FOLLOW OUR JOURNEY</span>
           </div>
 
@@ -83,87 +126,85 @@ export const InstagramFeed = () => {
             Experience the energy, passion, and community spirit from our last
             marathon. Join us in creating more unforgettable memories!
           </p>
-
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full">
-            <a
-              href="https://www.instagram.com/abujhmad_marathon/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors"
-            >
-              <Instagram className="w-5 h-5" />
-              <span className="font-semibold">Follow Us</span>
-            </a>
-          </div>
         </motion.div>
 
-        {/* Instagram Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {instagramPosts.map((post, index) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative group"
-              onMouseEnter={() => setHoveredPost(post.id)}
-              onMouseLeave={() => setHoveredPost(null)}
+        <div className="flex justify-center items-center gap-8">
+          {/* Previous Post Preview - Left Side */}
+          <div
+            className="hidden lg:block w-[280px] h-[560px] cursor-pointer hover:opacity-70 transition-opacity opacity-50"
+            onClick={() => handlePostClick(prevPost.postUrl)}
+          >
+            <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-lg">
+              <Image
+                src={prevPost.imageUrl}
+                alt={prevPost.caption}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black/20"></div>
+            </div>
+          </div>
+
+          {/* Main Phone Frame */}
+          <div className="relative">
+            <MobileFrame
+              imageUrl={currentPost.imageUrl}
+              caption={currentPost.caption}
+              likes={currentPost.likes}
+              comments={currentPost.comments}
+              direction={direction}
+              onImageClick={() => handlePostClick(currentPost.postUrl)}
+            />
+
+            <button
+              onClick={handlePrev}
+              className="absolute left-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors z-30"
             >
-              <a
-                href={post.postUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block relative aspect-square rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
-              >
-                {/* Image */}
-                <div className="relative w-full h-full bg-gray-200">
-                  <Image
-                    src={post.imageUrl}
-                    alt={post.caption}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                </div>
+              <ChevronLeft className="w-6 h-6 text-gray-700" />
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute right-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors z-30"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-700" />
+            </button>
 
-                {/* Overlay on Hover */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 ${
-                    hoveredPost === post.id ? "opacity-100" : "opacity-0"
+            <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2 z-30">
+              {instagramPosts.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleDotClick(index)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    index === currentIndex ? "bg-primary w-8" : "bg-gray-300"
                   }`}
-                >
-                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                    <p className="text-sm mb-3 line-clamp-2">{post.caption}</p>
+                />
+              ))}
+            </div>
+          </div>
 
-                    <div className="flex items-center gap-4 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Heart className="w-4 h-4" fill="white" />
-                        <span>{post.likes}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <MessageCircle className="w-4 h-4" />
-                        <span>{post.comments}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Instagram Icon */}
-                  <div className="absolute top-4 right-4">
-                    <Instagram className="w-6 h-6 text-white" />
-                  </div>
-                </div>
-              </a>
-            </motion.div>
-          ))}
+          {/* Next Post Preview - Right Side */}
+          <div
+            className="hidden lg:block w-[280px] h-[560px] cursor-pointer hover:opacity-70 transition-opacity opacity-50"
+            onClick={() => handlePostClick(nextPost.postUrl)}
+          >
+            <div className="relative w-full h-full rounded-3xl overflow-hidden shadow-lg">
+              <Image
+                src={nextPost.imageUrl}
+                alt={nextPost.caption}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black/20"></div>
+            </div>
+          </div>
         </div>
 
-        {/* View More Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mt-10"
+          className="text-center mt-16"
         >
           <a
             href="https://www.instagram.com/abujhmad_marathon/"
