@@ -20,11 +20,10 @@ const PriceCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
       whileHover={{ y: -5 }}
-      className={
-        "relative overflow-hidden bg-primary/10 border border-primary/40 backdrop-blur-sm rounded-2xl"
-      }
+      className="relative overflow-hidden bg-primary/10 border border-primary/40 backdrop-blur-sm rounded-2xl"
     >
-      <div className="p-4">
+      <div className="p-4 relative">
+        {/* Header */}
         <motion.h3
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -35,7 +34,17 @@ const PriceCard = ({
           {category}
         </motion.h3>
 
-        <div className="space-y-4 mt-6">
+        {/* Prize section (blurred content) */}
+        <div className="relative space-y-4 mt-6">
+          {/* Overlay message */}
+          <div className="absolute inset-0 backdrop-blur-md bg-white/40 flex flex-col items-center justify-center rounded-xl z-10">
+            <TrophyIcon className="size-8 text-yellow-400 mb-2 animate-bounce-slow" />
+            <p className="text-gray-700 text-sm font-semibold">
+              Prizes will be revealed soon 🏆
+            </p>
+          </div>
+
+          {/* Actual blurred prize list underneath */}
           {prizes.map(
             (prize, prizeIndex) =>
               prize > 0 && (
@@ -47,11 +56,9 @@ const PriceCard = ({
                     delay: index * 0.1 + prizeIndex * 0.05 + 0.4,
                   }}
                   key={prizeIndex}
-                  className={
-                    "p-3 rounded-lg border border-primary/30 bg-primary/10 transition-colors"
-                  }
+                  className="p-3 rounded-lg border border-primary/30 bg-primary/10 transition-colors"
                 >
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center blur-sm select-none">
                     <span className="text-gray-600 text-sm">
                       {prizeIndex + 1}
                       {getOrdinalSuffix(prizeIndex + 1)} Place
@@ -61,7 +68,7 @@ const PriceCard = ({
                     </span>
                   </div>
                 </motion.div>
-              )
+              ),
           )}
         </div>
       </div>
@@ -104,6 +111,7 @@ const Prices = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br py-20 px-4">
       <div className="max-w-7xl mx-auto">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -130,12 +138,14 @@ const Prices = () => {
           </motion.p>
         </motion.div>
 
+        {/* Prize Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {prizeData.map((data, index) => (
             <PriceCard key={index} {...data} index={index} />
           ))}
         </div>
 
+        {/* Footer note */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

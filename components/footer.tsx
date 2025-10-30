@@ -17,7 +17,10 @@ export function Footer() {
               { id: "sponsors", text: "Our Sponsors" },
             ].map((link) => (
               <li key={link.id}>
-                <Link href="#" className="text-neutral-400 hover:text-primary transition-colors duration-200">
+                <Link
+                  href="#"
+                  className="text-neutral-400 hover:text-primary transition-colors duration-200"
+                >
                   {link.text}
                 </Link>
               </li>
@@ -34,7 +37,10 @@ export function Footer() {
               { id: "terms", text: "Terms and conditions" },
             ].map((link) => (
               <li key={link.id}>
-                <Link href="#" className="text-neutral-400 hover:text-primary transition-colors duration-200">
+                <Link
+                  href="#"
+                  className="text-neutral-400 hover:text-primary transition-colors duration-200"
+                >
                   {link.text}
                 </Link>
               </li>
@@ -46,27 +52,35 @@ export function Footer() {
           <h3 className="text-primary">Contact Us</h3>
           <ul className="space-y-2 md:space-y-4 text-neutral-400">
             <li className="flex items-center gap-2">
-              <span className="font-semibold text-white">Phone:</span> +91 94791 50759
+              <span className="font-semibold text-white">Phone:</span> +91 94791
+              50759
             </li>
             <li className="flex items-center gap-2">
-              <span className="font-semibold text-white">Email:</span> marathonabujhmad@gmail.com
+              <span className="font-semibold text-white">Email:</span>{" "}
+              marathonabujhmad@gmail.com
             </li>
             <li className="flex items-center gap-2">
-              <span className="font-semibold text-white">Address:</span> Narayanpur 494661, Chhattisgarh
+              <span className="font-semibold text-white">Address:</span>{" "}
+              Narayanpur 494661, Chhattisgarh
             </li>
           </ul>
         </div>
 
         <div className="">
           <h3 className="text-primary mb-2 md:mb-4">Stay Updated</h3>
-          <p className="text-neutral-400 mb-3 md:mb-6">Subscribe to our newsletter for the latest updates and offers</p>
+          <p className="text-neutral-400 mb-3 md:mb-6">
+            Subscribe to our newsletter for the latest updates and offers
+          </p>
           <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
               className="flex-grow px-4 py-2 rounded-2xl bg-neutral-800 text-white focus:outline-none focus:ring-2 focus:ring-primary"
             />
-            <Button type="submit" className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-2xl">
+            <Button
+              type="submit"
+              className="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-2xl"
+            >
               Subscribe
             </Button>
           </form>
@@ -74,8 +88,9 @@ export function Footer() {
       </div>
 
       <div className="border-t border-neutral-800 p-4 md:p-8 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-        <p className="text-neutral-400 text-sm md:text-base">&copy; 2024 Peace Marathon. All rights reserved.</p>
-        <p className="text-neutral-400 text-sm md:text-base">Event organised by Baster Event Management</p>
+        <p className="text-neutral-400 text-sm md:text-base">
+          &copy; 2025 Peace Marathon. All rights reserved.
+        </p>
 
         <div className="flex gap-3 md:gap-6">
           {[

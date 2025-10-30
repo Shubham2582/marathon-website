@@ -7,8 +7,8 @@ const eventDetails = [
   {
     icon: Calendar,
     title: "Event Date",
-    description: "March 2, 2025",
-    highlight: "5:30 AM Start",
+    description: "Comming Soon",
+    highlight: "",
   },
   {
     icon: MapPin,
@@ -31,19 +31,63 @@ const eventDetails = [
 ];
 
 const scheduleData = [
-  { time: "4:30 AM", activity: "Reporting: All Participants", details: "All runners (21 KM, 10 KM, 5 KM) must report at the venue" },
-  { time: "4:45 AM", activity: "Warm-Up Session", details: "Stretching & warm-up exercises for all runners" },
-  { time: "5:15 AM", activity: "21 KM Runners at Start Line", details: "All 21 KM runners must be at the start line" },
-  { time: "5:30 AM", activity: "Flag-Off: 21 KM Half Marathon", details: "Official flag-off for the 21 KM Half Marathon" },
-  { time: "5:35 AM", activity: "10 KM Runners Reporting", details: "All 10 KM runners must be at the start line" },
-  { time: "5:45 AM", activity: "Flag-Off: 10 KM Competitive Run", details: "Official flag-off for the 10 KM Competitive Run" },
-  { time: "5:50 AM", activity: "5 KM Runners Reporting", details: "All 5 KM runners must be at the start line" },
-  { time: "6:00 AM", activity: "Flag-Off: 5 KM women", details: "Official flag-off for the 5 KM Fun Run" },
+  {
+    time: "4:30 AM",
+    activity: "Reporting: All Participants",
+    details: "All runners (21 KM, 10 KM, 5 KM) must report at the venue",
+  },
+  {
+    time: "4:45 AM",
+    activity: "Warm-Up Session",
+    details: "Stretching & warm-up exercises for all runners",
+  },
+  {
+    time: "5:15 AM",
+    activity: "21 KM Runners at Start Line",
+    details: "All 21 KM runners must be at the start line",
+  },
+  {
+    time: "5:30 AM",
+    activity: "Flag-Off: 21 KM Half Marathon",
+    details: "Official flag-off for the 21 KM Half Marathon",
+  },
+  {
+    time: "5:35 AM",
+    activity: "10 KM Runners Reporting",
+    details: "All 10 KM runners must be at the start line",
+  },
+  {
+    time: "5:45 AM",
+    activity: "Flag-Off: 10 KM Competitive Run",
+    details: "Official flag-off for the 10 KM Competitive Run",
+  },
+  {
+    time: "5:50 AM",
+    activity: "5 KM Runners Reporting",
+    details: "All 5 KM runners must be at the start line",
+  },
+  {
+    time: "6:00 AM",
+    activity: "Flag-Off: 5 KM women",
+    details: "Official flag-off for the 5 KM Fun Run",
+  },
   { time: "6:45 AM", activity: "5 KM Run Ends", details: "End of 5 KM Run" },
   { time: "7:15 AM", activity: "10 KM Run Ends", details: "End of 10 KM Run" },
-  { time: "8:30 AM", activity: "21 KM Half Marathon Ends", details: "End of 21 KM Run" },
-  { time: "8:30 AM", activity: "prize distribution and addressing", details: "prize distribution" },
-  { time: "9:00 AM - 9:30 AM", activity: "Closing Ceremony & Wrap-Up", details: "Final announcements, felicitation of winners, and event wrap-up" },
+  {
+    time: "8:30 AM",
+    activity: "21 KM Half Marathon Ends",
+    details: "End of 21 KM Run",
+  },
+  {
+    time: "8:30 AM",
+    activity: "prize distribution and addressing",
+    details: "prize distribution",
+  },
+  {
+    time: "9:00 AM - 9:30 AM",
+    activity: "Closing Ceremony & Wrap-Up",
+    details: "Final announcements, felicitation of winners, and event wrap-up",
+  },
 ];
 
 const Event = () => {
@@ -60,7 +104,11 @@ const Event = () => {
             RACE INFORMATION
           </motion.span>
 
-          <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="font-bold text-primary mb-2 md:mb-6">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="font-bold text-primary mb-2 md:mb-6"
+          >
             Event Details
           </motion.h2>
 
@@ -69,7 +117,8 @@ const Event = () => {
             whileInView={{ opacity: 1, y: 0 }}
             className="text-gray-600 text-s md:text-lg max-w-2xl mx-auto font-medium"
           >
-            Join us for an unforgettable running experience through the scenic routes of Abujhmad
+            Join us for an unforgettable running experience through the scenic
+            routes of Abujhmad
           </motion.p>
         </div>
 
@@ -85,7 +134,7 @@ const Event = () => {
             >
               {/* Add a radial gradient to the background */}
               <div
-                className="bg-primary/10 border border-primary/50 backdrop-blur-sm rounded-2xl p-4 md:p-8 
+                className="bg-primary/10 border border-primary/50 backdrop-blur-sm rounded-2xl p-4 md:p-8
                 transition-all duration-300 hover:bg-primary/15 md:min-h-[280px]"
               >
                 {/* Icon */}
@@ -94,48 +143,74 @@ const Event = () => {
                 </div>
 
                 {/* Content */}
-                <h3 className="font-semibold text-primary mb-2">{detail.title}</h3>
-                <p className="text-sm md:text-lg font-semibold">{detail.description}</p>
-                <p className="text-xs md:text-base font-medium text-gray-500">{detail.highlight}</p>
+                <h3 className="font-semibold text-primary mb-2">
+                  {detail.title}
+                </h3>
+                <p className="text-sm md:text-lg font-semibold">
+                  {detail.description}
+                </p>
+                <p className="text-xs md:text-base font-medium text-gray-500">
+                  {detail.highlight}
+                </p>
               </div>
             </motion.div>
           ))}
         </div>
 
         {/* Schedule Section */}
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-16 md:mt-24">
-          <div className="text-center mb-10">
-            <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="font-bold text-primary mb-2 md:mb-6">
-              Event Schedule
-            </motion.h2>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          className="mt-16 md:mt-24 text-center"
+        >
+          {/* Title */}
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="font-bold text-primary mb-4 md:mb-6"
+          >
+            Event Schedule
+          </motion.h2>
 
-          <div className="overflow-x-auto border border-primary/10 rounded-lg">
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-primary/10">
-                  <th className="py-3 md:py-4 px-3 md:px-6 text-left font-semibold text-primary">Time</th>
-                  <th className="py-3 md:py-4 px-3 md:px-6 text-left font-semibold text-primary">Activity</th>
-                  <th className="py-3 md:py-4 px-3 md:px-6 text-left font-semibold text-primary">Details</th>
-                </tr>
-              </thead>
-              <tbody>
-                {scheduleData.map((item, index) => (
-                  <motion.tr
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                    className="border-b text-sm md:text-base border-primary/10 hover:bg-primary/5 transition-colors"
-                  >
-                    <td className="py-1.5 md:py-4 px-3 md:px-6 font-medium">{item.time}</td>
-                    <td className="py-1.5 md:py-4 px-3 md:px-6">{item.activity}</td>
-                    <td className="py-1.5 md:py-4 px-3 md:px-6 text-gray-500">{item.details}</td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {/* Animated “Coming Soon” Section */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="flex flex-col items-center justify-center space-y-4"
+          >
+            {/* Rotating Icon */}
+            <motion.div
+              animate={{ rotate: [0, 360] }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              className="p-4 rounded-full bg-primary/10 border border-primary/30"
+            >
+              <Calendar className="size-8 text-primary" />
+            </motion.div>
+
+            {/* Text */}
+            <motion.h3
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="text-2xl md:text-4xl font-bold text-gray-800"
+            >
+              Schedule Coming Soon
+            </motion.h3>
+
+            {/* Underline animation */}
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "160px" }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              className="h-[3px] bg-gradient-to-r from-primary via-pink-500 to-purple-500 rounded-full"
+            />
+
+            <p className="text-gray-500 text-sm md:text-base font-medium">
+              Stay tuned — full race timeline will be revealed soon.
+            </p>
+          </motion.div>
         </motion.div>
       </div>
     </section>

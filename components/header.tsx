@@ -24,7 +24,7 @@ export function Header() {
       label: "Media",
       href: "https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing",
     },
-    { label: "Recent Events", href: "/recent-events" },
+    { label: "Previous Edition", href: "/recent-events" },
   ];
 
   useEffect(() => {
@@ -45,7 +45,12 @@ export function Header() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
-        className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300", scrolled ? "bg-white/50 backdrop-blur-md shadow-lg" : "bg-transparent")}
+        className={cn(
+          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          scrolled
+            ? "bg-white/50 backdrop-blur-md shadow-lg"
+            : "bg-transparent",
+        )}
       >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-14 md:h-20">
@@ -65,14 +70,26 @@ export function Header() {
 
             <nav className="hidden lg:flex items-center gap-8">
               {routes.map((route) => (
-                <motion.div key={route.href} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
-                  <Link href={route.href} className="text-sm font-medium hover:text-primary transition-colors relative group">
+                <motion.div
+                  key={route.href}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  <Link
+                    href={route.href}
+                    className="text-sm font-medium hover:text-primary transition-colors relative group"
+                  >
                     <div className="flex items-center gap-2">{route.label}</div>
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
                   </Link>
                 </motion.div>
               ))}
-              <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.5 }}>
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.5 }}
+              >
                 <Image
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/qRtztWSu_400x400-tbTddpdVKml9HkbgJKbf3XFUTrwfL8.png"
                   alt="Narayanpur Police Logo"
@@ -95,7 +112,11 @@ export function Header() {
           >
             <nav className="flex flex-col text-sm">
               {routes.map((route) => (
-                <Link key={route.href} href={route.href} className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50">
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  className="font-medium py-3 px-4 hover:text-primary transition-colors rounded-lg hover:bg-gray-50"
+                >
                   {route.label}
                 </Link>
               ))}
