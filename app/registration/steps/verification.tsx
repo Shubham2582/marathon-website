@@ -275,7 +275,7 @@ export const Verification = () => {
                 : t.verification.send_otp}
             </Button>
           </div>
-          {otpError && <p className="text-red-500 text-sm mt-1">{otpError}</p>}
+          {otpError && <p className="text-purple-600 text-sm mt-1">{otpError}</p>}
         </div> */}
         {/* --- OTP Section */}
 

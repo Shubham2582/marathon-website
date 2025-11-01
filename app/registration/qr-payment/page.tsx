@@ -58,7 +58,7 @@ const QRPaymentContent = () => {
       <div className="container max-w-2xl mx-auto py-8">
         <Card>
           <CardContent>
-            <p className="text-center text-red-500">Invalid payment details</p>
+            <p className="text-center text-purple-600">Invalid payment details</p>
           </CardContent>
         </Card>
       </div>
@@ -95,7 +95,7 @@ const QRPaymentContent = () => {
                   setError("");
                 }}
               />
-              {error && <p className="text-sm text-red-500">{error}</p>}
+              {error && <p className="text-sm text-purple-600">{error}</p>}
             </div>
             <div className="text-center">
               <p className="text-sm text-gray-600 mb-4">{t.qr_payment.enter_transaction_id_note}</p>

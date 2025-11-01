@@ -10,7 +10,7 @@ const PaymentFailure = () => {
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
       <Card className="max-w-md w-full">
         <CardHeader>
-          <CardTitle className="text-center text-red-600">Payment Failed</CardTitle>
+          <CardTitle className="text-center text-purple-600">Payment Failed</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <p className="text-center text-gray-600">

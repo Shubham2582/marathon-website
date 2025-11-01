@@ -157,7 +157,7 @@ const SuccessContent = () => {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-xl text-red-500 text-center">Invalid or missing identification number</h1>
+          <h1 className="text-xl text-purple-600 text-center">Invalid or missing identification number</h1>
         </div>
       </main>
     );

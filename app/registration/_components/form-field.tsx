@@ -71,7 +71,7 @@ export const FormField = ({
           {...props}
         />
       )}
-      {error && <p className={"text-xs ml-0.5 mt-1 text-red-500"}>{error}</p>}
+      {error && <p className={"text-xs ml-0.5 mt-1 text-purple-600"}>{error}</p>}
     </div>
   );
 };
