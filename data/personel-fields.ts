@@ -4,8 +4,8 @@ import { statesByCountry } from "./locations/states";
 
 export const personelFormDetails = (
   form: RegistrationForm,
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void,
-  t: any
+  handleChange: (name: string, value: string, type: string) => void,
+  t: any,
 ): FormFieldType[] => [
   {
     label: t.fields.first_name,
@@ -67,7 +67,10 @@ export const personelFormDetails = (
     value: form.state,
     disabled: true,
     handleChange: handleChange,
-    options: statesByCountry["India"].map((state) => ({ label: state, value: state })),
+    options: statesByCountry["India"].map((state) => ({
+      label: state,
+      value: state,
+    })),
   },
   {
     label: t.fields.city,
@@ -77,7 +80,9 @@ export const personelFormDetails = (
     value: form.city,
     disabled: true,
     handleChange: handleChange,
-    options: form.state ? citiesByState[form.state].map((city) => ({ label: city, value: city })) : [{ label: "Please select your state", value: "" }],
+    options: form.state
+      ? citiesByState[form.state].map((city) => ({ label: city, value: city }))
+      : [],
   },
   {
     label: t.fields.race_category,
@@ -180,7 +185,10 @@ export const personelFormDetails = (
       { label: t.fields.id_type_options.aadhar, value: "AADHAR" },
       { label: t.fields.id_type_options.pan, value: "PAN" },
       { label: t.fields.id_type_options.voter, value: "VOTER" },
-      { label: t.fields.id_type_options.driving_license, value: "DRIVING_LICENSE" },
+      {
+        label: t.fields.id_type_options.driving_license,
+        value: "DRIVING_LICENSE",
+      },
     ],
   },
   {
@@ -190,7 +198,16 @@ export const personelFormDetails = (
     value: form.govtId,
     handleChange: handleChange,
     fieldType: "text",
-    maxLength: form.idType === "AADHAR" ? 12 : form.idType === "PAN" ? 10 : form.idType === "VOTER" ? 10 : form.idType === "DRIVING_LICENSE" ? 15 : undefined,
+    maxLength:
+      form.idType === "AADHAR"
+        ? 12
+        : form.idType === "PAN"
+          ? 10
+          : form.idType === "VOTER"
+            ? 10
+            : form.idType === "DRIVING_LICENSE"
+              ? 15
+              : undefined,
     style: { textTransform: form.idType === "AADHAR" ? "none" : "uppercase" },
   },
 ];

@@ -1,11 +1,14 @@
 import { BloodGroup } from "@/data/bloodGroups";
 
-export interface FormFieldType extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
+export interface FormFieldType
+  extends React.InputHTMLAttributes<
+    HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+  > {
   label: string;
   name: string;
   placeholder: string;
   value: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  handleChange: (name: string, value: string, type: string) => void;
   disabled?: boolean;
   fieldDataType?: "text" | "numeric";
   fieldType?: "text" | "date" | "select" | "textarea";

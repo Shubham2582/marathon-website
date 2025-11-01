@@ -119,7 +119,8 @@ export const InstagramFeed = () => {
           </div>
 
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Relive the <span className="text-primary">Previous Edition</span>
+            Relive the{" "}
+            <span className="text-primary font-bold">Previous Edition</span>
           </h2>
 
           <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-6">

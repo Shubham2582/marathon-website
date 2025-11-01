@@ -88,7 +88,7 @@ const HeroSection = () => {
         <motion.p
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center md:text-xl lg:text-2xl text-white font-semibold -mt-28"
+          className="text-center md:text-xl lg:text-2xl text-white drop-shadow font-semibold -mt-28"
         >
           #RUNWITHMAAD
         </motion.p>
@@ -98,7 +98,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-2 md:mb-4"
         >
-          <span className="text-2xl md:text-4xl text-primary font-bold">
+          <span className="text-2xl drop-shadow md:text-4xl text-primary-light font-bold">
             Central India's Biggest Marathon
           </span>
         </motion.h2>
@@ -112,13 +112,15 @@ const HeroSection = () => {
             Abujhmad Peace
           </span>
           <br />
-          <span className="text-white font-bold">Half Marathon 2026</span>
+          <span className="text-white drop-shadow font-bold">
+            Half Marathon 2026
+          </span>
           <br />
           <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="text-lg md:text-2xl lg:text-3xl text-primary-light font-bold"
+            className="text-lg md:text-2xl drop-shadow lg:text-3xl text-primary-light font-bold"
           >
             5th Edition
           </motion.span>
@@ -128,7 +130,7 @@ const HeroSection = () => {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               onClick={() => router.push("/registration")}
-              className="md:py-3 h-auto md:px-6 text-xs md:text-base rounded-3xl font-semibold"
+              className="md:py-3 h-auto md:px-6 text-xs md:text-base rounded-3xl shadow font-semibold"
             >
               {timeLeft.isLive ? "Join Now" : "Register Now"}
               <ChevronRight className="size-6" />

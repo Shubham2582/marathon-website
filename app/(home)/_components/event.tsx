@@ -95,7 +95,7 @@ const Event = () => {
     <section className="relative px-4 sm:px-6 lg:px-24 text-gray-600">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-10">
+        <div className="text-center my-10">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}

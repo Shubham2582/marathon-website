@@ -26,8 +26,8 @@ const DecorativeLine = () => (
         y2="800"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stopColor="#FF6B6B" />
-        <stop offset="1" stopColor="#FF6B6B" stopOpacity="0" />
+        <stop stopColor="#8B5CF6" />
+        <stop offset="1" stopColor="#8B5CF6" stopOpacity="0" />
       </linearGradient>
     </defs>
   </svg>
@@ -42,7 +42,7 @@ const RunnerIcon = () => (
   >
     <path
       d="M15 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM13.9 9.32l-2.49 2.49A2 2 0 0 1 10 12.5H6a2 2 0 0 0-2 2v1.5M8 18.5v-7M14.5 11.5l2 2-2 2M15 13.5h-2"
-      stroke="red"
+      stroke="#8B5CF6"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"

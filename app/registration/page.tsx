@@ -1,37 +1,99 @@
 "use client";
 
-import { useStep } from "@/store/useStep";
 import React from "react";
-import { Personel } from "./steps/personel";
-import { Verification } from "./steps/verification";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { PayUPayment } from "./steps/payu-payment";
-import { Select, SelectContent, SelectItem } from "@/components/ui/select";
-import { SelectTrigger } from "@radix-ui/react-select";
-import { useLanguage, useTranslation } from "@/store/useLanguage";
+import { useStep } from "@/store/useStep";
 import { Language } from "@/types/language";
+import { useLanguage, useTranslation } from "@/store/useLanguage";
+
+import { EmailVerification } from "./steps/email-verification";
+import { PastRecords } from "./steps/past-records";
+import { Personel } from "./steps/personel";
+import { PayUPayment } from "./steps/payu-payment";
+import { Verification } from "./steps/verification";
+import { useRegistrationStore } from "@/store/useRegistration";
 
 const Registration = () => {
   const { currentStep } = useStep();
   const { language, setLanguage } = useLanguage();
+  const { pastRecords } = useRegistrationStore();
   const t = useTranslation();
 
-  const steps = [t.steps[1], t.steps[2], t.steps[3]];
+  const steps = [
+    t.steps.email,
+    t.steps.past_records,
+    t.steps[1], // Verification
+    t.steps[2], // Personel
+    t.steps[3], // Payment
+  ];
+
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return <EmailVerification />;
+      case 2:
+        return <PastRecords />;
+      case 3:
+        return <Verification />;
+      case 4:
+        return <Personel />;
+      case 5:
+        return <PayUPayment />;
+      default:
+        return <EmailVerification />;
+    }
+  };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gray-100">
-      <section className="max-w-2xl w-full bg-white shadow-md rounded-xl p-5">
+    <main className="min-h-screen flex items-center justify-center bg-muted">
+      <section className="max-w-2xl z-10 w-full bg-white backdrop-blur-xl shadow-md rounded-xl p-5">
         <h2 className="text-4xl mb-0">{t.page_title}</h2>
         {/* --- Steps --- */}
         <div className="flex gap-x-5 mt-5">
-          {steps.map((step, index: number) => (
-            <div key={index} className="flex gap-x-2 text-sm items-center font-medium">
-              <p className={cn("text-sm px-2.5 py-0.5 rounded", currentStep === index + 1 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600")}>
-                {index + 1}
-              </p>
-              <p className={currentStep === index + 1 ? "text-blue-600" : "text-gray-600"}>{step}</p>
-            </div>
-          ))}
+          {(() => {
+            let stepNumber = 1;
+            return steps.map((step, index: number) => {
+              if (pastRecords.length === 0 && index === 1) {
+                return null;
+              }
+              const currentVisibleStep = stepNumber;
+              stepNumber++;
+              return (
+                <div
+                  key={index}
+                  className="flex gap-x-2 text-sm items-center font-medium"
+                >
+                  <p
+                    className={cn(
+                      "text-sm px-2.5 py-0.5 rounded",
+                      currentStep === index + 1
+                        ? "bg-primary text-white"
+                        : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {currentVisibleStep}
+                  </p>
+                  <p
+                    className={
+                      currentStep === index + 1
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    }
+                  >
+                    {step}
+                  </p>
+                </div>
+              );
+            });
+          })()}
         </div>
         {/* /--- Steps --- */}
 
@@ -40,11 +102,22 @@ const Registration = () => {
         {/* --- Steps Count --- */}
         <div className="flex justify-between items-center">
           <p className="text-sm text-gray-500 font-medium">
-            {currentStep === 1 ? t.verification.step_label : currentStep === 2 ? t.personal.step_label : t.payment.step_label}
+            {currentStep === 1
+              ? t.verification.step_label
+              : currentStep === 2
+                ? t.personal.step_label
+                : t.payment.step_label}
           </p>
-          <Select onValueChange={(value) => setLanguage(value as Language)}>
-            <SelectTrigger className="my-2 bg-blue-600 text-sm text-white p-1.5 px-3 rounded-md">
-              {language === Language.EN ? "Change Language" : "भाषा बदलें"}
+          <Select
+            defaultValue={language}
+            onValueChange={(value) => setLanguage(value as Language)}
+          >
+            <SelectTrigger className="my-2 text-sm w-fit h-8 space-x-2 px-3 rounded-md">
+              <SelectValue
+                placeholder={
+                  language === Language.EN ? "Change Language" : "भाषा बदलें"
+                }
+              />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={Language.EN}>English</SelectItem>
@@ -57,9 +130,7 @@ const Registration = () => {
         {/* --- Steps Content --- */}
         <>
           <h3 className="mt-2">{steps[currentStep - 1]}</h3>
-          {currentStep === 1 && <Verification />}
-          {currentStep === 2 && <Personel />}
-          {currentStep === 3 && <PayUPayment />}
+          {renderStepContent()}
         </>
         {/* /--- Steps Content --- */}
       </section>

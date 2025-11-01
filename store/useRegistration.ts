@@ -31,27 +31,38 @@ const defaultFormState: RegistrationForm = {
 
 interface RegistrationStore {
   form: RegistrationForm;
-  setForm: <K extends keyof RegistrationForm>(field: K, value: RegistrationForm[K] | File) => void;
+  pastRecords: Partial<RegistrationForm>[];
+  setForm: <K extends keyof RegistrationForm>(
+    field: K,
+    value: RegistrationForm[K] | File,
+  ) => void;
+  setPastRecords: (records: Partial<RegistrationForm>[]) => void;
   resetForm: () => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
+  handleChange: (name: string, value: string, type: string) => void;
 }
 
 export const useRegistrationStore = create<RegistrationStore>((set, get) => ({
   form: defaultFormState,
+  pastRecords: [],
 
   setForm: (field, value) =>
     set((state) => ({
       form: { ...state.form, [field]: value },
     })),
 
-  resetForm: () => set({ form: defaultFormState }),
+  setPastRecords: (records) => set({ pastRecords: records }),
 
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
+  resetForm: () => set({ form: defaultFormState, pastRecords: [] }),
+
+  handleChange: (name, value, type) => {
     const form = get().form;
 
-    if (name === "mobile" || name === "emergencyContactNumber" || name === "pincode" || name === "otp") {
+    if (
+      name === "mobile" ||
+      name === "emergencyContactNumber" ||
+      name === "pincode" ||
+      name === "otp"
+    ) {
       if (value === "") {
         set((state) => ({
           form: {
@@ -64,7 +75,10 @@ export const useRegistrationStore = create<RegistrationStore>((set, get) => ({
 
       // For international participants, allow any length for phone numbers
       // Only validate that it's numeric
-      if ((name === "mobile" || name === "emergencyContactNumber") && form.isInternational) {
+      if (
+        (name === "mobile" || name === "emergencyContactNumber") &&
+        form.isInternational
+      ) {
         if (!/^\d*$/.test(value)) return;
       }
       // For non-international participants or other fields, enforce existing rules
@@ -72,7 +86,11 @@ export const useRegistrationStore = create<RegistrationStore>((set, get) => ({
         if (!/^\d*$/.test(value)) return;
 
         // Enforce 10-digit limit only for Indian phone numbers
-        if ((name === "mobile" || name === "emergencyContactNumber") && value.length > 10 && !form.isInternational) {
+        if (
+          (name === "mobile" || name === "emergencyContactNumber") &&
+          value.length > 10 &&
+          !form.isInternational
+        ) {
           return;
         }
       }
@@ -93,7 +111,7 @@ export const useRegistrationStore = create<RegistrationStore>((set, get) => ({
     set((state) => ({
       form: {
         ...state.form,
-        [name]: type === "checkbox" ? checked : value,
+        [name]: value,
       },
     }));
   },

@@ -23,7 +23,8 @@ const SuccessContent = () => {
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
   // Get both identification number and PayU parameters
-  const identificationNumber = searchParams?.get("identification_number") ?? null;
+  const identificationNumber =
+    searchParams?.get("identification_number") ?? null;
 
   const { resetForm } = useRegistrationStore();
   const { resetStep } = useStep();
@@ -50,23 +51,26 @@ const SuccessContent = () => {
     tShirtSize: string,
     identificationNumber: string | null,
     firstName: string,
-    lastName: string
+    lastName: string,
   ) => {
     try {
-      const response = await fetch("https://runabujhmaad.in/send-marathon-message", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://runabujhmaad.in/send-marathon-message",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phoneNumber,
+            raceCategory,
+            tShirtSize,
+            identificationNumber,
+            firstName,
+            lastName,
+          }),
         },
-        body: JSON.stringify({
-          phoneNumber,
-          raceCategory,
-          tShirtSize,
-          identificationNumber,
-          firstName,
-          lastName,
-        }),
-      });
+      );
 
       if (!response.ok) {
         console.error("Failed to send WhatsApp message");
@@ -114,7 +118,7 @@ const SuccessContent = () => {
           userData.t_shirt_size,
           identificationNumber,
           userData.first_name,
-          userData.last_name
+          userData.last_name,
         );
       }
     } catch (emailError) {
@@ -129,7 +133,12 @@ const SuccessContent = () => {
         return;
       }
 
-      const { data, error: fetchError } = await supabase.from("registrations").select("*").eq("identification_number", identificationNumber).single();
+      const { data, error: fetchError } = await supabase
+        .schema("marathon")
+        .from("registrations_2026")
+        .select("*")
+        .eq("identification_number", identificationNumber)
+        .single();
 
       if (fetchError) {
         console.error("Error fetching user data:", fetchError);
@@ -157,7 +166,9 @@ const SuccessContent = () => {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-xl text-purple-600 text-center">Invalid or missing identification number</h1>
+          <h1 className="text-xl text-purple-600 text-center">
+            Invalid or missing identification number
+          </h1>
         </div>
       </main>
     );
@@ -187,26 +198,53 @@ const SuccessContent = () => {
               duration: 0.5,
             }}
           >
-            <motion.path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            <motion.path
+              d="M5 13l4 4L19 7"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </motion.svg>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="text-center space-y-4">
-          <h1 className="text-3xl font-bold text-gray-800">Payment Successful!</h1>
-          <p className="text-gray-600">Thank you for your registration. Your payment has been processed successfully.</p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="text-center space-y-4"
+        >
+          <h1 className="text-3xl font-bold text-gray-800">
+            Payment Successful!
+          </h1>
+          <p className="text-gray-600">
+            Thank you for your registration. Your payment has been processed
+            successfully.
+          </p>
 
           {identificationNumber && (
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <p className="text-sm text-gray-600">Your Identification Number</p>
-              <p className="text-2xl font-mono font-bold text-blue-600 tracking-wider">{identificationNumber}</p>
-              <p className="text-sm text-gray-500 mt-2">Please save this number for future reference</p>
+            <div className="mt-6 p-4 bg-primary/10 rounded-lg">
+              <p className="text-sm text-gray-600">
+                Your Identification Number
+              </p>
+              <p className="text-2xl font-mono font-bold text-primary tracking-wider">
+                {identificationNumber}
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                Please save this number for future reference
+              </p>
             </div>
           )}
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="mt-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="mt-8"
+          >
             <Link
               href="/"
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200"
             >
               Return to Home
             </Link>
@@ -222,7 +260,7 @@ const SuccessContent = () => {
           {[...Array(20)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-blue-500 rounded-full"
+              className="absolute w-2 h-2 bg-primary rounded-full"
               initial={{
                 opacity: 1,
                 x: Math.random() * (windowSize.width || 0),
@@ -239,7 +277,9 @@ const SuccessContent = () => {
                 delay: Math.random() * 2,
               }}
               style={{
-                backgroundColor: ["#60A5FA", "#34D399", "#F59E0B", "#EC4899"][Math.floor(Math.random() * 4)],
+                backgroundColor: ["#60A5FA", "#34D399", "#F59E0B", "#EC4899"][
+                  Math.floor(Math.random() * 4)
+                ],
               }}
             />
           ))}

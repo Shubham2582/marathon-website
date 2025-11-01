@@ -1,16 +1,16 @@
-// app/registration/steps/payu-payment.tsx
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+
 import { useStep } from "@/store/useStep";
-import { useRegistrationStore } from "@/store/useRegistration";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
-import { useTranslation } from "@/store/useLanguage";
 import { initiatePayment } from "@/lib/payu";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/store/useLanguage";
+import { useRegistrationStore } from "@/store/useRegistration";
+import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export const PayUPayment = () => {
   const { form } = useRegistrationStore();
@@ -25,6 +25,11 @@ export const PayUPayment = () => {
     e.preventDefault();
     if (!acceptedTerms) {
       alert("Please accept the terms and conditions");
+      return;
+    }
+
+    if (form.isFromNarayanpur) {
+      handleOfflinePayment();
       return;
     }
 
@@ -57,7 +62,10 @@ export const PayUPayment = () => {
     };
 
     try {
-      const { error } = await supabase.from("registrations").insert([registrationData]).select("id");
+      const { error } = await supabase
+        .from("registrations")
+        .insert([registrationData])
+        .select("id");
 
       if (error) {
         console.error("Supabase insertion error:", error);
@@ -65,7 +73,9 @@ export const PayUPayment = () => {
       }
 
       if (form.isFromNarayanpur) {
-        router.push(`/registration/payment-success?identification_number=${identificationNumber}`);
+        router.push(
+          `/registration/payment-success?identification_number=${identificationNumber}`,
+        );
         return;
       }
 
@@ -77,11 +87,6 @@ export const PayUPayment = () => {
   };
 
   const handleOfflinePayment = async () => {
-    if (!acceptedTerms) {
-      alert("Please accept the terms and conditions");
-      return;
-    }
-
     try {
       const identificationNumber = await getUniqueIdentificationNumber();
 
@@ -111,11 +116,16 @@ export const PayUPayment = () => {
         previous_marathon_rank: form.previousMarathonRank || null,
       };
 
-      const { error } = await supabase.from("registrations").insert([registrationData]);
+      const { error } = await supabase
+        .schema("marathon")
+        .from("registrations_2026")
+        .insert([registrationData]);
 
       if (error) throw error;
 
-      await router.push(`/registration/payment-success?identification_number=${identificationNumber}`);
+      router.push(
+        `/registration/payment-success?identification_number=${identificationNumber}`,
+      );
     } catch (error) {
       console.error("Registration error:", error);
       throw error;
@@ -133,7 +143,11 @@ export const PayUPayment = () => {
             <span>{t.payment.registration_fee}</span>
             <span>₹{registrationFee}</span>
           </div>
-          {form.isFromNarayanpur && <p className="text-sm text-green-600">* {t.payment.narayanpur_note}</p>}
+          {form.isFromNarayanpur && (
+            <p className="text-sm text-green-600">
+              * {t.payment.narayanpur_note}
+            </p>
+          )}
         </CardContent>
       </Card>
 
@@ -169,7 +183,13 @@ export const PayUPayment = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <Input type="checkbox" id="terms" className="w-4 h-4" checked={acceptedTerms} onChange={(e) => setAcceptedTerms(e.target.checked)} />
+            <Input
+              type="checkbox"
+              id="terms"
+              className="w-4 h-4"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+            />
             <label htmlFor="terms" className="text-sm">
               {t.payment.accept_terms}
             </label>
@@ -184,16 +204,13 @@ export const PayUPayment = () => {
         <div className="flex gap-2">
           {!form.isFromNarayanpur && (
             <>
-              <Button type="button" variant="outline" onClick={handleOfflinePayment} disabled={!acceptedTerms}>
+              <Button type="submit" variant="outline" disabled={!acceptedTerms}>
                 {t.payment.pay_at_event}
               </Button>
-              {/* <Button type="submit" variant="primary" disabled={!acceptedTerms}>
-                {t.payment.proceed_button}
-              </Button> */}
             </>
           )}
           {form.isFromNarayanpur && (
-            <Button type="submit" variant="primary" disabled={!acceptedTerms}>
+            <Button type="submit" disabled={!acceptedTerms}>
               {t.payment.continue_button}
             </Button>
           )}

@@ -1,4 +1,11 @@
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { FormFieldType } from "@/types/form";
 
@@ -14,36 +21,40 @@ export const FormField = ({
   error,
   ...props
 }: FormFieldType) => {
+  const handleFormField = (value: string) => {
+    handleChange(name, value, fieldType);
+  };
+
   return (
     <div className="h-auto transition-all">
       <label htmlFor={name} className="text-sm font-medium">
         {label}
       </label>
       {fieldType === "select" ? (
-        <select
-          id={name}
-          name={name}
-          className="w-full rounded-md border border-input py-2.5 px-2 text-sm focus:outline-none focus:border-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
-          value={value}
-          onChange={handleChange}
+        <Select
+          defaultValue={value}
+          onValueChange={handleFormField}
           disabled={disabled}
-          {...props}
         >
-          <option value="">{placeholder}</option>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          <SelectTrigger className="ring-0">
+            <SelectValue placeholder={placeholder || "Choose"} />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       ) : fieldType === "textarea" ? (
         <Textarea
           id={name}
           name={name}
           placeholder={placeholder}
-          className="focus:border-blue-500 mt-0.5"
+          className="mt-0.5"
           value={value}
-          onChange={handleChange}
+          onChange={(e) => handleFormField(e.target.value)}
           disabled={disabled}
           {...props}
         />
@@ -53,9 +64,9 @@ export const FormField = ({
           name={name}
           type="date"
           placeholder={placeholder}
-          className="focus:border-blue-500 mt-0.5 w-full"
+          className="mt-0.5 w-full"
           value={value}
-          onChange={handleChange}
+          onChange={(e) => handleFormField(e.target.value)}
           disabled={disabled}
           {...props}
         />
@@ -64,14 +75,14 @@ export const FormField = ({
           id={name}
           name={name}
           placeholder={placeholder}
-          className="focus:border-blue-500 mt-0.5"
+          className="mt-0.5"
           value={value}
-          onChange={handleChange}
+          onChange={(e) => handleFormField(e.target.value)}
           disabled={disabled}
           {...props}
         />
       )}
-      {error && <p className={"text-xs ml-0.5 mt-1 text-purple-600"}>{error}</p>}
+      {error && <p className={"text-xs ml-0.5 mt-1 text-primary"}>{error}</p>}
     </div>
   );
 };

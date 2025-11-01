@@ -4,7 +4,21 @@
   "steps": {
     "1": "सत्यापन",
     "2": "व्यक्तिगत जानकारी",
-    "3": "भुगतान"
+    "3": "भुगतान",
+    "email": "ईमेल",
+    "past_records": "पिछले रिकॉर्ड"
+  },
+  "email_verification": {
+    "enter_email_error": "कृपया अपना ईमेल दर्ज करें।",
+    "searching": "खोज रहा है...",
+    "continue_button": "जारी रखें"
+  },
+  "past_records": {
+    "title": "हमें आपके पिछले पंजीकरण विवरण मिल गए हैं।",
+    "subtitle": "क्या आप इनमें से किसी एक के साथ जारी रखना चाहते हैं, या एक नया पंजीकरण शुरू करना चाहते हैं?",
+    "continue_button": "इस पंजीकरण के साथ जारी रखें",
+    "new_registration_button": "एक नया पंजीकरण शुरू करें",
+    "loading": "लोड हो रहा है..."
   },
   "verification": {
     "important_links_title": "महत्वपूर्ण लिंक",
@@ -20,6 +34,7 @@
     "email_placeholder": "example@mail.com",
     "mobile_placeholder": "10 अंकों का मोबाइल नंबर",
     "gender_label": "लिंग",
+    "gender_placeholder": "अपना लिंग चुनें",
     "male": "पुरुष",
     "female": "महिला",
     "otp_placeholder": "4-अंकों का OTP दर्ज करें",

@@ -4,7 +4,21 @@
   "steps": {
     "1": "Verification",
     "2": "Personal",
-    "3": "Payment"
+    "3": "Payment",
+    "email": "Email",
+    "past_records": "Past Records"
+  },
+  "email_verification": {
+    "enter_email_error": "Please enter your email.",
+    "searching": "Searching...",
+    "continue_button": "Continue"
+  },
+  "past_records": {
+    "title": "We found your past registration details.",
+    "subtitle": "Do you want to continue with one of these, or start a new registration?",
+    "continue_button": "Continue with this registration",
+    "new_registration_button": "Start a new registration",
+    "loading": "Loading..."
   },
   "verification": {
     "important_links_title": "Important Links",
@@ -20,6 +34,7 @@
     "email_placeholder": "example@mail.com",
     "mobile_placeholder": "10 digit mobile number",
     "gender_label": "Gender",
+    "gender_placeholder": "Choose your Gender",
     "male": "Male",
     "female": "Female",
     "otp_placeholder": "Enter 4-digit OTP",
