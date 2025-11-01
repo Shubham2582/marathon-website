@@ -17,19 +17,14 @@ const config: Config = {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				"primary-marathon": {
-					light: '#FF6B6B',
-					DEFAULT: '#FF4949',
-					dark: '#FF2727',
-				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
 					foreground: 'hsl(var(--popover-foreground))'
 				},
 				primary: {
-					light: '#FF6B6B',
-					DEFAULT: '#FF4949',
-					dark: '#FF2727',
+					light: '#A78BFA',
+					DEFAULT: '#8B5CF6',
+					dark: '#7C3AED',
 					foreground: '#FFFFFF'
 				},
 				secondary: {

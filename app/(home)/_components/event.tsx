@@ -19,7 +19,7 @@ const eventDetails = [
   {
     icon: Users,
     title: "Participants",
-    description: "5000+ Runners",
+    description: "7000+ Runners",
     highlight: "All Skill Levels",
   },
   {
@@ -172,45 +172,14 @@ const Event = () => {
           >
             Event Schedule
           </motion.h2>
-
-          {/* Animated “Coming Soon” Section */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex flex-col items-center justify-center space-y-4"
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-gray-600 text-s md:text-lg max-w-2xl mx-auto font-medium mb-8 md:mb-12"
           >
-            {/* Rotating Icon */}
-            <motion.div
-              animate={{ rotate: [0, 360] }}
-              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-              className="p-4 rounded-full bg-primary/10 border border-primary/30"
-            >
-              <Calendar className="size-8 text-primary" />
-            </motion.div>
-
-            {/* Text */}
-            <motion.h3
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-2xl md:text-4xl font-bold text-gray-800"
-            >
-              Schedule Coming Soon
-            </motion.h3>
-
-            {/* Underline animation */}
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: "160px" }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              className="h-[3px] bg-gradient-to-r from-primary via-pink-500 to-purple-500 rounded-full"
-            />
-
-            <p className="text-gray-500 text-sm md:text-base font-medium">
-              Stay tuned — full race timeline will be revealed soon.
-            </p>
-          </motion.div>
+            Evevt schedule comming soon
+          </motion.p>
         </motion.div>
       </div>
     </section>

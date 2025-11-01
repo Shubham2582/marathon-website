@@ -158,7 +158,7 @@ const Track = () => {
                   <span className="text-white text-sm">Start Point</span>
                 </div>
                 <div className="flex items-center space-x-4 mt-2">
-                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                  <div className="w-2 h-2 rounded-full bg-purple-500" />
                   <span className="text-white text-sm">Finish Line</span>
                 </div>
               </div> */}
