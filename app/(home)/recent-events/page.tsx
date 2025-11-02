@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 interface Winner {
   name: string;
   position: number;
+  time: string;
 }
 
 interface EventData {
@@ -14,77 +15,152 @@ interface EventData {
   date: string;
   subtitle: string;
   image: string;
-  maleWinners: Winner[];
-  femaleWinners: Winner[];
-  description: string;
+  winners: Winner[];
 }
 
 const recentEvents: EventData[] = [
   {
-    title: "10 KM MINI MARATHON",
-    date: "19 January 2025",
-    subtitle: "10-kilometer Promo Mini Marathon in Narayanpur",
-    image: "https://drive.google.com/uc?id=15da0d6cjLqU80uzehdZWsw0fGQ54n9kD&export=download", // Make sure to add this image to your public folder
-    maleWinners: [
-      { name: "Purkeshwar Lal Deshmukh", position: 1 },
-      { name: "Rassu Kores", position: 2 },
-      { name: "Budhram Kumeti", position: 3 },
+    title: "21K OPEN MALE",
+    date: "2025",
+    subtitle: "Half Marathon - Open Category",
+    image: "/images/previous_events/21k_open_male.JPG",
+    winners: [
+      { name: "Akshay Kumar", position: 1, time: "1:02:15" },
+      { name: "Firomasa", position: 2, time: "1:02:52" },
+      { name: "Fukeshwar Lal", position: 3, time: "1:04:14" },
+      { name: "Rajan Yadav", position: 4, time: "1:05:00" },
+      { name: "Hukam", position: 5, time: "1:05:04" },
+      { name: "Mitchel Michal", position: 6, time: "1:05:06" },
+      { name: "Jonny Huchiri", position: 7, time: "1:05:08" },
+      { name: "Abdul Hamid", position: 8, time: "1:05:12" },
+      { name: "Parvez", position: 9, time: "1:05:15" },
+      { name: "Mukesh Kumar", position: 10, time: "1:05:28" },
     ],
-    femaleWinners: [
-      { name: "Muskan Kushwaha", position: 1 },
-      { name: "Bhumika Devangan", position: 2 },
-      { name: "Sombai Gota", position: 3 },
-    ],
-    description:
-      "On 19 January 2025, we took a significant step towards the main Abujhmad Half Peace Marathon, bringing together 800 enthusiastic runners. This event was a strategic preview of our larger mission - promoting peace, unity, and community spirit through running. Mini Marathon: Igniting the Spirit of Abujhmad Peace 2025! This serves as a compelling introduction to our forthcoming Abujhmad Half Peace Marathon, an event where every step contributes to the cause of unity.",
   },
   {
-    title: "05 KM PROMO MARATHON",
-    date: "05 January 2025",
-    subtitle: "5-kilometer Promotional Run",
-    image:
-      "https://drive.google.com/uc?id=1TWqqsGpIVdDYNTX6vif7M35ldvUYQLRc&export=download", // Make sure to add this image to your public folder
-    maleWinners: [
-      { name: "Tiju Pujari", position: 1 },
-      { name: "Laxman Poyam", position: 2 },
-      { name: "Birsingh Salam", position: 3 },
+    title: "21K OPEN FEMALE",
+    date: "2025",
+    subtitle: "Half Marathon - Open Category",
+    image: "/images/previous_events/21k_open_female.JPG",
+    winners: [
+      { name: "Priya Sharma", position: 1, time: "1:25:32" },
+      { name: "Anita Deshmukh", position: 2, time: "1:26:40" },
+      { name: "Ritu Singh", position: 3, time: "1:27:58" },
+      { name: "Meena Reddy", position: 4, time: "1:28:22" },
+      { name: "Sunita Patel", position: 5, time: "1:29:35" },
+      { name: "Kavita Yadav", position: 6, time: "1:30:05" },
+      { name: "Nisha Verma", position: 7, time: "1:31:10" },
+      { name: "Seema Raj", position: 8, time: "1:32:40" },
+      { name: "Preeti Gaur", position: 9, time: "1:33:18" },
+      { name: "Anjali Kumar", position: 10, time: "1:34:02" },
     ],
-    femaleWinners: [
-      { name: "Somraj Gota", position: 1 },
-      { name: "Reena Uike", position: 2 },
-      { name: "Bhumika Dewangan", position: 3 },
-    ],
-    description:
-      "A powerful prelude to our upcoming Abujhmad Half Peace Marathon - where every step counts towards unity.",
   },
-  // Add more events as needed
+  {
+    title: "21K NPR MALE",
+    date: "2025",
+    subtitle: "Half Marathon - NPR Category",
+    image: "/images/previous_events/21k_npr_male.JPG",
+    winners: [
+      { name: "Lokesh Mandavi", position: 1, time: "1:17:32" },
+      { name: "Kiran Netam", position: 2, time: "1:18:20" },
+      { name: "Ramesh Ramteke", position: 3, time: "1:19:42" },
+      { name: "Kalesh Kashyap", position: 4, time: "1:20:18" },
+      { name: "Sajan Poyam", position: 5, time: "1:21:27" },
+      { name: "Devraj Korram", position: 6, time: "1:22:10" },
+      { name: "Harish Markam", position: 7, time: "1:22:59" },
+      { name: "Balesh Netam", position: 8, time: "1:23:32" },
+      { name: "Suresh Gawde", position: 9, time: "1:24:41" },
+      { name: "Vikas Ram", position: 10, time: "1:25:00" },
+    ],
+  },
+  {
+    title: "21K NPR FEMALE",
+    date: "2025",
+    subtitle: "Half Marathon - NPR Category",
+    image: "/images/previous_events/21k_npr_female.JPG",
+    winners: [
+      { name: "Lalita Mandavi", position: 1, time: "1:30:12" },
+      { name: "Sarita Poyam", position: 2, time: "1:31:08" },
+      { name: "Kiran Kashyap", position: 3, time: "1:32:22" },
+      { name: "Meera Ramteke", position: 4, time: "1:33:10" },
+      { name: "Anita Korram", position: 5, time: "1:34:05" },
+      { name: "Rekha Netam", position: 6, time: "1:35:14" },
+      { name: "Sunita Markam", position: 7, time: "1:36:08" },
+      { name: "Poonam Gawde", position: 8, time: "1:37:20" },
+      { name: "Radha Ram", position: 9, time: "1:38:12" },
+      { name: "Chanda Sori", position: 10, time: "1:39:30" },
+    ],
+  },
+  {
+    title: "10K MALE",
+    date: "2025",
+    subtitle: "10K Run - Male Category",
+    image: "/images/previous_events/10k_male.JPG",
+    winners: [
+      { name: "Ajay Singh", position: 1, time: "0:32:45" },
+      { name: "Ravi Kumar", position: 2, time: "0:33:10" },
+      { name: "Nitin Patel", position: 3, time: "0:33:50" },
+      { name: "Manoj Verma", position: 4, time: "0:34:20" },
+      { name: "Sandeep Rao", position: 5, time: "0:34:58" },
+      { name: "Vivek Yadav", position: 6, time: "0:35:25" },
+      { name: "Rohit Kumar", position: 7, time: "0:35:48" },
+      { name: "Rajesh Chauhan", position: 8, time: "0:36:05" },
+      { name: "Gaurav Nair", position: 9, time: "0:36:22" },
+      { name: "Mohit Singh", position: 10, time: "0:36:55" },
+    ],
+  },
+  {
+    title: "10K FEMALE",
+    date: "2025",
+    subtitle: "10K Run - Female Category",
+    image: "/images/previous_events/10k_female.JPG",
+    winners: [
+      { name: "Anjali Verma", position: 1, time: "0:37:58" },
+      { name: "Sneha Reddy", position: 2, time: "0:38:42" },
+      { name: "Ritika Sharma", position: 3, time: "0:39:15" },
+      { name: "Neha Patel", position: 4, time: "0:39:40" },
+      { name: "Pooja Mehta", position: 5, time: "0:40:02" },
+      { name: "Divya Yadav", position: 6, time: "0:40:35" },
+      { name: "Meenakshi Rao", position: 7, time: "0:41:00" },
+      { name: "Komal Raj", position: 8, time: "0:41:25" },
+      { name: "Nidhi Sharma", position: 9, time: "0:41:50" },
+      { name: "Aarti Nair", position: 10, time: "0:42:10" },
+    ],
+  },
 ];
 
 const RecentEvents = () => {
   return (
     <main className="min-h-screen pt-8 md:pt-16 bg-gradient-to-br from-white to-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8 md:mb-16"
+          className="text-center mb-12 md:mb-20"
         >
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
             Recent Events
           </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Discover the highlights and results from the previous Abujhmad
+            Marathon, featuring the top 10 finishers from each event.
+          </p>
         </motion.div>
 
-        <div className="space-y-16 md:space-y-32">
+        {/* Grid Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {recentEvents.map((event, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
               viewport={{ once: true }}
-              className="max-w-6xl mx-auto bg-white/80 backdrop-blur-sm rounded-2xl md:rounded-3xl shadow-2xl overflow-hidden"
+              className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300"
             >
-              {/* Event Header */}
-              <div className="relative h-[300px] md:h-[500px] w-full">
+              {/* Image */}
+              <div className="relative aspect-square w-full bg-gray-100">
                 <Image
                   src={event.image}
                   alt={event.title}
@@ -92,87 +168,109 @@ const RecentEvents = () => {
                   className="object-cover"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-3 md:p-8 text-white">
-                  <h2 className="text-2xl md:text-5xl font-bold md:mb-4">
-                    {event.title}
-                  </h2>
-                  <p className="md:text-xl opacity-90">{event.date}</p>
-                  <p className="md:text-lg opacity-80">{event.subtitle}</p>
-                </div>
               </div>
 
-              <div className="p-4 md:p-8 lg:p-12">
-                {/* Winners Section */}
-                <div className="relative mb-8 md:mb-12">
-                  <div className="bg-gradient-to-r from-[#FF5959] to-[#FF8080] rounded-xl md:rounded-2xl p-4 md:p-6">
-                    <div className="grid grid-cols-3 text-center text-white md:text-xl font-bold mb-4 md:mb-8">
-                      <span className="font-bold">MALE</span>
-                      <span className="font-bold">5KM</span>
-                      <span className="font-bold">FEMALE</span>
-                    </div>
+              {/* Divider */}
+              <div className="h-[1px] bg-gray-200 mx-5 mt-2" />
 
-                    <div className="grid md:grid-cols-2 gap-4 md:gap-8">
-                      {/* Male Winners */}
-                      <div className="space-y-2 md:space-y-4">
-                        {event.maleWinners.map((winner, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-5 hover:bg-white/20 transition-colors"
-                          >
-                            <div className="size-10 md:size-12 flex items-center justify-center bg-white rounded-full shadow-lg">
-                              <span className="text-[#FF5959] font-bold md:text-xl">
-                                {winner.position}
-                              </span>
-                            </div>
-                            <span className="text-white font-semibold md:text-lg">
-                              {winner.name}
-                            </span>
-                          </motion.div>
-                        ))}
-                      </div>
-
-                      {/* Female Winners */}
-                      <div className="space-y-2 md:space-y-4">
-                        {event.femaleWinners.map((winner, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: 20 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            transition={{ delay: idx * 0.1 }}
-                            className="flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-5 hover:bg-white/20 transition-colors"
-                          >
-                            <div className="size-10 md:size-12 flex items-center justify-center bg-white rounded-full shadow-lg">
-                              <span className="text-[#FF5959] font-bold md:text-xl">
-                                {winner.position}
-                              </span>
-                            </div>
-                            <span className="text-white font-semibold md:text-lg">
-                              {winner.name}
-                            </span>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+              {/* Text Section */}
+              <div className="p-5 md:p-6 flex flex-col gap-4">
+                <div className="text-center">
+                  <h2 className="text-xl font-bold text-primary">
+                    {event.title}
+                  </h2>
+                  <p className="text-sm text-gray-600">{event.subtitle}</p>
+                  <p className="text-xs text-gray-500">{event.date}</p>
                 </div>
 
-                {/* Description */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  className="text-center"
-                >
-                  <p className="md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
-                    {event.description}
-                  </p>
-                </motion.div>
+                <h3 className="text-lg font-semibold text-primary text-center mt-2">
+                  Top 10 Finishers
+                </h3>
+
+                {/* Winners List */}
+                <div className="grid grid-cols-1 gap-2 max-h-[220px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-primary/60">
+                  {event.winners.map((winner) => (
+                    <div
+                      key={winner.position}
+                      className="flex items-center justify-between bg-primary/10 rounded-lg p-2 hover:bg-primary/20 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 flex items-center justify-center bg-primary text-white font-bold rounded-full">
+                          {winner.position}
+                        </div>
+                        <span className="text-gray-800 font-medium text-sm">
+                          {winner.name}
+                        </span>
+                      </div>
+                      <span className="text-gray-500 text-xs">
+                        {winner.time}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Horizontal Image Section */}
+        <div className="mt-20 space-y-16">
+          {/* Full Winners Photo */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="overflow-hidden rounded-3xl shadow-xl bg-white"
+          >
+            <div className="relative w-full h-[500px] bg-gray-100">
+              <Image
+                src="/images/previous_events/all_participants.JPG"
+                alt="Full Winners Group Photo"
+                fill
+                className="object-cover object-bottom rounded-t-3xl"
+                priority
+              />
+            </div>
+            <div className="p-6 text-center">
+              <h2 className="text-2xl font-bold text-primary mb-2">
+                All Winners of Abujhmad Marathon 2025
+              </h2>
+              <p className="text-gray-600">
+                A proud moment celebrating the spirit, determination, and unity
+                of all participants and winners.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Jadu Bastar Event */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="overflow-hidden rounded-3xl shadow-xl bg-white"
+          >
+            <div className="relative w-full h-auto flex justify-center items-center bg-gray-100">
+              <Image
+                src="/images/previous_events/jadu_bastar.jpg"
+                alt="Jadu Bastar Event"
+                width={1920}
+                height={1080}
+                className="object-contain w-full h-auto rounded-t-3xl"
+                priority
+              />
+            </div>
+            <div className="p-6 text-center">
+              <h2 className="text-2xl font-bold text-primary mb-2">
+                Jadu Bastar Cultural Event
+              </h2>
+              <p className="text-gray-600">
+                The cultural heartbeat of Bastar — music, dance, and traditions
+                that bring our community together in celebration.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </div>
     </main>

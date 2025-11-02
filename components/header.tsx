@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -10,6 +11,7 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   const routes: { label: string; href: string }[] = [
     { label: "Home", href: "/" },
@@ -28,16 +30,16 @@ export function Header() {
   ];
 
   useEffect(() => {
-    if (window.scrollY > 20) {
-      setScrolled(true);
-    }
-
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    handleScroll();
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const isHome = pathname === "/";
+
+  // Determine if text should be black
+  const isTextBlack = !isHome || scrolled;
 
   return (
     <>
@@ -49,7 +51,7 @@ export function Header() {
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled
             ? "bg-white/50 backdrop-blur-md shadow-lg"
-            : "bg-transparent text-white",
+            : "bg-transparent",
         )}
       >
         <div className="container mx-auto px-4">
@@ -65,7 +67,21 @@ export function Header() {
             </Link>
 
             <button className="lg:hidden" onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <X className="size-6" /> : <Menu className="size-6" />}
+              {isOpen ? (
+                <X
+                  className={cn(
+                    "size-6",
+                    isTextBlack ? "text-black" : "text-white",
+                  )}
+                />
+              ) : (
+                <Menu
+                  className={cn(
+                    "size-6",
+                    isTextBlack ? "text-black" : "text-white",
+                  )}
+                />
+              )}
             </button>
 
             <nav className="hidden lg:flex items-center gap-8">
@@ -78,7 +94,10 @@ export function Header() {
                 >
                   <Link
                     href={route.href}
-                    className="text-sm font-medium hover:text-primary transition-colors relative group"
+                    className={cn(
+                      "text-sm font-medium hover:text-primary transition-colors relative group",
+                      isTextBlack ? "text-black" : "text-white",
+                    )}
                   >
                     <div className="flex items-center gap-2">{route.label}</div>
                     <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
@@ -102,6 +121,7 @@ export function Header() {
           </div>
         </div>
       </motion.header>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
