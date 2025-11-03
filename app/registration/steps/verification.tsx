@@ -47,27 +47,30 @@ export const Verification = () => {
   };
 
   return (
-    <form onSubmit={handleVerificationSubmit} className="space-y-6">
+    <form onSubmit={handleVerificationSubmit} className="space-y-4 animate-fade-in">
       <div className="flex flex-col">
-        <div className="p-3 mb-4 bg-gray-50 rounded-lg border border-gray-200">
-          <h4 className="font-medium text-lg mb-1">
+        <div className="p-3 bg-white/30 rounded-lg border border-purple-200 shadow-sm hover:shadow-md transition-all duration-300">
+          <h4 className="font-bold text-sm mb-2 text-purple-900 flex items-center gap-1.5">
+            <span className="text-lg">🔗</span>
             {t.verification.important_links_title}
           </h4>
-          <ul className="space-y-2 list-disc pl-5 text-sm">
-            <li>
+          <ul className="space-y-2 list-none pl-0 text-xs">
+            <li className="flex items-start gap-1.5 group">
+              <span className="text-purple-600 mt-0.5 group-hover:scale-110 transition-transform text-xs">▸</span>
               <Link
                 href="https://youtu.be/gJ3kS9t8-nE"
                 target="_blank"
-                className="text-primary hover:text-primary/90 hover:underline"
+                className="text-purple-700 hover:text-purple-900 hover:underline font-medium transition-colors flex-1"
               >
                 {t.verification.watch_registration_tutorial_video}
               </Link>
             </li>
-            <li>
+            <li className="flex items-start gap-1.5 group">
+              <span className="text-purple-600 mt-0.5 group-hover:scale-110 transition-transform text-xs">▸</span>
               <Link
                 href="https://forms.gle/LFVcYJ9uJZ3SzYrQ9"
                 target="_blank"
-                className="text-primary hover:text-primary/90 hover:underline"
+                className="text-purple-700 hover:text-purple-900 hover:underline font-medium transition-colors flex-1"
               >
                 {
                   t.verification
@@ -79,7 +82,7 @@ export const Verification = () => {
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-3">
         <FormField
           label={t.verification.email}
           name="email"
@@ -104,39 +107,39 @@ export const Verification = () => {
           required
         />
 
-        <div className="space-y-2 mt-4">
-          <div className="flex items-center gap-x-2 text-sm font-medium pl-1">
+        <div className="space-y-2 mt-4 pt-3 border-t border-purple-100">
+          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
             <Input
-              className="size-4"
+              className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
               name="isFromNarayanpur"
               id="isFromNarayanpur"
               checked={form.isFromNarayanpur}
               onChange={handleIsFromNarayanpur}
             />
-            <label htmlFor="isFromNarayanpur">
+            <label htmlFor="isFromNarayanpur" className="text-xs font-semibold text-gray-700 cursor-pointer group-hover:text-purple-700 transition-colors">
               {t.verification.are_you_from_narayanpur}
             </label>
           </div>
 
-          <div className="flex items-center gap-x-2 text-sm font-medium pl-1">
+          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
             <Input
-              className="size-4"
+              className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
               name="isInternational"
               id="isInternational"
               checked={form.isInternational}
               onChange={handleIsInternational}
             />
-            <label htmlFor="isInternational">
+            <label htmlFor="isInternational" className="text-xs font-semibold text-gray-700 cursor-pointer group-hover:text-purple-700 transition-colors">
               {t.verification.are_you_international}
             </label>
           </div>
         </div>
       </div>
 
-      <div className="flex justify-end">
-        <Button type="submit">{t.personal.next_button}</Button>
+      <div className="flex justify-end pt-2">
+        <Button type="submit" size="sm" className="min-w-[120px]">{t.personal.next_button}</Button>
       </div>
     </form>
   );

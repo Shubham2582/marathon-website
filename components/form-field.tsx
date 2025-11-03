@@ -26,8 +26,8 @@ export const FormField = ({
   };
 
   return (
-    <div className="h-auto transition-all">
-      <label htmlFor={name} className="text-sm font-medium">
+    <div className="h-auto transition-all group">
+      <label htmlFor={name} className="text-xs font-semibold mb-1 block">
         {label}
       </label>
       {fieldType === "select" ? (
@@ -36,7 +36,7 @@ export const FormField = ({
           onValueChange={handleFormField}
           disabled={disabled}
         >
-          <SelectTrigger className="ring-0">
+          <SelectTrigger className="ring-0 border-purple-200 focus:border-purple-400 transition-all rounded-lg hover:border-purple-300 bg-white/30 h-9 text-sm">
             <SelectValue placeholder={placeholder || "Choose"} />
           </SelectTrigger>
           <SelectContent>
@@ -52,7 +52,7 @@ export const FormField = ({
           id={name}
           name={name}
           placeholder={placeholder}
-          className="mt-0.5"
+          className="mt-0.5 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 transition-all hover:border-purple-300 bg-white/30 text-sm min-h-[80px]"
           value={value}
           onChange={(e) => handleFormField(e.target.value)}
           disabled={disabled}
@@ -64,7 +64,7 @@ export const FormField = ({
           name={name}
           type="date"
           placeholder={placeholder}
-          className="mt-0.5 w-full"
+          className="mt-0.5 w-full border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 transition-all hover:border-purple-300 bg-white/30 h-9 text-sm"
           value={value}
           onChange={(e) => handleFormField(e.target.value)}
           disabled={disabled}
@@ -75,14 +75,14 @@ export const FormField = ({
           id={name}
           name={name}
           placeholder={placeholder}
-          className="mt-0.5"
+          className="mt-0.5 border-purple-200 rounded-lg focus:border-purple-400 focus:ring-2 focus:ring-purple-200 transition-all hover:border-purple-300 bg-white/30 h-9 text-sm"
           value={value}
           onChange={(e) => handleFormField(e.target.value)}
           disabled={disabled}
           {...props}
         />
       )}
-      {error && <p className={"text-xs ml-0.5 mt-1 text-primary"}>{error}</p>}
+      {error && <p className={"text-[10px] ml-0.5 mt-1 text-red-600 font-medium"}>{error}</p>}
     </div>
   );
 };

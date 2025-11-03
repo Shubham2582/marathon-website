@@ -242,9 +242,9 @@ export const Personel = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="animate-fade-in">
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 gap-x-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-3 overflow-auto max-h-[350px] pr-2">
           {personelFormDetails(form, handleChange, t.personal).map(
             (detail, index) => {
               // CORRECTED: Only show ID fields if the user IS from Narayanpur
@@ -294,24 +294,24 @@ export const Personel = () => {
           )}
         </div>
 
-        <div className="space-y-3 mt-4">
-          <div className="flex items-center gap-x-2 text-sm font-medium">
+        <div className="space-y-2 mt-4 pt-4 border-t border-purple-100">
+          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
             <Input
-              className="size-4"
+              className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
               id="isRunner"
               checked={form.isRunner}
               onChange={() => setForm("isRunner", !form.isRunner)}
             />
-            <label htmlFor="isRunner">
+            <label htmlFor="isRunner" className="text-xs font-semibold cursor-pointer group-hover:text-purple-700 transition-colors flex-1">
               {t.personal.fields.have_you_participated_in_marathons}
             </label>
           </div>
 
           {form.isRunner && (
-            <div className="space-y-2 p-3 border rounded-md bg-gray-50">
-              <div className="space-y-1">
-                <label className="block text-sm font-medium">
+            <div className="space-y-2.5 p-3 border border-white rounded-lg bg-white/30 animate-fade-in shadow-sm">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold">
                   {t.personal.fields.previous_marathon_name}
                 </label>
                 <Input
@@ -323,11 +323,11 @@ export const Personel = () => {
                   onChange={(e) =>
                     setForm("previousMarathonName", e.target.value)
                   }
-                  className="w-full"
+                  className="w-full border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 rounded-lg transition-all bg-white/30 h-9 text-sm"
                 />
               </div>
-              <div className="space-y-1">
-                <label className="block text-sm font-medium">
+              <div className="space-y-1.5">
+                <label className="block text-xs font-semibold">
                   {t.personal.fields.previous_marathon_rank}
                 </label>
                 <Input
@@ -340,7 +340,7 @@ export const Personel = () => {
                     setForm("previousMarathonRank", e.target.value)
                   }
                   min="1"
-                  className="w-full"
+                  className="w-full border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 rounded-lg transition-all bg-white/30 h-9 text-sm"
                 />
               </div>
             </div>
@@ -348,9 +348,9 @@ export const Personel = () => {
         </div>
 
         {!form.isFromNarayanpur && (
-          <div className="flex items-center gap-x-2 text-sm font-medium mt-4">
+          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group mt-2">
             <Input
-              className="size-4"
+              className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
               name="accomodation"
               id="needsAccommodation"
@@ -359,17 +359,17 @@ export const Personel = () => {
                 setForm("needsAccommodation", !form.needsAccommodation)
               }
             />
-            <label htmlFor="needsAccommodation">
+            <label htmlFor="needsAccommodation" className="text-xs font-semibold cursor-pointer group-hover:text-purple-700 transition-colors flex-1">
               {t.personal.fields.need_accommodation}
             </label>
           </div>
         )}
       </div>
-      <div className="mt-4 flex justify-between">
-        <Button type="button" onClick={previousStep} variant="secondary">
+      <div className="mt-4 pt-4 flex justify-between gap-3 border-t border-purple-100">
+        <Button type="button" onClick={previousStep} variant="secondary" size="sm">
           {t.personal.back_button}
         </Button>
-        <Button type="submit">{t.personal.next_button}</Button>
+        <Button type="submit" size="sm">{t.personal.next_button}</Button>
       </div>
     </form>
   );

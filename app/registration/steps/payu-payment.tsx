@@ -134,7 +134,7 @@ export const PayUPayment = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <Card>
+      <Card className="bg-white/30">
         <CardHeader>
           <CardTitle>{t.payment.fee_details}</CardTitle>
         </CardHeader>
@@ -151,12 +151,12 @@ export const PayUPayment = () => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="bg-white/30">
         <CardHeader>
           <CardTitle>{t.payment.terms_conditions}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="h-48 overflow-y-auto p-4 bg-gray-50 rounded-md text-sm space-y-2">
+          <div className="h-48 overflow-y-auto p-4 bg-white/40 rounded-md text-sm space-y-2">
             <p>{t.payment.participant_agreement.title}</p>
             <ul className="list-disc pl-5 space-y-1">
               <li>{t.payment.participant_agreement.medical_fit}</li>

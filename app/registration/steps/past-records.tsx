@@ -39,7 +39,7 @@ export const PastRecords = () => {
       try {
         const pincode = await getPincodeFromCityAndState(
           mappedRecord.city,
-          mappedRecord.state as string,
+          mappedRecord.state as string
         );
         if (pincode) {
           mappedRecord.pincode = pincode;
@@ -53,7 +53,7 @@ export const PastRecords = () => {
       if (Object.prototype.hasOwnProperty.call(mappedRecord, key)) {
         setForm(
           key as keyof RegistrationForm,
-          mappedRecord[key as keyof RegistrationForm],
+          mappedRecord[key as keyof RegistrationForm]
         );
       }
     }
@@ -70,20 +70,24 @@ export const PastRecords = () => {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-lg font-medium">{t.past_records.title}</h3>
-      <p>{t.past_records.subtitle}</p>
-      <div className="space-y-4">
+      <div>
+        <h3 className="text-lg font-bold mb-2">{t.past_records.title}</h3>
+        <p className="text-sm">{t.past_records.subtitle}</p>
+      </div>
+      <div className="space-y-4 max-h-[200px] overflow-y-auto">
         {pastRecords.map((record: any, index) => (
-          <Card key={index}>
-            <CardHeader>
-              <CardTitle>
+          <Card key={index} className="bg-white/30">
+            <CardHeader className="p-3 pb-0">
+              <CardTitle className="text-lg">
                 {record.first_name} {record.last_name}
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <p>Email: {record.email}</p>
-              <p>Race Category: {record.race_category}</p>
+            <CardContent className="flex flex-col gap-y-1 p-3 pt-0">
+              <p className="text-sm">Email: {record.email}</p>
+              <p className="text-sm">Race Category: {record.race_category}</p>
               <Button
+              size="sm"
+              className="mt-2 w-fit"
                 onClick={() => handleSelectRecord(record, index)}
                 disabled={loading === index}
               >
