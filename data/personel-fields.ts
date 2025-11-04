@@ -65,7 +65,6 @@ export const personelFormDetails = (
     fieldType: "select" as const,
     placeholder: t.fields.state_placeholder,
     value: form.state,
-    disabled: true,
     handleChange: handleChange,
     options: statesByCountry["India"].map((state) => ({
       label: state,
@@ -78,7 +77,6 @@ export const personelFormDetails = (
     fieldType: "select" as const,
     placeholder: t.fields.city_placeholder,
     value: form.city,
-    disabled: true,
     handleChange: handleChange,
     options: form.state
       ? citiesByState[form.state].map((city) => ({ label: city, value: city }))

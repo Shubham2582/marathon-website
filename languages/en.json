@@ -10,6 +10,10 @@
   },
   "email_verification": {
     "enter_email_error": "Please enter your email.",
+    "phone_instruction": "Enter your 10-digit phone number",
+    "phone_instruction_suffix": "to check for previous registrations",
+    "phone_required": "Phone number is required",
+    "phone_invalid": "Please enter a valid 10-digit phone number",
     "searching": "Searching...",
     "continue_button": "Continue"
   },

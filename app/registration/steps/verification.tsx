@@ -84,11 +84,11 @@ export const Verification = () => {
 
       <div className="space-y-3">
         <FormField
-          label={t.verification.email}
-          name="email"
-          type="email"
-          placeholder={t.verification.email_placeholder}
-          value={form.email}
+          label={t.personal.fields.mobile}
+          name="mobile"
+          type="tel"
+          placeholder={t.personal.fields.mobile_placeholder}
+          value={form.mobile || ""}
           handleChange={handleChange}
           disabled
         />
@@ -108,7 +108,7 @@ export const Verification = () => {
         />
 
         <div className="space-y-2 mt-4 pt-3 border-t border-purple-100">
-          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
+          <label htmlFor="isFromNarayanpur" className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
             <Input
               className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
@@ -117,12 +117,12 @@ export const Verification = () => {
               checked={form.isFromNarayanpur}
               onChange={handleIsFromNarayanpur}
             />
-            <label htmlFor="isFromNarayanpur" className="text-xs font-semibold text-gray-700 cursor-pointer group-hover:text-purple-700 transition-colors">
+            <p className="text-xs font-semibold text-gray-700 cursor-pointer group-hover:text-purple-700 transition-colors">
               {t.verification.are_you_from_narayanpur}
-            </label>
-          </div>
+            </p>
+          </label>
 
-          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
+          <label htmlFor="isInternational" className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
             <Input
               className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
@@ -131,10 +131,10 @@ export const Verification = () => {
               checked={form.isInternational}
               onChange={handleIsInternational}
             />
-            <label htmlFor="isInternational" className="text-xs font-semibold text-gray-700 cursor-pointer group-hover:text-purple-700 transition-colors">
+            <p className="text-xs font-semibold text-gray-700 cursor-pointer group-hover:text-purple-700 transition-colors">
               {t.verification.are_you_international}
-            </label>
-          </div>
+            </p>
+          </label>
         </div>
       </div>
 

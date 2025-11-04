@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import { useStep } from "@/store/useStep";
 import { Input } from "@/components/ui/input";
@@ -16,8 +16,48 @@ export const Personel = () => {
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const { language } = useLanguage();
   const t = useTranslation();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const validateForm = () => {
+  const scrollToFirstError = (errorFields: Record<string, string>) => {
+    const firstErrorField = Object.keys(errorFields)[0];
+    if (!firstErrorField || !scrollContainerRef.current) return;
+
+    // Find the input element with the error
+    const errorInput = scrollContainerRef.current.querySelector(
+      `[name="${firstErrorField}"]`
+    ) as HTMLElement;
+
+    if (errorInput) {
+      // Scroll the container to show the error field
+      const container = scrollContainerRef.current;
+      const inputRect = errorInput.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      // Calculate if the input is outside the visible area
+      const isAbove = inputRect.top < containerRect.top;
+      const isBelow = inputRect.bottom + 8 > containerRect.bottom;
+
+      if (isAbove || isBelow) {
+        // Calculate the scroll position to center the input in the container
+        const inputOffsetTop = errorInput.offsetTop;
+        const containerScrollTop = container.scrollTop;
+        const containerHeight = container.clientHeight;
+        const inputHeight = errorInput.offsetHeight;
+
+        const targetScroll =
+          inputOffsetTop - containerHeight / 2 + inputHeight / 2;
+
+        container.scrollTo({
+          top: Math.max(0, targetScroll),
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     const newErrors: Record<string, string> = {};
     const fields = personelFormDetails(form, handleChange, t.personal);
 
@@ -176,6 +216,12 @@ export const Personel = () => {
       coreFieldsFilled = false;
     }
 
+    if (!form.bloodGroup?.trim()) {
+      newErrors.bloodGroup =
+        language === "en" ? "Blood group is required" : "रक्त समूह आवश्यक है";
+      coreFieldsFilled = false;
+    }
+
     // Non-international participants need to provide location details
     if (!form.isInternational) {
       if (!form.pincode?.trim()) {
@@ -197,26 +243,22 @@ export const Personel = () => {
       }
     }
 
-    console.log("Validation errors:", newErrors);
     setErrors(newErrors);
-    return coreFieldsFilled && Object.keys(newErrors).length === 0;
-  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted, validating...");
-
-    const isValid = validateForm();
-    console.log("Form valid:", isValid);
+    const isValid = coreFieldsFilled && Object.keys(newErrors).length === 0;
 
     if (isValid) {
-      console.log("Moving to next step...");
       nextStep();
+    } else {
+      // Scroll to the first error field
+      setTimeout(() => {
+        scrollToFirstError(newErrors);
+      }, 100);
     }
   };
 
   const handlePincodeChange = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     handleChange(e.target.name, e.target.value, "text");
     const pincode = e.target.value;
@@ -232,11 +274,15 @@ export const Personel = () => {
         const addressData = await fetchAddressFromPincode(pincode);
         if (addressData) {
           setForm("state", addressData.State);
-          setForm("city", addressData.District);
+          setTimeout(() => {
+            setForm("city", addressData.District);
+          }, 200);
         }
       } catch (error) {
         setForm("state", "");
-        setForm("city", "");
+        setTimeout(() => {
+          setForm("city", "");
+        }, 200);
       }
     }
   };
@@ -244,7 +290,10 @@ export const Personel = () => {
   return (
     <form onSubmit={handleSubmit} className="animate-fade-in">
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-3 overflow-auto max-h-[350px] pr-2">
+        <div
+          ref={scrollContainerRef}
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 gap-x-3 overflow-auto max-h-[350px] px-2"
+        >
           {personelFormDetails(form, handleChange, t.personal).map(
             (detail, index) => {
               // CORRECTED: Only show ID fields if the user IS from Narayanpur
@@ -290,12 +339,15 @@ export const Personel = () => {
                   error={errors[detail.name]}
                 />
               );
-            },
+            }
           )}
         </div>
 
         <div className="space-y-2 mt-4 pt-4 border-t border-purple-100">
-          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group">
+          <label
+            htmlFor="isRunner"
+            className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group"
+          >
             <Input
               className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
@@ -303,10 +355,10 @@ export const Personel = () => {
               checked={form.isRunner}
               onChange={() => setForm("isRunner", !form.isRunner)}
             />
-            <label htmlFor="isRunner" className="text-xs font-semibold cursor-pointer group-hover:text-purple-700 transition-colors flex-1">
+            <p className="text-xs font-semibold cursor-pointer group-hover:text-purple-700 transition-colors flex-1">
               {t.personal.fields.have_you_participated_in_marathons}
-            </label>
-          </div>
+            </p>
+          </label>
 
           {form.isRunner && (
             <div className="space-y-2.5 p-3 border border-white rounded-lg bg-white/30 animate-fade-in shadow-sm">
@@ -348,7 +400,10 @@ export const Personel = () => {
         </div>
 
         {!form.isFromNarayanpur && (
-          <div className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group mt-2">
+          <label
+            htmlFor="needsAccommodation"
+            className="flex items-center gap-x-2.5 p-2 rounded-lg hover:bg-white/30 transition-colors cursor-pointer group mt-2"
+          >
             <Input
               className="size-4 cursor-pointer accent-purple-600"
               type="checkbox"
@@ -359,17 +414,24 @@ export const Personel = () => {
                 setForm("needsAccommodation", !form.needsAccommodation)
               }
             />
-            <label htmlFor="needsAccommodation" className="text-xs font-semibold cursor-pointer group-hover:text-purple-700 transition-colors flex-1">
+            <p className="text-xs font-semibold cursor-pointer group-hover:text-purple-700 transition-colors flex-1">
               {t.personal.fields.need_accommodation}
-            </label>
-          </div>
+            </p>
+          </label>
         )}
       </div>
       <div className="mt-4 pt-4 flex justify-between gap-3 border-t border-purple-100">
-        <Button type="button" onClick={previousStep} variant="secondary" size="sm">
+        <Button
+          type="button"
+          onClick={previousStep}
+          variant="secondary"
+          size="sm"
+        >
           {t.personal.back_button}
         </Button>
-        <Button type="submit" size="sm">{t.personal.next_button}</Button>
+        <Button type="submit" size="sm">
+          {t.personal.next_button}
+        </Button>
       </div>
     </form>
   );

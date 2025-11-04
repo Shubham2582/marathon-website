@@ -32,14 +32,14 @@ export const FormField = ({
       </label>
       {fieldType === "select" ? (
         <Select
-          defaultValue={value}
+          value={value}
           onValueChange={handleFormField}
           disabled={disabled}
         >
           <SelectTrigger className="ring-0 border-purple-200 focus:border-purple-400 transition-all rounded-lg hover:border-purple-300 bg-white/30 h-9 text-sm">
             <SelectValue placeholder={placeholder || "Choose"} />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[200px] overflow-y-auto">
             {options.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
@@ -82,7 +82,7 @@ export const FormField = ({
           {...props}
         />
       )}
-      {error && <p className={"text-[10px] ml-0.5 mt-1 text-red-600 font-medium"}>{error}</p>}
+      {error && <p className={"text-xs ml-0.5 mt-1 text-red-600 font-medium"}>{error}</p>}
     </div>
   );
 };

@@ -62,9 +62,9 @@ export const PastRecords = () => {
   };
 
   const handleNewRegistration = () => {
-    const email = useRegistrationStore.getState().form.email;
+    const mobile = useRegistrationStore.getState().form.mobile;
     resetForm();
-    setForm("email", email);
+    setForm("mobile", mobile);
     setStep(3); // Go to Verification step
   };
 
@@ -83,7 +83,7 @@ export const PastRecords = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-y-1 p-3 pt-0">
-              <p className="text-sm">Email: {record.email}</p>
+              <p className="text-sm">Mobile: {record.mobile || record.mobile_number}</p>
               <p className="text-sm">Race Category: {record.race_category}</p>
               <Button
               size="sm"

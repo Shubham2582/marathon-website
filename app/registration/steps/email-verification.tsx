@@ -10,17 +10,27 @@ import { supabase } from "@/lib/supabase";
 
 export const EmailVerification = () => {
   const { setStep } = useStep();
-  const { form, setForm, setPastRecords } = useRegistrationStore();
+  const { form, handleChange, setPastRecords } = useRegistrationStore();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const t = useTranslation();
 
-  const handleEmailSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handlePhoneSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!form.email) {
-      setError(t.email_verification.enter_email_error);
+    const phoneNumber = form.mobile?.trim() || "";
+    
+    // Validate phone number
+    if (!phoneNumber) {
+      setError(t.email_verification.phone_required);
       return;
     }
+    
+    // Validate 10 digits
+    if (!/^\d{10}$/.test(phoneNumber)) {
+      setError(t.email_verification.phone_invalid);
+      return;
+    }
+    
     setError("");
     setLoading(true);
 
@@ -29,7 +39,7 @@ export const EmailVerification = () => {
         .schema("marathon")
         .from("registrations_2025")
         .select("*")
-        .eq("email", form.email);
+        .eq("mobile", phoneNumber);
 
       if (error) {
         throw error;
@@ -51,26 +61,23 @@ export const EmailVerification = () => {
     }
   };
 
-  const handleChange = (name: string, value: string) => {
-    setForm(name as any, value);
-  };
-
   return (
-    <form onSubmit={handleEmailSubmit} className="space-y-4 animate-fade-in">
-      <div className="bg-white/30 rounded-lg p-3">
-        <p className="text-xs text-gray-700">
-          <span className="font-semibold text-purple-700">{t.email_verification.enter_email_error.split(' ')[0]}</span> {t.email_verification.enter_email_error.split(' ').slice(1).join(' ')}
+    <form onSubmit={handlePhoneSubmit} className="space-y-4 animate-fade-in">
+        <p className="text-sm text-gray-700">
+          <span className="font-semibold text-purple-700">{t.email_verification.phone_instruction}</span> {t.email_verification.phone_instruction_suffix}
         </p>
-      </div>
       
       <FormField
-        label={t.verification.email}
-        name="email"
-        type="email"
-        placeholder={t.verification.email_placeholder}
-        value={form.email}
+        label={t.personal.fields.mobile}
+        name="mobile"
+        type="tel"
+        placeholder={t.personal.fields.mobile_placeholder}
+        value={form.mobile || ""}
         handleChange={handleChange}
         error={error}
+        inputMode="numeric"
+        pattern="[0-9]*"
+        maxLength={10}
       />
       
       <div className="flex justify-end pt-2">

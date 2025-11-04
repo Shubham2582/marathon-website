@@ -44,6 +44,23 @@ const Registration = () => {
     t.steps[3], // Payment
   ];
 
+  // Calculate visible steps and current visible step
+  const hasPastRecords = pastRecords.length > 0;
+  const visibleSteps = hasPastRecords ? steps : steps.filter((_, i) => i !== 1);
+  const totalVisibleSteps = visibleSteps.length;
+  
+  // Calculate current visible step number (accounting for skipped past records)
+  const getCurrentVisibleStep = () => {
+    if (hasPastRecords) {
+      return currentStep;
+    } else {
+      // If no past records and current step is after step 2, subtract 1
+      return currentStep > 2 ? currentStep - 1 : currentStep;
+    }
+  };
+  
+  const currentVisibleStep = getCurrentVisibleStep();
+
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
@@ -88,7 +105,7 @@ const Registration = () => {
             <div 
               className="absolute left-0 h-1 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full transition-all duration-500 -z-10"
               style={{ 
-                width: `${((currentStep - 1) / (steps.filter((_, i) => pastRecords.length > 0 || i !== 1).length - 1)) * 100}%` 
+                width: `${totalVisibleSteps > 1 ? ((currentVisibleStep - 1) / (totalVisibleSteps - 1)) * 100 : 0}%` 
               }}
             ></div>
             
@@ -146,7 +163,7 @@ const Registration = () => {
           <div className="flex items-center gap-1.5">
             <div className="w-1 h-4 bg-gradient-to-b from-purple-600 to-violet-600 rounded-full"></div>
             <p className="text-xs font-semibold">
-              {currentStep} / {steps.length}
+              {currentVisibleStep} / {totalVisibleSteps}
             </p>
           </div>
           <Select

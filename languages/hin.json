@@ -10,6 +10,10 @@
   },
   "email_verification": {
     "enter_email_error": "कृपया अपना ईमेल दर्ज करें।",
+    "phone_instruction": "अपना 10 अंकों का फ़ोन नंबर दर्ज करें",
+    "phone_instruction_suffix": "पिछले पंजीकरण की जांच के लिए",
+    "phone_required": "फ़ोन नंबर आवश्यक है",
+    "phone_invalid": "कृपया एक मान्य 10 अंकों का फ़ोन नंबर दर्ज करें",
     "searching": "खोज रहा है...",
     "continue_button": "जारी रखें"
   },

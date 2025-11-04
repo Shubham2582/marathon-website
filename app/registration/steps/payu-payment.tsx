@@ -63,7 +63,8 @@ export const PayUPayment = () => {
 
     try {
       const { error } = await supabase
-        .from("registrations")
+        .schema("marathon")
+        .from("registrations_2026")
         .insert([registrationData])
         .select("id");
 
@@ -74,7 +75,7 @@ export const PayUPayment = () => {
 
       if (form.isFromNarayanpur) {
         router.push(
-          `/registration/payment-success?identification_number=${identificationNumber}`,
+          `/registration/payment-success?identification_number=${identificationNumber}`
         );
         return;
       }
@@ -124,7 +125,7 @@ export const PayUPayment = () => {
       if (error) throw error;
 
       router.push(
-        `/registration/payment-success?identification_number=${identificationNumber}`,
+        `/registration/payment-success?identification_number=${identificationNumber}`
       );
     } catch (error) {
       console.error("Registration error:", error);
@@ -205,7 +206,7 @@ export const PayUPayment = () => {
           {!form.isFromNarayanpur && (
             <>
               <Button type="submit" variant="outline" disabled={!acceptedTerms}>
-                {t.payment.pay_at_event}
+                {t.payment.proceed_button}
               </Button>
             </>
           )}
