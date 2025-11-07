@@ -58,7 +58,7 @@ export function Header() {
           <div className="flex items-center justify-between h-14 md:h-20">
             <Link href="/" className="flex items-center">
               <Image
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/PNG%20FOR%20WHITE-XnTh0iSNRB193VAsfIfYj00SNKxAf2.png"
+                src="/logo.png"
                 alt="Abujhmad Marathon 2025 Logo"
                 width={120}
                 height={40}
