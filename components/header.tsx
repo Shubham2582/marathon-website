@@ -24,7 +24,7 @@ export function Header() {
     },
     {
       label: "Media",
-      href: "https://drive.google.com/drive/folders/125xLduuMILa-AS7OTO6Vwz4PlpT84J9k?usp=sharing",
+      href: "/media-feed",
     },
     { label: "Previous Edition", href: "/recent-events" },
   ];
