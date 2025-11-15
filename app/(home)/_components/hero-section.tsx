@@ -76,7 +76,7 @@ const HeroSection = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero-bg-img.png"
+          src="/images/bg-hero.jpg"
           alt="Hero Section Background"
           fill
           className="object-cover brightness-90"
