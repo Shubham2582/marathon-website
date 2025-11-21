@@ -82,25 +82,25 @@ export const personelFormDetails = (
       ? citiesByState[form.state].map((city) => ({ label: city, value: city }))
       : [],
   },
-  {
-    label: t.fields.race_category,
-    name: "raceCategory",
-    fieldType: "select" as const,
-    placeholder: t.fields.race_category_placeholder,
-    value: form.raceCategory,
-    handleChange: handleChange,
-    options:
-      form.gender === "FEMALE"
-        ? [
-            { label: "5KM", value: "5KM" },
-            { label: "10KM", value: "10KM" },
-            { label: "21KM", value: "21KM" },
-          ]
-        : [
-            { label: "10KM", value: "10KM" },
-            { label: "21KM", value: "21KM" },
-          ],
-  },
+  // {
+  //   label: t.fields.race_category,
+  //   name: "raceCategory",
+  //   fieldType: "select" as const,
+  //   placeholder: t.fields.race_category_placeholder,
+  //   value: form.raceCategory,
+  //   handleChange: handleChange,
+  //   options:
+  //     form.gender === "FEMALE"
+  //       ? [
+  //           { label: "5KM", value: "5KM" },
+  //           { label: "10KM", value: "10KM" },
+  //           { label: "21KM", value: "21KM" },
+  //         ]
+  //       : [
+  //           { label: "10KM", value: "10KM" },
+  //           { label: "21KM", value: "21KM" },
+  //         ],
+  // },
   {
     label: t.fields.tshirt_size,
     name: "tShirtSize",
