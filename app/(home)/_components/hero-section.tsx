@@ -160,7 +160,7 @@ const HeroSection = () => {
                 transition={{ duration: 2, repeat: Infinity }}
                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white drop-shadow mb-1"
               >
-                ₹18 Lakhs
+                ₹13 Lakhs
               </motion.div>
               <div className="text-xs md:text-sm text-white font-bold">
                 Prize Pool 🏆
@@ -181,18 +181,18 @@ const HeroSection = () => {
                 transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
                 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1"
               >
-                7,000+
+                25th
               </motion.div>
               <div className="text-white text-xs md:text-sm font-semibold">
-                Previous Edition
+                January
               </div>
-              <div className="text-white/70 text-xs">Runners</div>
+              <div className="text-white/70 text-xs">2026</div>
             </div>
 
             {/* Mini Divider */}
             <div className="h-12 w-px bg-white/30"></div>
 
-            {/* Countries */}
+            {/* Date */}
             <div className="text-center">
               <motion.div
                 initial={{ scale: 0 }}
@@ -200,12 +200,12 @@ const HeroSection = () => {
                 transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
                 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1"
               >
-                6
+                5000+
               </motion.div>
               <div className="text-white text-xs md:text-sm font-semibold">
-                Countries
+                Previous Edition
               </div>
-              <div className="text-white/70 text-xs">Represented</div>
+              <div className="text-white/70 text-xs">Runners</div>
             </div>
           </div>
         </div>
