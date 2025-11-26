@@ -190,7 +190,7 @@ const HeroSection = () => {
             </div>
 
             {/* Mini Divider */}
-            <div className="h-12 w-px bg-white/30"></div>
+            <div className="hidden md:block h-20 w-px bg-white/30"></div>
 
             {/* Date */}
             <div className="text-center">
