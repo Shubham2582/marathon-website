@@ -117,6 +117,9 @@
   "payment": {
     "step_label": "चरण 3 / 3",
     "fee_details": "पंजीकरण शुल्क विवरण",
+    "base_fee": "मूल शुल्क",
+    "tshirts": "टी-शर्ट",
+    "total": "कुल",
     "registration_fee": "पंजीकरण शुल्क",
     "narayanpur_note": "* नारायणपुर के प्रतिभागियों के लिए कोई पंजीकरण शुल्क नहीं",
     "terms_conditions": "नियम और शर्तें",

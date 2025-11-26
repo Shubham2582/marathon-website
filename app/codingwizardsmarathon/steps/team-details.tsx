@@ -48,7 +48,7 @@ const formSchema = z.object({
           }),
           gender: z.enum(["MALE", "FEMALE"]),
           wantsTshirt: z.boolean().default(false),
-          tShirtSize: z.enum(["S", "M", "L", "XL", ""]).default(""),
+          tShirtSize: z.enum(["S", "M", "L", "XL", "XXL", ""]).default(""),
         })
         .refine(
           (data) => {

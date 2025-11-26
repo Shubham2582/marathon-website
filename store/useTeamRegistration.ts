@@ -5,7 +5,7 @@ interface TeamMember {
   mobile: string;
   gender: "MALE" | "FEMALE";
   wantsTshirt: boolean;
-  tShirtSize: "S" | "M" | "L" | "XL" | "XXL";
+  tShirtSize: "S" | "M" | "L" | "XL" | "XXL" | "";
 }
 
 export interface TeamDetails {
