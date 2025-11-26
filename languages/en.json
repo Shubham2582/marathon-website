@@ -1,12 +1,14 @@
 {
   "title": "English",
   "page_title": "Marathon Registration",
+  "team_run_registration_title": "Team Run Registration",
   "steps": {
     "1": "Verification",
     "2": "Personal",
     "3": "Payment",
     "email": "Email",
-    "past_records": "Past Records"
+    "past_records": "Past Records",
+    "team_details_step": "Team Details"
   },
   "email_verification": {
     "enter_email_error": "Please enter your email.",
@@ -103,9 +105,21 @@
     "back_button": "Back",
     "next_button": "Next"
   },
+  "team_details": {
+    "team_name": "Team Name",
+    "member": "Member",
+    "name": "Name",
+    "mobile": "Mobile",
+    "wants_tshirt": "Want a T-shirt? ({price} Rs)",
+    "tshirt_size": "T-shirt Size",
+    "tshirt_size_placeholder": "Select a size"
+  },
   "payment": {
     "step_label": "Step 3 / 3",
     "fee_details": "Registration Fee Details",
+    "base_fee": "Base Fee",
+    "tshirts": "T-shirts",
+    "total": "Total",
     "registration_fee": "Registration Fee",
     "narayanpur_note": "* No registration fee for participants from Narayanpur",
     "terms_conditions": "Terms and Conditions",
@@ -148,5 +162,12 @@
     "error_invalid_details": "Invalid payment details",
     "error_no_id": "No identification number found",
     "error_no_transaction": "Please enter the transaction ID"
+  },
+  "success_page": {
+    "thank_you": "Thank you for your registration. Your payment has been processed successfully. Please save the following identification numbers for your team members:",
+    "identification_number": "Identification Number:",
+    "payment_successful": "Payment Successful!",
+    "return_to_home": "Return to Home"
   }
 }
+

@@ -1,12 +1,14 @@
 {
   "title": "हिन्दी",
   "page_title": "मैरेथन पंजीकरण",
+  "team_run_registration_title": "टीम रन पंजीकरण",
   "steps": {
     "1": "सत्यापन",
     "2": "व्यक्तिगत जानकारी",
     "3": "भुगतान",
     "email": "ईमेल",
-    "past_records": "पिछले रिकॉर्ड"
+    "past_records": "पिछले रिकॉर्ड",
+    "team_details_step": "टीम विवरण"
   },
   "email_verification": {
     "enter_email_error": "कृपया अपना ईमेल दर्ज करें।",
@@ -102,6 +104,15 @@
     },
     "back_button": "वापस",
     "next_button": "अगला"
+  },
+  "team_details": {
+    "team_name": "टीम का नाम",
+    "member": "सदस्य",
+    "name": "नाम",
+    "mobile": "मोबाइल",
+    "wants_tshirt": "टी-शर्ट चाहिए? ({price} रु)",
+    "tshirt_size": "टी-शर्ट का आकार",
+    "tshirt_size_placeholder": "एक आकार चुनें"
   },
   "payment": {
     "step_label": "चरण 3 / 3",
