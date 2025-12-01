@@ -26,8 +26,9 @@ const SuccessContent = () => {
   const [members, setMembers] = useState<UserData[]>([]);
 
   // Get both identification number and PayU parameters
-  const team_id =
-    searchParams?.get("team_id") ?? null;
+  const team_id = searchParams?.get("team_id") ?? null;
+
+  const bibNumber = searchParams?.get("bibNumber") ?? null;
 
   const { resetForm } = useRegistrationStore();
   const { resetStep } = useStep();
@@ -148,7 +149,7 @@ const SuccessContent = () => {
         console.error("Error fetching user data:", fetchError);
         return;
       }
-      
+
       setMembers(data as UserData[]);
 
       // Update payment status for each member
@@ -158,11 +159,14 @@ const SuccessContent = () => {
           .from("registrations_2026")
           .update({ payment_status: "DONE" })
           .eq("identification_number", member.identification_number);
-        
+
         if (memberUpdateError) {
-            console.error(`Error updating payment status for member ${member.identification_number}:`, memberUpdateError);
+          console.error(
+            `Error updating payment status for member ${member.identification_number}:`,
+            memberUpdateError,
+          );
         } else {
-            await sendSuccessEmail(member);
+          await sendSuccessEmail(member);
         }
       }
     };
@@ -176,6 +180,18 @@ const SuccessContent = () => {
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <h1 className="text-xl text-purple-600 text-center">
             Invalid or missing team ID
+          </h1>
+        </div>
+      </main>
+    );
+  }
+
+  if (!bibNumber) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+          <h1 className="text-xl text-purple-600 text-center">
+            Invalid or missing BIB Number
           </h1>
         </div>
       </main>
@@ -229,30 +245,27 @@ const SuccessContent = () => {
             Thank you for your registration. Your payment has been processed
             successfully.
           </p>
-          
+
           <div className="mt-6 p-4 bg-black rounded-lg">
+            <p className="text-sm text-gray-400">Your Team ID</p>
+            <p className="text-2xl font-mono font-bold text-white tracking-wider">
+              {teamId}
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Please save this number for future reference
+            </p>
+          </div>
+
+          {members.map((member, index) => (
+            <div key={index} className="mt-6 p-4 bg-black rounded-lg">
               <p className="text-sm text-gray-400">
-                Your Team ID
+                Team Member {index + 1}'s Identification Number
               </p>
               <p className="text-2xl font-mono font-bold text-white tracking-wider">
-                {teamId}
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Please save this number for future reference
+                {member.identification_number}
               </p>
             </div>
-            
-            {members.map((member, index) => (
-                <div key={index} className="mt-6 p-4 bg-black rounded-lg">
-                <p className="text-sm text-gray-400">
-                    Team Member {index + 1}'s Identification Number
-                </p>
-                <p className="text-2xl font-mono font-bold text-white tracking-wider">
-                    {member.identification_number}
-                </p>
-                </div>
-            ))}
-
+          ))}
 
           <motion.div
             initial={{ opacity: 0 }}

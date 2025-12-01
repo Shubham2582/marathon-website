@@ -1,6 +1,7 @@
 export const siteConfig = {
-  title: "Abujhmad Peace Half Marathon 2025",
-  description: "Central India's Biggest Marathon event with prize pool of ₹18 Lakhs. Join us for 21K, 10K, and 5K races.",
+  title: "Abujhmad Peace Half Marathon 2026",
+  description:
+    "Central India's Biggest Marathon event with prize pool of ₹18 Lakhs. Join us for 21K, 10K, and 5K races.",
   keywords: [
     "Abujhmad Marathon",
     "Peace Half Marathon",
@@ -10,8 +11,7 @@ export const siteConfig = {
     "Sports Event India",
     "Central India Marathon",
     "Half Marathon",
-    "10K Run",
-    "5K Run"
+    "5th Edition",
   ],
   authors: [
     {
@@ -25,6 +25,6 @@ export const siteConfig = {
   links: {
     twitter: "https://twitter.com/abujhmadmarathon2025",
     instagram: "https://instagram.com/abujhmadmarathon2025",
-    facebook: "https://facebook.com/abujhmadmarathon2025"
+    facebook: "https://facebook.com/abujhmadmarathon2025",
   },
-}; 
+};

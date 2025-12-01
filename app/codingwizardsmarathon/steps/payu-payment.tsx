@@ -10,12 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/store/useLanguage";
 import { useRegistrationStore } from "@/store/useRegistration";
 import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -148,7 +143,7 @@ export const PayUPayment = () => {
       if (error) throw error;
 
       router.push(
-        `/registration/payment-success?identification_number=${identificationNumber}`
+        `/registration/payment-callback?identification_number=${identificationNumber}?success=true`,
       );
     } catch (error) {
       console.error("Registration error:", error);
