@@ -6,14 +6,18 @@ import { Trophy, Award } from "lucide-react";
 const PriceCard = ({
   category,
   prizes,
-  index,
 }: {
   category: string;
   prizes: number[];
   index: number;
 }) => {
   return (
-    <div className="relative overflow-hidden bg-primary/10 border-2 border-primary/40 rounded-3xl shadow-xl">
+    <div
+      className="
+        relative overflow-hidden bg-primary/10 border-2 border-primary/40 rounded-3xl
+        shadow-xl hover:scale-[1.03] hover:shadow-2xl transition-all duration-300
+      "
+    >
       <div className="p-6 relative z-10">
         {/* Header with Trophy */}
         <div className="flex flex-col items-center mb-6">
@@ -27,20 +31,25 @@ const PriceCard = ({
           />
         </div>
 
-        {/* Male and Female nested containers */}
+        {/* Male + Female */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-          {/* Male Container */}
+          {/* Male */}
           <div className="bg-primary/5 border border-primary/30 rounded-xl p-4">
             <h4 className="text-lg font-semibold text-gray-700 mb-3 text-center">
               Male
             </h4>
+
             <div className="space-y-2">
               {prizes.map(
                 (prize, prizeIndex) =>
                   prize > 0 && (
                     <div
                       key={prizeIndex}
-                      className="p-3 rounded-lg border border-primary/30 bg-white/50"
+                      className="
+                        p-3 rounded-lg border border-primary/30 bg-white/50
+                        opacity-0 animate-prizePop
+                      "
+                      style={{ animationDelay: `${prizeIndex * 90}ms` }}
                     >
                       <div className="flex justify-between items-center gap-2">
                         <div className="flex items-center gap-1.5">
@@ -61,6 +70,7 @@ const PriceCard = ({
                             </span>
                           )}
                         </div>
+
                         <span className="text-primary font-bold text-base whitespace-nowrap">
                           ₹{prize.toLocaleString()}
                         </span>
@@ -71,18 +81,23 @@ const PriceCard = ({
             </div>
           </div>
 
-          {/* Female Container */}
+          {/* Female */}
           <div className="bg-primary/5 border border-primary/30 rounded-xl p-4">
             <h4 className="text-lg font-semibold text-gray-700 mb-3 text-center">
               Female
             </h4>
+
             <div className="space-y-2">
               {prizes.map(
                 (prize, prizeIndex) =>
                   prize > 0 && (
                     <div
                       key={prizeIndex}
-                      className="p-3 rounded-lg border border-primary/30 bg-white/50"
+                      className="
+                        p-3 rounded-lg border border-primary/30 bg-white/50
+                        opacity-0 animate-prizePop
+                      "
+                      style={{ animationDelay: `${prizeIndex * 90}ms` }}
                     >
                       <div className="flex justify-between items-center gap-2">
                         <div className="flex items-center gap-1.5">
@@ -103,6 +118,7 @@ const PriceCard = ({
                             </span>
                           )}
                         </div>
+
                         <span className="text-primary font-bold text-base whitespace-nowrap">
                           ₹{prize.toLocaleString()}
                         </span>
@@ -149,7 +165,6 @@ const Prices = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br py-20 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-primary mb-6 text-5xl font-bold">Prize Pool</h2>
 
@@ -165,7 +180,7 @@ const Prices = () => {
           </div>
         </div>
 
-        {/* Centered Prize Grid */}
+        {/* Centered Grid */}
         <div className="flex justify-center items-center">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl">
             {prizeData.map((data, index) => (
@@ -174,7 +189,6 @@ const Prices = () => {
           </div>
         </div>
 
-        {/* Footer Note */}
         <div className="mt-16 text-center">
           <p className="text-gray-600 text-sm">
             * All prizes are subject to applicable taxes and terms & conditions
