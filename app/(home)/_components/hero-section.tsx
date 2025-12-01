@@ -160,7 +160,7 @@ const HeroSection = () => {
                 transition={{ duration: 2, repeat: Infinity }}
                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white drop-shadow mb-1"
               >
-                ₹13 Lakhs
+                ₹15 Lakhs
               </motion.div>
               <div className="text-xs md:text-sm text-white font-bold">
                 Prize Pool 🏆

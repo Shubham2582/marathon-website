@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-import { TrophyIcon } from "lucide-react";
+import { Trophy, Award } from "lucide-react";
 
 const PriceCard = ({
   category,
@@ -12,67 +11,110 @@ const PriceCard = ({
   category: string;
   prizes: number[];
   index: number;
-  isPopular?: boolean;
 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      whileHover={{ y: -5 }}
-      className="relative overflow-hidden bg-primary/10 border border-primary/40 backdrop-blur-sm rounded-2xl"
-    >
-      <div className="p-4 relative">
-        {/* Header */}
-        <motion.h3
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
-          className="text-2xl font-bold text-gray-700 mb-2 flex gap-x-2 items-center"
-        >
-          <TrophyIcon className="size-10 text-yellow-400 bg-yellow-100 p-2 rounded-full" />
-          {category}
-        </motion.h3>
-
-        {/* Prize section (blurred content) */}
-        <div className="relative space-y-4 mt-6">
-          {/* Overlay message */}
-          <div className="absolute inset-0 backdrop-blur-md bg-white/40 flex flex-col items-center justify-center rounded-xl z-10">
-            <TrophyIcon className="size-8 text-yellow-400 mb-2 animate-bounce-slow" />
-            <p className="text-gray-700 text-sm font-semibold">
-              Prizes will be revealed soon 🏆
-            </p>
+    <div className="relative overflow-hidden bg-primary/10 border-2 border-primary/40 rounded-3xl shadow-xl">
+      <div className="p-6 relative z-10">
+        {/* Header with Trophy */}
+        <div className="flex flex-col items-center mb-6">
+          <div className="relative">
+            <Trophy className="size-16 text-yellow-400 bg-yellow-100 p-3 rounded-full shadow-lg" />
           </div>
 
-          {/* Actual blurred prize list underneath */}
-          {prizes.map(
-            (prize, prizeIndex) =>
-              prize > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{
-                    duration: 0.3,
-                    delay: index * 0.1 + prizeIndex * 0.05 + 0.4,
-                  }}
-                  key={prizeIndex}
-                  className="p-3 rounded-lg border border-primary/30 bg-primary/10 transition-colors"
-                >
-                  <div className="flex justify-between items-center blur-sm select-none">
-                    <span className="text-gray-600 text-sm">
-                      {prizeIndex + 1}
-                      {getOrdinalSuffix(prizeIndex + 1)} Place
-                    </span>
-                    <span className="text-primary font-semibold text-lg">
-                      ₹{prize.toLocaleString()}
-                    </span>
-                  </div>
-                </motion.div>
-              ),
-          )}
+          <h3
+            className="text-2xl font-bold text-gray-700 mt-4 text-center"
+            dangerouslySetInnerHTML={{ __html: category }}
+          />
+        </div>
+
+        {/* Male and Female nested containers */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+          {/* Male Container */}
+          <div className="bg-primary/5 border border-primary/30 rounded-xl p-4">
+            <h4 className="text-lg font-semibold text-gray-700 mb-3 text-center">
+              Male
+            </h4>
+            <div className="space-y-2">
+              {prizes.map(
+                (prize, prizeIndex) =>
+                  prize > 0 && (
+                    <div
+                      key={prizeIndex}
+                      className="p-3 rounded-lg border border-primary/30 bg-white/50"
+                    >
+                      <div className="flex justify-between items-center gap-2">
+                        <div className="flex items-center gap-1.5">
+                          {prizeIndex < 3 ? (
+                            <Award
+                              className={`size-4 flex-shrink-0 ${
+                                prizeIndex === 0
+                                  ? "text-yellow-500"
+                                  : prizeIndex === 1
+                                    ? "text-gray-400"
+                                    : "text-orange-500"
+                              }`}
+                            />
+                          ) : (
+                            <span className="text-gray-600 text-sm font-medium">
+                              {prizeIndex + 1}
+                              {getOrdinalSuffix(prizeIndex + 1)}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-primary font-bold text-base whitespace-nowrap">
+                          ₹{prize.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ),
+              )}
+            </div>
+          </div>
+
+          {/* Female Container */}
+          <div className="bg-primary/5 border border-primary/30 rounded-xl p-4">
+            <h4 className="text-lg font-semibold text-gray-700 mb-3 text-center">
+              Female
+            </h4>
+            <div className="space-y-2">
+              {prizes.map(
+                (prize, prizeIndex) =>
+                  prize > 0 && (
+                    <div
+                      key={prizeIndex}
+                      className="p-3 rounded-lg border border-primary/30 bg-white/50"
+                    >
+                      <div className="flex justify-between items-center gap-2">
+                        <div className="flex items-center gap-1.5">
+                          {prizeIndex < 3 ? (
+                            <Award
+                              className={`size-4 flex-shrink-0 ${
+                                prizeIndex === 0
+                                  ? "text-yellow-500"
+                                  : prizeIndex === 1
+                                    ? "text-gray-400"
+                                    : "text-orange-500"
+                              }`}
+                            />
+                          ) : (
+                            <span className="text-gray-600 text-sm font-medium">
+                              {prizeIndex + 1}
+                              {getOrdinalSuffix(prizeIndex + 1)}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-primary font-bold text-base whitespace-nowrap">
+                          ₹{prize.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ),
+              )}
+            </div>
+          </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -85,26 +127,22 @@ const getOrdinalSuffix = (num: number) => {
 const Prices = () => {
   const prizeData = [
     {
-      category: "21K Open Category",
+      category: "21K Open",
       prizes: [
-        150000, 100000, 75000, 50000, 50000, 10000, 10000, 10000, 10000, 10000,
+        100000, 50000, 20000, 15000, 10000, 5000, 4000, 3000, 2500, 2000,
       ],
-      isPopular: true,
     },
     {
-      category: "21K Open Women",
+      category: "21K Narayanpur",
       prizes: [
-        150000, 100000, 75000, 50000, 50000, 10000, 10000, 10000, 10000, 10000,
+        100000, 50000, 20000, 15000, 10000, 5000, 4000, 3000, 2500, 2000,
       ],
-      isPopular: true,
     },
     {
-      category: "10K Open Category",
-      prizes: [15000, 10000, 8000, 1000, 1000],
-    },
-    {
-      category: "5K Open Women",
-      prizes: [10000, 7000, 5000, 1000, 1000],
+      category: "21K Bastar",
+      prizes: [
+        100000, 50000, 20000, 15000, 10000, 5000, 4000, 3000, 2500, 2000,
+      ],
     },
   ];
 
@@ -112,50 +150,36 @@ const Prices = () => {
     <div className="min-h-screen bg-gradient-to-br py-20 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <motion.h2
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-primary mb-6"
-          >
-            Prize Pool
-          </motion.h2>
+        <div className="text-center mb-16">
+          <h2 className="text-primary mb-6 text-5xl font-bold">Prize Pool</h2>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-xl text-gray-700 max-w-2xl mx-auto"
-          >
-            Compete for an incredible total prize pool of{" "}
-            <span className="text-primary font-semibold">₹18 Lakhs</span>
-          </motion.p>
-        </motion.div>
-
-        {/* Prize Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {prizeData.map((data, index) => (
-            <PriceCard key={index} {...data} index={index} />
-          ))}
+          <div className="inline-block">
+            <div className="px-8 py-4 bg-gradient-to-r from-primary/20 via-primary/30 to-primary/20 rounded-2xl border-2 border-primary/50 shadow-2xl">
+              <p className="text-2xl text-gray-700 font-semibold">
+                Compete for an incredible total prize pool of{" "}
+                <span className="text-primary font-bold text-3xl">
+                  ₹15 Lakhs
+                </span>
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Footer note */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.8 }}
-          className="mt-16 text-center"
-        >
+        {/* Centered Prize Grid */}
+        <div className="flex justify-center items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl">
+            {prizeData.map((data, index) => (
+              <PriceCard key={index} {...data} index={index} />
+            ))}
+          </div>
+        </div>
+
+        {/* Footer Note */}
+        <div className="mt-16 text-center">
           <p className="text-gray-600 text-sm">
             * All prizes are subject to applicable taxes and terms & conditions
           </p>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
