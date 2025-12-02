@@ -1,5 +1,9 @@
 "use client";
 
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+export const preferredRegion = "auto";
+
 import React from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
