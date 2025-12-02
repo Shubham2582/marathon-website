@@ -31,7 +31,7 @@ const defaultTeamDetails: TeamDetails = {
 interface TeamRegistrationStore {
   teamDetails: TeamDetails;
   setTeamDetails: (details: TeamDetails) => void;
-  handleTeamChange: (name: string, value: any) => void;
+  handleTeamChange: (name: string, value: any, fieldType?: string) => void;
   handleMemberChange: (
     memberIndex: number,
     name: string,

@@ -11,7 +11,7 @@ import { toast } from "@/components/ui/use-toast";
 interface TeamDetailField {
   name: string;
   label: string;
-  type: string;
+  type: "text" | "date" | "select" | "textarea";
   placeholder: string;
   required: boolean;
 }
@@ -39,7 +39,7 @@ export function TeamDetails() {
     {
       name: "email",
       label: t.personal.fields.email,
-      type: "email",
+      type: "text",
       placeholder: t.personal.fields.email_placeholder,
       required: true,
     },
@@ -199,7 +199,7 @@ export function TeamDetails() {
           <FormField
             key={index}
             {...field}
-            value={teamDetails[field.name as keyof typeof teamDetails]}
+            value={teamDetails[field.name as keyof typeof teamDetails] as string}
             handleChange={handleTeamChange}
             error={errors[field.name]}
           />
@@ -222,7 +222,7 @@ export function TeamDetails() {
                 <FormField
                   key={fieldIndex}
                   {...field}
-                  value={member[field.name as keyof typeof member]}
+                  value={member[field.name as keyof typeof member] as string}
                   handleChange={(name, value) =>
                     handleMemberChange(memberIndex, name, value)
                   }
