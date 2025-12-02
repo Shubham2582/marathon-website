@@ -1,21 +1,47 @@
 import { NextResponse } from "next/server";
+import { generateBibNumber } from "@/lib/bibGenerator";
 
 export async function POST(req: Request) {
   try {
     const url = new URL(req.url);
 
-    // Get identification number from multiple possible sources
     const identificationNumber = url.searchParams.get("identification_number");
     const success = url.searchParams.get("success");
 
-    // TODO: generate BIB number
-    const bibNumber = "1000";
+    if (!identificationNumber) {
+      console.error("[Payment Callback] No identification number provided");
+      return new NextResponse(null, {
+        status: 302,
+        headers: {
+          Location: "/codingwizardsmarathon/payment-failure",
+        },
+      });
+    }
+    let redirectUrl: string;
 
-    const redirectUrl = success
-      ? `/registration/payment-success?identification_number=${identificationNumber}&bibNumber=${bibNumber}`
-      : `/registration/payment-failure?identification_number=${identificationNumber}`;
+    if (success === "true") {
+      // Generate BIB number
+      let bibNumber: string;
+      try {
+        console.log("[Payment Callback] Generating BIB number...");
+        const generatedBib = await generateBibNumber(identificationNumber);
+        bibNumber = generatedBib.toString();
+        console.log(
+          "[Payment Callback] BIB generated successfully:",
+          bibNumber,
+        );
+      } catch (error) {
+        console.error("[Payment Callback] Error generating BIB number:", error);
+        bibNumber = "PENDING";
+      }
 
-    // Redirect to the success page with parameters using 302 Found status
+      redirectUrl = `/codingwizardsmarathon/payment-success?identification_number=${identificationNumber}&bibNumber=${bibNumber}`;
+    } else {
+      redirectUrl = `/codingwizardsmarathon/payment-failure?identification_number=${identificationNumber}`;
+    }
+
+    console.log("[Payment Callback] Redirecting to:", redirectUrl);
+
     return new NextResponse(null, {
       status: 302,
       headers: {
