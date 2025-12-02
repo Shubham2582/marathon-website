@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface TeamMember {
+export interface TeamMember {
   name: string;
   mobile: string;
   gender: "MALE" | "FEMALE";
@@ -22,8 +22,8 @@ const defaultTeamDetails: TeamDetails = {
   members: Array(4).fill({
     name: "",
     mobile: "",
-    gender: "MALE",
-    wantsTshirt: false,
+    gender: "",
+    wantsTshirt: true,
     tShirtSize: "",
   }),
 };
@@ -31,6 +31,13 @@ const defaultTeamDetails: TeamDetails = {
 interface TeamRegistrationStore {
   teamDetails: TeamDetails;
   setTeamDetails: (details: TeamDetails) => void;
+  handleTeamChange: (name: string, value: any) => void;
+  handleMemberChange: (
+    memberIndex: number,
+    name: string,
+    value: any,
+    fieldType?: string,
+  ) => void;
   resetTeamDetails: () => void;
 }
 
@@ -38,6 +45,16 @@ export const useTeamRegistrationStore = create<TeamRegistrationStore>(
   (set) => ({
     teamDetails: defaultTeamDetails,
     setTeamDetails: (details) => set({ teamDetails: details }),
+    handleTeamChange: (name, value, fieldType) =>
+      set((state) => ({
+        teamDetails: { ...state.teamDetails, [name]: value },
+      })),
+    handleMemberChange: (memberIndex, name, value) =>
+      set((state) => {
+        const members = [...state.teamDetails.members];
+        members[memberIndex] = { ...members[memberIndex], [name]: value };
+        return { teamDetails: { ...state.teamDetails, members } };
+      }),
     resetTeamDetails: () => set({ teamDetails: defaultTeamDetails }),
   }),
 );

@@ -1,271 +1,259 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import React, { useRef } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FormField } from "@/components/form-field";
 import { useTranslation } from "@/store/useLanguage";
 import { useTeamRegistrationStore } from "@/store/useTeamRegistration";
 import { useStep } from "@/store/useStep";
 import { toast } from "@/components/ui/use-toast";
-import { Checkbox } from "@/components/ui/checkbox";
 
-const formSchema = z.object({
-  team_name: z.string().min(2, {
-    message: "Team name must be at least 2 characters.",
-  }),
-  email: z.string().email({
-    message: "Please enter a valid email.",
-  }),
-  city: z.string().min(2, {
-    message: "City must be at least 2 characters.",
-  }),
-  members: z
-    .array(
-      z
-        .object({
-          name: z.string().min(2, {
-            message: "Name must be at least 2 characters.",
-          }),
-          mobile: z.string().regex(/^(\+\d{1,3}[- ]?)?\d{10}$/, {
-            message: "Mobile number must be 10 digits.",
-          }),
-          gender: z.enum(["MALE", "FEMALE"]),
-          wantsTshirt: z.boolean().default(false),
-          tShirtSize: z.enum(["S", "M", "L", "XL", "XXL", ""]).default(""),
-        })
-        .refine(
-          (data) => {
-            if (data.wantsTshirt && !data.tShirtSize) {
-              return false;
-            }
-            return true;
-          },
-          {
-            message: "Please select a T-shirt size.",
-            path: ["tShirtSize"],
-          },
-        ),
-    )
-    .length(4, {
-      message: "There must be 4 members in a team.",
-    }),
-});
+interface TeamDetailField {
+  name: string;
+  label: string;
+  type: string;
+  placeholder: string;
+  required: boolean;
+}
+
+interface TeamMemberField extends TeamDetailField {
+  options?: { value: string; label: string }[];
+}
 
 export function TeamDetails() {
-  const { setStep, setProgress } = useStep();
-  const { setTeamDetails, teamDetails } = useTeamRegistrationStore();
+  const { nextStep, setProgress } = useStep();
+  const { teamDetails, handleTeamChange, handleMemberChange } =
+    useTeamRegistrationStore();
   const t = useTranslation();
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      team_name: teamDetails.team_name,
-      email: teamDetails.email,
-      city: teamDetails.city,
-      members: teamDetails.members,
+  const teamDetailFields: TeamDetailField[] = [
+    {
+      name: "team_name",
+      label: t.team_details.team_name,
+      type: "text",
+      placeholder: t.team_details.team_name,
+      required: true,
     },
-  });
+    {
+      name: "email",
+      label: t.personal.fields.email,
+      type: "email",
+      placeholder: t.personal.fields.email_placeholder,
+      required: true,
+    },
+    {
+      name: "city",
+      label: t.personal.fields.city,
+      type: "text",
+      placeholder: t.personal.fields.city_placeholder,
+      required: true,
+    },
+  ];
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      setTeamDetails(values);
-      setStep(2);
+  const teamMemberFields = (memberIndex: number): TeamMemberField[] => [
+    {
+      name: "name",
+      label: t.team_details.name,
+      type: "text",
+      placeholder: t.team_details.name,
+      required: true,
+    },
+    {
+      name: "mobile",
+      label: t.team_details.mobile,
+      type: "text", // Changed from "number" to "text"
+      placeholder: t.team_details.mobile,
+      required: true,
+    },
+    {
+      name: "gender",
+      label: t.verification.gender_label,
+      type: "select",
+      placeholder: t.verification.gender_placeholder,
+      required: true,
+      options: [
+        { value: "MALE", label: t.verification.male },
+        { value: "FEMALE", label: t.verification.female },
+      ],
+    },
+    {
+      name: "tShirtSize",
+      label: t.team_details.tshirt_size,
+      type: "select",
+      placeholder: t.team_details.tshirt_size_placeholder,
+      required: teamDetails.members[memberIndex].wantsTshirt,
+      options: [
+        { value: "S", label: "S" },
+        { value: "M", label: "M" },
+        { value: "L", label: "L" },
+        { value: "XL", label: "XL" },
+        { value: "XXL", label: "XXL" },
+      ],
+    },
+  ];
+
+  const scrollToFirstError = (errorFields: Record<string, string>) => {
+    const firstErrorField = Object.keys(errorFields)[0];
+    if (!firstErrorField || !scrollContainerRef.current) return;
+
+    // Find the input element with the error
+    const errorInput = scrollContainerRef.current.querySelector(
+      `[name="${firstErrorField}"]`,
+    ) as HTMLElement;
+
+    if (errorInput) {
+      // Scroll the container to show the error field
+      const container = scrollContainerRef.current;
+      const inputRect = errorInput.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      // Calculate if the input is outside the visible area
+      const isAbove = inputRect.top < containerRect.top;
+      const isBelow = inputRect.bottom + 8 > containerRect.bottom;
+
+      if (isAbove || isBelow) {
+        // Calculate the scroll position to center the input in the container
+        const inputOffsetTop = errorInput.offsetTop;
+        const containerScrollTop = container.scrollTop;
+        const containerHeight = container.clientHeight;
+        const inputHeight = errorInput.offsetHeight;
+
+        const targetScroll =
+          inputOffsetTop - containerHeight / 2 + inputHeight / 2;
+
+        container.scrollTo({
+          top: Math.max(0, targetScroll),
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const newErrors: Record<string, string> = {};
+    let allFieldsValid = true;
+
+    // Validate main team details
+    teamDetailFields.forEach((field) => {
+      if (
+        field.required &&
+        (!teamDetails[field.name as keyof typeof teamDetails] ||
+          teamDetails[field.name as keyof typeof teamDetails]
+            .toString()
+            .trim() === "")
+      ) {
+        newErrors[field.name] = `${field.label} is required`;
+        allFieldsValid = false;
+      }
+    });
+
+    // Validate team members
+    teamDetails.members.forEach((member, memberIndex) => {
+      teamMemberFields(memberIndex).forEach((field) => {
+        if (
+          field.required &&
+          (!member[field.name as keyof typeof member] ||
+            member[field.name as keyof typeof member].toString().trim() === "")
+        ) {
+          newErrors[`members.${memberIndex}.${field.name}`] =
+            `${field.label} is required`;
+          allFieldsValid = false;
+        }
+
+        // Mobile number validation
+        if (field.name === "mobile" && member.mobile) {
+          if (!/^\d{10}$/.test(member.mobile)) {
+            newErrors[`members.${memberIndex}.${field.name}`] =
+              "Mobile number must be 10 digits.";
+            allFieldsValid = false;
+          }
+        }
+      });
+    });
+
+    setErrors(newErrors);
+
+    if (allFieldsValid && Object.keys(newErrors).length === 0) {
+      nextStep();
       setProgress(50);
-    } catch (error: any) {
+    } else {
       toast({
         title: "Error",
-        description: error.message,
+        description: "Please fill all required fields correctly.",
         variant: "destructive",
       });
+      setTimeout(() => {
+        scrollToFirstError(newErrors);
+      }, 100);
     }
-  }
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="team_name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t.team_details.team_name}</FormLabel>
-              <FormControl>
-                <Input placeholder={t.team_details.team_name} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t.personal.fields.email}</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder={t.personal.fields.email_placeholder}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="city"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>{t.personal.fields.city}</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder={t.personal.fields.city_placeholder}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto pr-2">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div key={index} className="space-y-2 p-4 border rounded-md">
-              <h3 className="font-semibold">
-                {t.team_details.member} {index + 1}
-              </h3>
-              <FormField
-                control={form.control}
-                name={`members.${index}.name`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t.team_details.name}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t.team_details.name} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`members.${index}.mobile`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t.team_details.mobile}</FormLabel>
-                    <FormControl>
-                      <Input placeholder={t.team_details.mobile} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`members.${index}.gender`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t.verification.gender_label}</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue
-                            placeholder={t.verification.gender_placeholder}
-                          />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="MALE">
-                          {t.verification.male}
-                        </SelectItem>
-                        <SelectItem value="FEMALE">
-                          {t.verification.female}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`members.${index}.wantsTshirt`}
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel>
-                        {t.team_details.wants_tshirt.replace("{price}", "200")}
-                      </FormLabel>
-                    </div>
-                  </FormItem>
-                )}
-              />
-              {form.watch(`members.${index}.wantsTshirt`) && (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {teamDetailFields.map((field, index) => (
+          <FormField
+            key={index}
+            {...field}
+            value={teamDetails[field.name as keyof typeof teamDetails]}
+            handleChange={handleTeamChange}
+            error={errors[field.name]}
+          />
+        ))}
+      </div>
+      <div
+        ref={scrollContainerRef}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-96 overflow-y-auto pr-2"
+      >
+        {teamDetails.members.map((member, memberIndex) => (
+          <div key={memberIndex} className="space-y-2 p-4 border rounded-md">
+            <h3 className="font-semibold">
+              {t.team_details.member} {memberIndex + 1}
+            </h3>
+            {teamMemberFields(memberIndex).map((field, fieldIndex) => {
+              if (field.name === "tShirtSize" && !member.wantsTshirt) {
+                return null;
+              }
+              return (
                 <FormField
-                  control={form.control}
-                  name={`members.${index}.tShirtSize`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{t.team_details.tshirt_size}</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue
-                              placeholder={
-                                t.team_details.tshirt_size_placeholder
-                              }
-                            />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="S">S</SelectItem>
-                          <SelectItem value="M">M</SelectItem>
-                          <SelectItem value="L">L</SelectItem>
-                          <SelectItem value="XL">XL</SelectItem>
-                          <SelectItem value="XXL">XXL</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  key={fieldIndex}
+                  {...field}
+                  value={member[field.name as keyof typeof member]}
+                  handleChange={(name, value) =>
+                    handleMemberChange(memberIndex, name, value)
+                  }
+                  error={errors[`members.${memberIndex}.${field.name}`]}
+                  fieldType={field.type}
                 />
-              )}
+              );
+            })}
+            <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+              <input
+                type="checkbox"
+                checked={member.wantsTshirt}
+                onChange={(e) =>
+                  handleMemberChange(
+                    memberIndex,
+                    "wantsTshirt",
+                    e.target.checked,
+                  )
+                }
+                className="size-4 cursor-pointer accent-purple-600"
+              />
+              <label className="text-sm font-medium leading-none">
+                {t.team_details.wants_tshirt.replace("{price}", "200")}
+              </label>
             </div>
-          ))}
-        </div>
-        <div className="flex justify-end">
-          <Button type="submit">{t.personal.next_button}</Button>
-        </div>
-      </form>
-    </Form>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-end">
+        <Button type="submit">{t.personal.next_button}</Button>
+      </div>
+    </form>
   );
 }
