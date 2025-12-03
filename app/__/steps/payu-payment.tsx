@@ -75,12 +75,21 @@ export const PayUPayment = () => {
 
       if (form.isFromNarayanpur) {
         router.push(
-          `/registration/payment-success?identification_number=${identificationNumber}`
+          `/registration/payment-success?identification_number=${identificationNumber}`,
         );
         return;
       }
 
-      await initiatePayment(registrationFee, form, identificationNumber);
+      await initiatePayment(
+        registrationFee,
+        {
+          email: form.email,
+          firstName: form.firstName,
+          lastName: form.lastName,
+          phone: form.mobile,
+        },
+        identificationNumber,
+      );
     } catch (error) {
       console.error("Payment error:", error);
       alert("An error occurred during payment initiation. Please try again.");
@@ -125,7 +134,7 @@ export const PayUPayment = () => {
       if (error) throw error;
 
       router.push(
-        `/registration/payment-success?identification_number=${identificationNumber}`
+        `/registration/payment-success?identification_number=${identificationNumber}`,
       );
     } catch (error) {
       console.error("Registration error:", error);
