@@ -17,6 +17,7 @@ const BASTAR_CITIES = [
   "Kanker",
   "Bijapur",
   "Dantewada",
+  "Sukma",
 ].map((city) => city.toLowerCase());
 
 type Category =
