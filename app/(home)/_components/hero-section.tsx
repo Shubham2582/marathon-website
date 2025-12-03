@@ -7,6 +7,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
+import AnimatedNumber from "./AnimatedNumber";
+
 const HeroSection = () => {
   const bounceAnimation = {
     scale: [1, 1.1, 1],
@@ -18,6 +20,8 @@ const HeroSection = () => {
   };
 
   const router = useRouter();
+  const [registrationCount, setRegistrationCount] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   // Countries that participated in previous edition with participant counts
   const participatingCountries = [
@@ -31,7 +35,7 @@ const HeroSection = () => {
 
   // Add countdown timer logic
   const calculateTimeLeft = () => {
-    const targetDate = new Date("2025-03-02T05:30:00+05:30").getTime();
+    const targetDate = new Date("2026-01-25T05:00:00+05:30").getTime();
     const now = new Date().getTime();
     const difference = targetDate - now;
 
@@ -69,6 +73,27 @@ const HeroSection = () => {
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  React.useEffect(() => {
+    const fetchCount = async () => {
+      try {
+        const res = await fetch("/api/registration-count");
+        const data = await res.json();
+        if (typeof data.count === "number") {
+          setRegistrationCount(data.count);
+        } else {
+          setRegistrationCount(0);
+        }
+      } catch (error) {
+        console.error("Error fetching registration count:", error);
+        setRegistrationCount(0);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCount();
   }, []);
 
   return (
@@ -139,74 +164,155 @@ const HeroSection = () => {
         </div>
 
         {/* Horizontal Stats Section - Prize Pool + Previous Edition */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8 lg:gap-12 mt-8 md:mt-12 px-4">
-          {/* Prize Pool - Highlighted */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-            whileHover={{ scale: 1.05 }}
-            className="bg-gradient-to-br from-primary/30 to-primary-light/30 backdrop-blur-md border-2 border-primary rounded-2xl px-6 md:px-8 py-4 shadow-lg shadow-primary/20"
-          >
-            <div className="text-center">
-              <motion.div
-                animate={{
-                  textShadow: [
-                    "0 0 10px rgba(139, 92, 246, 0.5)",
-                    "0 0 20px rgba(139, 92, 246, 0.8)",
-                    "0 0 10px rgba(139, 92, 246, 0.5)",
-                  ],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="text-2xl md:text-3xl lg:text-4xl font-bold text-white drop-shadow mb-1"
-              >
-                ₹15 Lakhs
-              </motion.div>
-              <div className="text-xs md:text-sm text-white font-bold">
-                Prize Pool 🏆
+        <div className="flex flex-col justify-center items-center gap-6 md:gap-8 lg:gap-12 mt-8 md:mt-12 px-4">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-8 lg:gap-12">
+            {/* Prize Pool - Highlighted */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+              whileHover={{ scale: 1.05 }}
+              className="bg-gradient-to-br from-primary/30 to-primary-light/30 backdrop-blur-md border-2 border-primary rounded-2xl px-6 md:px-8 py-4 shadow-lg shadow-primary/20"
+            >
+              <div className="text-center">
+                <motion.div
+                  animate={{
+                    textShadow: [
+                      "0 0 10px rgba(139, 92, 246, 0.5)",
+                      "0 0 20px rgba(139, 92, 246, 0.8)",
+                      "0 0 10px rgba(139, 92, 246, 0.5)",
+                    ],
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="text-2xl md:text-3xl lg:text-4xl font-bold text-white drop-shadow mb-1"
+                >
+                  ₹15 Lakhs
+                </motion.div>
+                <div className="text-xs md:text-sm text-white font-bold">
+                  Prize Pool 🏆
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Divider */}
-          <div className="hidden md:block h-20 w-px bg-white/30"></div>
-
-          {/* Previous Edition Stats */}
-          <div className="flex items-center gap-6 md:gap-8">
-            {/* Total Runners */}
-            <div className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1"
-              >
-                25th
-              </motion.div>
-              <div className="text-white text-xs md:text-sm font-semibold">
-                January
-              </div>
-              <div className="text-white/70 text-xs">2026</div>
-            </div>
-
-            {/* Mini Divider */}
+            {/* Divider */}
             <div className="hidden md:block h-20 w-px bg-white/30"></div>
 
-            {/* Date */}
-            <div className="text-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-                className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1"
-              >
-                5000+
-              </motion.div>
-              <div className="text-white text-xs md:text-sm font-semibold">
-                Previous Edition
+            {/* Previous Edition Stats */}
+            <div className="flex items-center gap-6 md:gap-8">
+              {/* Total Runners */}
+              <div className="text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
+                  className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1"
+                >
+                  25th
+                </motion.div>
+                <div className="text-white text-xs md:text-sm font-semibold">
+                  January
+                </div>
+                <div className="text-white/70 text-xs">2026</div>
               </div>
-              <div className="text-white/70 text-xs">Runners</div>
+
+              {/* Mini Divider */}
+              <div className="hidden md:block h-20 w-px bg-white/30"></div>
+
+              {/* Date */}
+              <div className="text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
+                  className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1"
+                >
+                  5000+
+                </motion.div>
+                <div className="text-white text-xs md:text-sm font-semibold">
+                  Previous Edition
+                </div>
+                <div className="text-white/70 text-xs">Runners</div>
+              </div>
             </div>
+          </div>
+
+          {/* Countdown Timer and Registration - Centered in a row */}
+          <div className="flex flex-col md:flex-row justify-center items-center gap-6 md:gap-12 lg:gap-16">
+            {/* Countdown Timer */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, type: "spring", stiffness: 200 }}
+              whileHover={{ scale: 1.05 }}
+              className="bg-gradient-to-br from-primary/30 to-primary-light/30 backdrop-blur-md border-2 border-primary rounded-2xl px-6 md:px-8 py-4 shadow-lg shadow-primary/20"
+            >
+              <div className="text-white flex justify-center">
+                Marathon Countdown
+              </div>
+              <div className="flex items-center gap-3 md:gap-4 text-white">
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-bold h-12 md:h-14 lg:h-16 flex items-center">
+                    <AnimatedNumber value={timeLeft.days} />
+                  </div>
+                  <span className="text-xs md:text-sm font-semibold">Days</span>
+                </div>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">
+                  :
+                </span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-bold h-12 md:h-14 lg:h-16 flex items-center">
+                    <AnimatedNumber value={timeLeft.hours} />
+                  </div>
+                  <span className="text-xs md:text-sm font-semibold">
+                    Hours
+                  </span>
+                </div>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">
+                  :
+                </span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-bold h-12 md:h-14 lg:h-16 flex items-center">
+                    <AnimatedNumber value={timeLeft.minutes} />
+                  </div>
+                  <span className="text-xs md:text-sm font-semibold">
+                    Minutes
+                  </span>
+                </div>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">
+                  :
+                </span>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="text-3xl md:text-4xl lg:text-5xl font-bold h-12 md:h-14 lg:h-16 flex items-center">
+                    <AnimatedNumber value={timeLeft.seconds} />
+                  </div>
+                  <span className="text-xs md:text-sm font-semibold">
+                    Seconds
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Registration Count */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, type: "spring", stiffness: 200 }}
+              whileHover={{ scale: 1.05 }}
+              className="bg-gradient-to-br from-primary/30 to-primary-light/30 backdrop-blur-md border-2 border-primary rounded-2xl px-8 md:px-12 py-4 shadow-lg shadow-primary/20"
+            >
+              <div className="flex flex-col items-center justify-center text-white min-w-[120px]">
+                <div className="text-3xl md:text-4xl lg:text-5xl font-bold">
+                  {isLoading ? (
+                    <span>...</span>
+                  ) : (
+                    <AnimatedNumber value={registrationCount.toString()} />
+                  )}
+                </div>
+                <span className="text-xs md:text-sm font-semibold mt-1">
+                  Registrations till now
+                </span>
+              </div>
+            </motion.div>
           </div>
         </div>
       </div>
