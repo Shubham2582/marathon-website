@@ -29,6 +29,8 @@ const SuccessContent = () => {
   const { resetForm } = useRegistrationStore();
   const { resetStep } = useStep();
 
+  const [bibNumber, setBibNumber] = useState<number | null>(null);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -95,7 +97,8 @@ const SuccessContent = () => {
             raceCategory: userData.race_category,
             tShirtSize: userData.t_shirt_size,
           },
-          identification_number: identificationNumber,
+          identificationNumber,
+          bibNumber,
         },
       };
 
@@ -143,18 +146,11 @@ const SuccessContent = () => {
       if (fetchError) {
         console.error("Error fetching user data:", fetchError);
         return;
-      }
-
-      if (data?.payment_status === "PENDING") {
-        const { error: updateError } = await supabase
-          .from("registrations")
-          .update({ payment_status: "DONE" })
-          .eq("identification_number", identificationNumber);
-
-        if (!updateError && data) {
-          await sendSuccessEmail(data);
-        }
-      } else if (data?.payment_status === "OFFLINE") {
+      } else if (
+        data?.payment_status === "OFFLINE" ||
+        data?.payment_status === "SUCCESS"
+      ) {
+        setBibNumber(data?.bib_num);
         await sendSuccessEmail(data);
       }
     };
@@ -224,11 +220,9 @@ const SuccessContent = () => {
 
           {identificationNumber && (
             <div className="mt-6 p-4 bg-primary/10 rounded-lg">
-              <p className="text-sm text-gray-600">
-                Your Identification Number
-              </p>
+              <p className="text-sm text-gray-600">Your Bib Number</p>
               <p className="text-2xl font-mono font-bold text-primary tracking-wider">
-                {identificationNumber}
+                {bibNumber}
               </p>
               <p className="text-sm text-gray-500 mt-2">
                 Please save this number for future reference

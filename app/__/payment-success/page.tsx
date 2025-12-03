@@ -16,19 +16,15 @@ interface UserData {
   t_shirt_size: string;
   payment_status: string;
   mobile: string;
-  identification_number: string;
 }
 
 const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
-  const [teamId, setTeamId] = useState<string | null>(null);
-  const [members, setMembers] = useState<UserData[]>([]);
 
   // Get both identification number and PayU parameters
-  const team_id = searchParams?.get("team_id") ?? null;
-
-  const bibNumber = searchParams?.get("bibNumber") ?? null;
+  const identificationNumber =
+    searchParams?.get("identification_number") ?? null;
 
   const { resetForm } = useRegistrationStore();
   const { resetStep } = useStep();
@@ -99,7 +95,7 @@ const SuccessContent = () => {
             raceCategory: userData.race_category,
             tShirtSize: userData.t_shirt_size,
           },
-          identification_number: userData.identification_number,
+          identification_number: identificationNumber,
         },
       };
 
@@ -120,7 +116,7 @@ const SuccessContent = () => {
           "91" + userData.mobile,
           userData.race_category,
           userData.t_shirt_size,
-          userData.identification_number,
+          identificationNumber,
           userData.first_name,
           userData.last_name,
         );
@@ -131,67 +127,47 @@ const SuccessContent = () => {
   };
 
   useEffect(() => {
-    const fetchTeamData = async () => {
-      if (!team_id) {
-        console.error("No team ID provided");
+    const fetchUserDataAndUpdate = async () => {
+      if (!identificationNumber) {
+        console.error("No identification number provided");
         return;
       }
-
-      setTeamId(team_id);
 
       const { data, error: fetchError } = await supabase
         .schema("marathon")
         .from("registrations_2026")
         .select("*")
-        .eq("team_id", team_id);
+        .eq("identification_number", identificationNumber)
+        .single();
 
       if (fetchError) {
         console.error("Error fetching user data:", fetchError);
         return;
       }
 
-      setMembers(data as UserData[]);
-
-      // Update payment status for each member
-      for (const member of data) {
-        const { error: memberUpdateError } = await supabase
-          .schema("marathon")
-          .from("registrations_2026")
+      if (data?.payment_status === "PENDING") {
+        const { error: updateError } = await supabase
+          .from("registrations")
           .update({ payment_status: "DONE" })
-          .eq("identification_number", member.identification_number);
+          .eq("identification_number", identificationNumber);
 
-        if (memberUpdateError) {
-          console.error(
-            `Error updating payment status for member ${member.identification_number}:`,
-            memberUpdateError,
-          );
-        } else {
-          await sendSuccessEmail(member);
+        if (!updateError && data) {
+          await sendSuccessEmail(data);
         }
+      } else if (data?.payment_status === "OFFLINE") {
+        await sendSuccessEmail(data);
       }
     };
 
-    fetchTeamData();
-  }, [team_id]);
+    fetchUserDataAndUpdate();
+  }, [identificationNumber]);
 
-  if (!team_id) {
+  if (!identificationNumber) {
     return (
       <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
         <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
           <h1 className="text-xl text-purple-600 text-center">
-            Invalid or missing team ID
-          </h1>
-        </div>
-      </main>
-    );
-  }
-
-  if (!bibNumber) {
-    return (
-      <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-          <h1 className="text-xl text-purple-600 text-center">
-            Invalid or missing BIB Number
+            Invalid or missing identification number
           </h1>
         </div>
       </main>
@@ -246,26 +222,19 @@ const SuccessContent = () => {
             successfully.
           </p>
 
-          <div className="mt-6 p-4 bg-black rounded-lg">
-            <p className="text-sm text-gray-400">Your Team ID</p>
-            <p className="text-2xl font-mono font-bold text-white tracking-wider">
-              {teamId}
-            </p>
-            <p className="text-sm text-gray-500 mt-2">
-              Please save this number for future reference
-            </p>
-          </div>
-
-          {members.map((member, index) => (
-            <div key={index} className="mt-6 p-4 bg-black rounded-lg">
-              <p className="text-sm text-gray-400">
-                Team Member {index + 1}'s Identification Number
+          {identificationNumber && (
+            <div className="mt-6 p-4 bg-primary/10 rounded-lg">
+              <p className="text-sm text-gray-600">
+                Your Identification Number
               </p>
-              <p className="text-2xl font-mono font-bold text-white tracking-wider">
-                {member.identification_number}
+              <p className="text-2xl font-mono font-bold text-primary tracking-wider">
+                {identificationNumber}
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                Please save this number for future reference
               </p>
             </div>
-          ))}
+          )}
 
           <motion.div
             initial={{ opacity: 0 }}

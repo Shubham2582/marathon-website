@@ -28,13 +28,18 @@ export async function POST(request: Request) {
     const mailOptions = {
       from: `"Abujhmad Marathon" <${process.env.SMTP_USER}>`,
       to: userData.personal_info.email,
-      subject: userData.marathon_details.otp ? "OTP Verification - Abujhmad Marathon 2025" : "Registration Confirmation - Abujhmad Marathon 2025",
+      subject: userData.marathon_details.otp
+        ? "OTP Verification - Abujhmad Marathon 2025"
+        : "Registration Confirmation - Abujhmad Marathon 2025",
       html: getEmailTemplate(userData),
     };
 
     await transporter.sendMail(mailOptions);
     return NextResponse.json({ message: "Email sent successfully" });
   } catch (error) {
-    return NextResponse.json({ message: "Failed to send email", error }, { status: 500 });
+    return NextResponse.json(
+      { message: "Failed to send email", error },
+      { status: 500 },
+    );
   }
 }

@@ -11,26 +11,15 @@ import { useTranslation } from "@/store/useLanguage";
 import { useRegistrationStore } from "@/store/useRegistration";
 import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import Image from "next/image";
 
 export const PayUPayment = () => {
   const { form } = useRegistrationStore();
   const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [includeTshirt, setIncludeTshirt] = useState(true);
   const router = useRouter();
   const t = useTranslation();
 
   const registrationFee = form.isFromNarayanpur ? 0 : 299;
-  const tshirtFee = 200;
-  const totalFee = registrationFee + (includeTshirt ? tshirtFee : 0);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,23 +28,11 @@ export const PayUPayment = () => {
       return;
     }
 
-    // If from Narayanpur and wants a t-shirt, go to payment gateway
-    if (form.isFromNarayanpur && includeTshirt) {
-      handleOnlinePayment();
-      return;
-    }
-
-    // If from Narayanpur and does not want a t-shirt, do offline payment
-    if (form.isFromNarayanpur && !includeTshirt) {
+    if (form.isFromNarayanpur) {
       handleOfflinePayment();
       return;
     }
 
-    // For non-Narayanpur residents, always go to payment gateway
-    handleOnlinePayment();
-  };
-
-  const handleOnlinePayment = async () => {
     const identificationNumber = await getUniqueIdentificationNumber();
 
     const registrationData = {
@@ -82,7 +59,6 @@ export const PayUPayment = () => {
       payment_status: "PENDING",
       previous_marathon_name: form.previousMarathonName || null,
       previous_marathon_rank: form.previousMarathonRank || null,
-      wants_tshirt: includeTshirt,
     };
 
     try {
@@ -97,7 +73,14 @@ export const PayUPayment = () => {
         throw error;
       }
 
-      await initiatePayment(totalFee, form, identificationNumber);
+      if (form.isFromNarayanpur) {
+        router.push(
+          `/registration/payment-success?identification_number=${identificationNumber}`
+        );
+        return;
+      }
+
+      await initiatePayment(registrationFee, form, identificationNumber);
     } catch (error) {
       console.error("Payment error:", error);
       alert("An error occurred during payment initiation. Please try again.");
@@ -132,7 +115,6 @@ export const PayUPayment = () => {
         payment_status: "OFFLINE",
         previous_marathon_name: form.previousMarathonName || null,
         previous_marathon_rank: form.previousMarathonRank || null,
-        wants_tshirt: includeTshirt,
       };
 
       const { error } = await supabase
@@ -143,7 +125,7 @@ export const PayUPayment = () => {
       if (error) throw error;
 
       router.push(
-        `/registration/payment-callback?identification_number=${identificationNumber}?success=true`,
+        `/registration/payment-success?identification_number=${identificationNumber}`
       );
     } catch (error) {
       console.error("Registration error:", error);
@@ -161,47 +143,6 @@ export const PayUPayment = () => {
           <div className="flex justify-between items-center py-2 border-b">
             <span>{t.payment.registration_fee}</span>
             <span>₹{registrationFee}</span>
-          </div>
-          <div className="flex justify-between items-center py-2 border-b">
-            <div className="flex items-center gap-2">
-              <Input
-                type="checkbox"
-                id="tshirt"
-                className="w-4 h-4"
-                checked={includeTshirt}
-                onChange={(e) => setIncludeTshirt(e.target.checked)}
-              />
-              <label htmlFor="tshirt" className="text-sm">
-                T-shirt
-              </label>
-            </div>
-            <div className="flex items-center gap-4">
-              <span>₹{tshirtFee}</span>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    See T-shirt
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>T-shirt Design</DialogTitle>
-                  </DialogHeader>
-                  <div className="flex justify-center">
-                    <Image
-                      src="/images/tshirt-placeholder.png"
-                      alt="T-shirt"
-                      width={400}
-                      height={400}
-                    />
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
-          </div>
-          <div className="flex justify-between items-center py-2 font-bold">
-            <span>Total</span>
-            <span>₹{totalFee}</span>
           </div>
           {form.isFromNarayanpur && (
             <p className="text-sm text-green-600">
@@ -262,9 +203,18 @@ export const PayUPayment = () => {
           {t.payment.back_button}
         </Button>
         <div className="flex gap-2">
-          <Button type="submit" disabled={!acceptedTerms}>
-            {t.payment.proceed_button}
-          </Button>
+          {!form.isFromNarayanpur && (
+            <>
+              <Button type="submit" variant="outline" disabled={!acceptedTerms}>
+                {t.payment.proceed_button}
+              </Button>
+            </>
+          )}
+          {form.isFromNarayanpur && (
+            <Button type="submit" disabled={!acceptedTerms}>
+              {t.payment.continue_button}
+            </Button>
+          )}
         </div>
       </div>
     </form>

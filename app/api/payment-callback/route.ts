@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { generateBibNumber } from "@/lib/bibGenerator";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req: Request) {
+  const url = new URL(req.url);
+
+  const identificationNumber = url.searchParams.get("identification_number");
+  const success = url.searchParams.get("success");
+  const team = Boolean(url.searchParams.get("team"));
+  const offline = Boolean(url.searchParams.get("offline"));
+
   try {
-    const url = new URL(req.url);
-
-    const identificationNumber = url.searchParams.get("identification_number");
-    const success = url.searchParams.get("success");
-
     if (!identificationNumber) {
       console.error("[Payment Callback] No identification number provided");
       return new NextResponse(null, {
@@ -21,23 +24,25 @@ export async function POST(req: Request) {
 
     if (success === "true") {
       // Generate BIB number
-      let bibNumber: string;
       try {
         console.log("[Payment Callback] Generating BIB number...");
-        const generatedBib = await generateBibNumber(identificationNumber);
-        bibNumber = generatedBib.toString();
-        console.log(
-          "[Payment Callback] BIB generated successfully:",
-          bibNumber,
-        );
+        await generateBibNumber(identificationNumber, team);
+
+        if (!team) {
+          await supabase
+            .schema("marathon")
+            .from("registrations_2026")
+            .update({ payment_status: offline ? "OFFLINE" : "DONE" })
+            .eq("identification_number", identificationNumber);
+        }
+        console.log("[Payment Callback] BIB generated successfully:");
       } catch (error) {
         console.error("[Payment Callback] Error generating BIB number:", error);
-        bibNumber = "PENDING";
       }
 
-      redirectUrl = `/codingwizardsmarathon/payment-success?identification_number=${identificationNumber}&bibNumber=${bibNumber}`;
+      redirectUrl = `/registration/${team ? "team-" : ""}payment-success?identification_number=${identificationNumber}`;
     } else {
-      redirectUrl = `/codingwizardsmarathon/payment-failure?identification_number=${identificationNumber}`;
+      redirectUrl = `/registration/payment-failure?identification_number=${identificationNumber}`;
     }
 
     console.log("[Payment Callback] Redirecting to:", redirectUrl);
@@ -53,7 +58,7 @@ export async function POST(req: Request) {
     return new NextResponse(null, {
       status: 302,
       headers: {
-        Location: "/registration/payment-failure",
+        Location: `/registration/payment-failure?identification_number=${identificationNumber}`,
       },
     });
   }

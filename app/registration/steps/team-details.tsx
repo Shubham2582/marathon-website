@@ -13,6 +13,7 @@ interface TeamDetailField {
   label: string;
   type: "text" | "date" | "select" | "textarea";
   placeholder: string;
+  maxLength?: number;
   required: boolean;
 }
 
@@ -65,6 +66,7 @@ export function TeamDetails() {
       label: t.team_details.mobile,
       type: "text", // Changed from "number" to "text"
       placeholder: t.team_details.mobile,
+      maxLength: 10,
       required: true,
     },
     {
@@ -199,7 +201,9 @@ export function TeamDetails() {
           <FormField
             key={index}
             {...field}
-            value={teamDetails[field.name as keyof typeof teamDetails] as string}
+            value={
+              teamDetails[field.name as keyof typeof teamDetails] as string
+            }
             handleChange={handleTeamChange}
             error={errors[field.name]}
           />

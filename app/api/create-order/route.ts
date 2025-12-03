@@ -20,6 +20,10 @@ export async function POST(req: Request) {
     const params: PayUOrderRequest = await req.json();
     const txnid = `txn_${Date.now()}`;
 
+    const url = new URL(req.url);
+
+    const isTeam = url.searchParams.get("team");
+
     const hash = generateHash(params, txnid);
 
     const paymentData = {
@@ -31,10 +35,10 @@ export async function POST(req: Request) {
       email: params.email,
       phone: params.phone,
       surl: encodeURI(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/payment-callback?identification_number=${params.identification_number}&success=true`,
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/payment-callback?identification_number=${params.identification_number}&success=true${isTeam ? "&team=true" : ""}`,
       ),
       furl: encodeURI(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/payment-callback?identification_number=${params.identification_number}&success=false`,
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/payment-callback?identification_number=${params.identification_number}&success=false${isTeam ? "&team=true" : ""}`,
       ),
       hash,
     };

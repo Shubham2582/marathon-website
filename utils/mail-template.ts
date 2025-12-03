@@ -1,6 +1,6 @@
 import { EmailUserData } from "@/types/mail";
 
-export const successMail = (userData: EmailUserData)=> `
+export const successMail = (userData: EmailUserData) => `
     <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f4f4;">
       <div style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); overflow: hidden;">
         <!-- Header Banner with Marathon Theme -->
@@ -18,7 +18,7 @@ export const successMail = (userData: EmailUserData)=> `
         <!-- Main Content -->
         <div style="padding: 40px 30px;">
           <p style="font-size: 16px; color: #333;">Dear ${userData.personal_info.firstName} ${userData.personal_info.lastName},</p>
-          
+
           <p style="font-size: 16px; color: #333; line-height: 1.6;">
             Congratulations! You're officially registered for the Abujhmad Marathon 2025. Get ready for an incredible journey ahead!
           </p>
@@ -26,11 +26,18 @@ export const successMail = (userData: EmailUserData)=> `
           <!-- Registration Details Card -->
           <div style="background-color: #f8f9fa; border-radius: 8px; padding: 25px; margin: 30px 0; border-left: 4px solid #0d47a1;">
             <h2 style="margin: 0 0 20px 0; color: #0d47a1; font-size: 20px;">Your Registration Details</h2>
-            
+
             <!-- Registration ID -->
             <div style="background-color: #e3f2fd; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
               <p style="margin: 0; font-size: 14px; color: #1565c0;">Registration ID</p>
-              <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #0d47a1; font-family: monospace;">${userData.identification_number}</p>
+              <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #0d47a1; font-family: monospace;">${userData.identificationNumber}</p>
+              <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Please save this ID for future reference</p>
+            </div>
+
+            <!-- Registration ID -->
+            <div style="background-color: #e3f2fd; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+              <p style="margin: 0; font-size: 14px; color: #1565c0;">Bib Number</p>
+              <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #0d47a1; font-family: monospace;">${userData.bibNumber}</p>
               <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Please save this ID for future reference</p>
             </div>
 
@@ -77,7 +84,7 @@ export const successMail = (userData: EmailUserData)=> `
             Best regards,<br>
             <strong>Team Abujhmad Marathon 2025</strong>
           </p>
-          
+
           <!-- Social Media Links -->
           <div style="margin-top: 20px;">
             <a href="https://tinyurl.com/yc8mmmnr" style="text-decoration: none; color: #666; margin: 0 10px;">Facebook</a>
@@ -107,7 +114,7 @@ export const otpMail = (userData: EmailUserData) => `
         <!-- Main Content -->
         <div style="padding: 40px 30px;">
           <p style="font-size: 16px; color: #333;">Dear ${userData.personal_info.firstName} ${userData.personal_info.lastName},</p>
-          
+
           <p style="font-size: 16px; color: #333; line-height: 1.6;">
             Thank you for starting your registration for the Abujhmad Marathon 2025. To complete your registration, please verify your email address using the OTP below.
           </p>
@@ -115,7 +122,7 @@ export const otpMail = (userData: EmailUserData) => `
           <!-- OTP Card -->
           <div style="background-color: #f8f9fa; border-radius: 8px; padding: 25px; margin: 30px 0; border-left: 4px solid #0d47a1; text-align: center;">
             <h2 style="margin: 0 0 20px 0; color: #0d47a1; font-size: 20px;">Your Verification Code</h2>
-            
+
             <!-- OTP Display -->
             <div style="background-color: #e3f2fd; padding: 20px; border-radius: 6px; margin-bottom: 20px;">
               <p style="margin: 0; font-size: 32px; font-weight: bold; color: #0d47a1; font-family: monospace; letter-spacing: 5px;">${userData.marathon_details.otp}</p>
@@ -160,7 +167,7 @@ export const otpMail = (userData: EmailUserData) => `
             Best regards,<br>
             <strong>Team Abujhmad Marathon 2025</strong>
           </p>
-          
+
           <!-- Social Media Links -->
           <div style="margin-top: 20px;">
             <a href="https://tinyurl.com/yc8mmmnr" style="text-decoration: none; color: #666; margin: 0 10px;">Facebook</a>

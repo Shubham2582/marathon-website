@@ -33,12 +33,13 @@ export const PastRecords = () => {
   const handleSelectRecord = async (record: any, index: number) => {
     setLoading(index);
     const mappedRecord = mapSupabaseRecordToForm(record);
+    console.log(mappedRecord);
 
     if (!mappedRecord.pincode && mappedRecord.city && mappedRecord.state) {
       try {
         const pincode = await getPincodeFromCityAndState(
           mappedRecord.city,
-          mappedRecord.state as string,
+          mappedRecord.state as string
         );
         if (pincode) {
           mappedRecord.pincode = pincode;
@@ -52,7 +53,7 @@ export const PastRecords = () => {
       if (Object.prototype.hasOwnProperty.call(mappedRecord, key)) {
         setForm(
           key as keyof RegistrationForm,
-          mappedRecord[key as keyof RegistrationForm],
+          mappedRecord[key as keyof RegistrationForm]
         );
       }
     }
@@ -82,13 +83,11 @@ export const PastRecords = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-y-1 p-3 pt-0">
-              <p className="text-sm">
-                Mobile: {record.mobile || record.mobile_number}
-              </p>
+              <p className="text-sm">Mobile: {record.mobile || record.mobile_number}</p>
               <p className="text-sm">Race Category: {record.race_category}</p>
               <Button
-                size="sm"
-                className="mt-2 w-fit"
+              size="sm"
+              className="mt-2 w-fit"
                 onClick={() => handleSelectRecord(record, index)}
                 disabled={loading === index}
               >

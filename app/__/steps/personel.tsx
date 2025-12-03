@@ -24,7 +24,7 @@ export const Personel = () => {
 
     // Find the input element with the error
     const errorInput = scrollContainerRef.current.querySelector(
-      `[name="${firstErrorField}"]`,
+      `[name="${firstErrorField}"]`
     ) as HTMLElement;
 
     if (errorInput) {
@@ -184,13 +184,13 @@ export const Personel = () => {
       coreFieldsFilled = false;
     }
 
-    // if (!form.raceCategory?.trim()) {
-    //   newErrors.raceCategory =
-    //     language === "en"
-    //       ? "Race category is required"
-    //       : "दौड़ श्रेणी आवश्यक है";
-    //   coreFieldsFilled = false;
-    // }
+    if (!form.raceCategory?.trim()) {
+      newErrors.raceCategory =
+        language === "en"
+          ? "Race category is required"
+          : "दौड़ श्रेणी आवश्यक है";
+      coreFieldsFilled = false;
+    }
 
     if (!form.tShirtSize?.trim()) {
       newErrors.tShirtSize =
@@ -258,7 +258,7 @@ export const Personel = () => {
   };
 
   const handlePincodeChange = async (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     handleChange(e.target.name, e.target.value, "text");
     const pincode = e.target.value;
@@ -339,7 +339,7 @@ export const Personel = () => {
                   error={errors[detail.name]}
                 />
               );
-            },
+            }
           )}
         </div>
 

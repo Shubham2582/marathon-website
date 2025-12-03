@@ -14,21 +14,21 @@ import { useStep } from "@/store/useStep";
 import { Language } from "@/types/language";
 import { useLanguage, useTranslation } from "@/store/useLanguage";
 
-import { EmailVerification } from "../steps/email-verification";
-import { PastRecords } from "../steps/past-records";
-import { Personel } from "../steps/personel";
-import { PayUPayment } from "../steps/payu-payment";
-import { Verification } from "../steps/verification";
-import { useRegistrationStore } from "@/store/useRegistration";
 import { CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { TeamDetails } from "../steps/team-details";
+import { TeamPayUPayment } from "../steps/team-payu-payment";
 
 const Registration = () => {
-  const { currentStep } = useStep();
+  const { currentStep, setTotalSteps, setStep } = useStep();
   const { language, setLanguage } = useLanguage();
-  const { pastRecords } = useRegistrationStore();
   const t = useTranslation();
   const [animateStep, setAnimateStep] = useState(false);
+
+  useEffect(() => {
+    setTotalSteps(2);
+    setStep(1);
+  }, []);
 
   useEffect(() => {
     setAnimateStep(false);
@@ -37,44 +37,21 @@ const Registration = () => {
   }, [currentStep]);
 
   const steps = [
-    t.steps.email,
-    t.steps.past_records,
-    t.steps[1], // Verification
-    t.steps[2], // Personel
+    t.steps.team_details_step,
     t.steps[3], // Payment
   ];
 
-  // Calculate visible steps and current visible step
-  const hasPastRecords = pastRecords.length > 0;
-  const visibleSteps = hasPastRecords ? steps : steps.filter((_, i) => i !== 1);
-  const totalVisibleSteps = visibleSteps.length;
-
-  // Calculate current visible step number (accounting for skipped past records)
-  const getCurrentVisibleStep = () => {
-    if (hasPastRecords) {
-      return currentStep;
-    } else {
-      // If no past records and current step is after step 2, subtract 1
-      return currentStep > 2 ? currentStep - 1 : currentStep;
-    }
-  };
-
-  const currentVisibleStep = getCurrentVisibleStep();
+  const totalVisibleSteps = steps.length;
+  const currentVisibleStep = currentStep;
 
   const renderStepContent = () => {
     switch (currentStep) {
       case 1:
-        return <EmailVerification />;
+        return <TeamDetails />;
       case 2:
-        return <PastRecords />;
-      case 3:
-        return <Verification />;
-      case 4:
-        return <Personel />;
-      case 5:
-        return <PayUPayment />;
+        return <TeamPayUPayment />;
       default:
-        return <EmailVerification />;
+        return <TeamDetails />;
     }
   };
 
@@ -87,24 +64,19 @@ const Registration = () => {
           fill
           className="object-cover"
         />
-        {/* <div className="absolute top-0 left-0 w-full h-full bg-black/10"/> */}
       </div>
 
-      <section className="max-w-xl z-10 w-full bg-white/30 backdrop-blur-lg shadow-2xl rounded-2xl p-5 md:p-6 border border-purple-100 animate-fade-in my-4">
-        {/* Header with gradient text */}
+      <section className="max-w-2xl z-10 w-full bg-white/50 backdrop-blur-lg shadow-2xl rounded-2xl p-5 md:p-6 border border-purple-100 animate-fade-in my-4">
         <div className="mb-4">
           <h2 className="text-2xl md:text-3xl mb-1.5 bg-gradient-to-r from-purple-600 via-violet-600 to-purple-600 bg-clip-text text-transparent animate-shimmer bg-[length:200%_auto]">
-            {t.page_title}
+            {t.team_run_registration_title}
           </h2>
           <div className="h-0.5 w-16 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full"></div>
         </div>
 
-        {/* Modern Progress Steps */}
         <div className="mb-4">
           <div className="flex items-center justify-between relative">
-            {/* Progress bar background */}
             <div className="absolute left-0 right-0 h-1 bg-white rounded-full -z-10"></div>
-            {/* Active progress bar */}
             <div
               className="absolute left-0 h-1 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full transition-all duration-500 -z-10"
               style={{
@@ -113,13 +85,7 @@ const Registration = () => {
             ></div>
 
             {(() => {
-              let stepNumber = 1;
               return steps.map((step, index: number) => {
-                if (pastRecords.length === 0 && index === 1) {
-                  return null;
-                }
-                const currentVisibleStep = stepNumber;
-                stepNumber++;
                 const isActive = currentStep === index + 1;
                 const isCompleted = currentStep > index + 1;
 
@@ -142,7 +108,7 @@ const Registration = () => {
                       {isCompleted ? (
                         <CheckCircle2 className="w-4 h-4 animate-scale-in" />
                       ) : (
-                        currentVisibleStep
+                        index + 1
                       )}
                     </div>
                     <p
@@ -160,10 +126,8 @@ const Registration = () => {
           </div>
         </div>
 
-        {/* Divider with gradient */}
         <div className="h-px my-4"></div>
 
-        {/* Language selector and step info */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center gap-1.5">
             <div className="w-1 h-4 bg-gradient-to-b from-purple-600 to-violet-600 rounded-full"></div>
@@ -189,7 +153,6 @@ const Registration = () => {
           </Select>
         </div>
 
-        {/* Step Content with animation */}
         <div
           className={cn(
             "transition-all duration-500",
@@ -198,7 +161,6 @@ const Registration = () => {
               : "opacity-0 translate-y-4",
           )}
         >
-          {/* <h3 className="mt-2 mb-6">{steps[currentStep - 1]}</h3> */}
           <div className="animate-fade-in">{renderStepContent()}</div>
         </div>
       </section>

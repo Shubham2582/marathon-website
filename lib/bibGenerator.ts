@@ -8,6 +8,7 @@ const BIB_RANGES = {
   BASTAR_FEMALE: { start: 6001, end: 9000 },
   NARAYANPUR_MALE: { start: 11000, end: 17000 },
   NARAYANPUR_FEMALE: { start: 17001, end: 21000 },
+  TEAM: { start: 21001, end: 23000 },
 } as const;
 
 const BASTAR_CITIES = [
@@ -24,7 +25,8 @@ type Category =
   | "BASTAR_MALE"
   | "BASTAR_FEMALE"
   | "NARAYANPUR_MALE"
-  | "NARAYANPUR_FEMALE";
+  | "NARAYANPUR_FEMALE"
+  | "TEAM";
 
 interface RegistrationData {
   city: string;
@@ -102,74 +104,82 @@ async function getNextBibNumber(category: Category): Promise<number> {
  */
 export async function generateBibNumber(
   identificationNumber: string,
-): Promise<number> {
+  isTeam: boolean,
+): Promise<void> {
   try {
     console.log("[BIB Generator] Starting for:", identificationNumber);
-    
-    // Fetch registration data
-    const { data: registration, error: fetchError } = await supabase
-      .schema("marathon")
-      .from("registrations_2026")
-      .select("city, gender, is_from_narayanpur, bib_num")
-      .eq("identification_number", identificationNumber)
-      .single();
 
-    console.log("[BIB Generator] Registration data:", registration);
+    let category: Category = "TEAM";
 
-    if (fetchError || !registration) {
-      console.error("[BIB Generator] Error fetching registration:", fetchError);
-      throw new Error("Registration not found");
+    if (!isTeam) {
+      // Fetch registration data
+      const { data: registration, error: fetchError } = await supabase
+        .schema("marathon")
+        .from("registrations_2026")
+        .select("city, gender, is_from_narayanpur, bib_num")
+        .eq("identification_number", identificationNumber)
+        .single();
+
+      console.log("[BIB Generator] Registration data:", registration);
+
+      if (fetchError || !registration) {
+        console.error(
+          "[BIB Generator] Error fetching registration:",
+          fetchError,
+        );
+        throw new Error("Registration not found");
+      }
+
+      // If BIB already exists, return it
+      if (registration.bib_num) {
+        console.log(
+          "[BIB Generator] BIB already exists:",
+          registration.bib_num,
+        );
+        return registration.bib_num;
+      }
+
+      // Determine category
+      category = determineCategory({
+        city: registration.city,
+        gender: registration.gender,
+        is_from_narayanpur: registration.is_from_narayanpur,
+      });
+
+      const bibNumber = await getNextBibNumber(category);
+      console.log("[BIB GENERATOR] BIB generated ", bibNumber);
+      const { data: updateData, error: updateBibError } = await supabase
+        .schema("marathon")
+        .from("registrations_2026")
+        .update({ bib_num: bibNumber })
+        .eq("identification_number", identificationNumber)
+        .select();
     }
 
-    // If BIB already exists, return it
-    if (registration.bib_num) {
-      console.log("[BIB Generator] BIB already exists:", registration.bib_num);
-      return registration.bib_num;
+    if (isTeam) {
+      // Get next BIB number
+      const { data: teamData, error: teamFetchError } = await supabase
+        .schema("marathon")
+        .from("registrations_2026")
+        .select("identification_number")
+        .eq("team_id", identificationNumber);
+
+      if (teamFetchError) {
+        throw Error("Error while fetching team data: ", teamFetchError);
+      }
+
+      if (teamData) {
+        for (const idn of teamData) {
+          const bibNumber = await getNextBibNumber(category);
+          await supabase
+            .schema("marathon")
+            .from("registrations_2026")
+            .update({ bib_num: bibNumber })
+            .eq("identification_number", idn)
+            .select();
+        }
+      }
     }
-
-    // Determine category
-    const category = determineCategory({
-      city: registration.city,
-      gender: registration.gender,
-      is_from_narayanpur: registration.is_from_narayanpur,
-    });
-
-    console.log("[BIB Generator] Category determined:", category);
-
-    // Get next BIB number
-    const bibNumber = await getNextBibNumber(category);
-
-    console.log("[BIB Generator] Generated BIB:", bibNumber);
-
-    // Update the registration with the BIB number
-    console.log("[BIB Generator] Attempting to update database...");
-    console.log("[BIB Generator] Update params:", { 
-      bib_num: bibNumber, 
-      identification_number: identificationNumber 
-    });
-    
-    const { data: updateData, error: updateError } = await supabase
-      .schema("marathon")
-      .from("registrations_2026")
-      .update({ bib_num: bibNumber })
-      .eq("identification_number", identificationNumber)
-      .select();
-
-    console.log("[BIB Generator] Update response data:", updateData);
-    console.log("[BIB Generator] Update response error:", updateError);
-
-    if (updateError) {
-      console.error("[BIB Generator] Error updating BIB number:", updateError);
-      throw updateError;
-    }
-
-    if (!updateData || updateData.length === 0) {
-      console.error("[BIB Generator] Update succeeded but no rows affected!");
-      throw new Error("No rows updated - identification_number might not exist");
-    }
-
-    console.log("[BIB Generator] Successfully generated and saved BIB:", bibNumber);
-    return bibNumber;
   } catch (error) {
     console.error("[BIB Generator] Error generating BIB number:", error);
     throw error;
