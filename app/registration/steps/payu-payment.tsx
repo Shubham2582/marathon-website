@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { useStep } from "@/store/useStep";
-import { useRouter } from "next/navigation";
 import { initiatePayment } from "@/lib/payu";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,12 +16,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
+
 export const PayUPayment = () => {
   const { form, identificationNumber } = useRegistrationStore();
   const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [includeTshirt, setIncludeTshirt] = useState(true);
-  const router = useRouter();
   const t = useTranslation();
   const registrationFee =
     form.isFromNarayanpur || form.city === "Narayanpur" ? 0 : 299;
@@ -62,7 +61,16 @@ export const PayUPayment = () => {
         console.error("Supabase update error:", error);
         throw error;
       }
-      await initiatePayment(totalFee, form, identificationNumber);
+      await initiatePayment(
+        totalFee,
+        {
+          firstName: form.firstName,
+          lastName: form.lastName,
+          email: form.email,
+          phone: form.mobile,
+        },
+        identificationNumber,
+      );
     } catch (error) {
       console.error("Payment error:", error);
       alert("An error occurred during payment initiation. Please try again.");

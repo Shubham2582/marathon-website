@@ -90,7 +90,15 @@ export const TeamPayUPayment = () => {
         throw individualError;
       }
 
-      await initiateTeamPayment(totalFee, teamDetails, team_id);
+      await initiateTeamPayment(
+        totalFee,
+        {
+          team_name: teamDetails.team_name,
+          email: teamDetails.email,
+          phone: teamDetails.members[0].mobile,
+        },
+        team_id,
+      );
     } catch (error) {
       console.error("Payment error:", error);
       alert(`An error occurred during payment initiation. Please try again.

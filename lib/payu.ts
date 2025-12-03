@@ -1,10 +1,14 @@
 // lib/payu.ts
 import { RegistrationForm } from "@/types/form";
-import { TeamDetails } from "@/store/useTeamRegistration";
 
 export const initiatePayment = async (
   registrationFee: number,
-  formData: RegistrationForm,
+  formData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  },
   identificationNumber: string,
 ): Promise<void> => {
   try {
@@ -17,7 +21,7 @@ export const initiatePayment = async (
         amount: registrationFee,
         name: `${formData.firstName} ${formData.lastName}`,
         email: formData.email,
-        phone: formData.mobile,
+        phone: formData.phone,
         identification_number: identificationNumber,
       }),
     });
@@ -53,7 +57,11 @@ export const initiatePayment = async (
 
 export const initiateTeamPayment = async (
   registrationFee: number,
-  formData: TeamDetails,
+  formData: {
+    team_name: string;
+    email: string;
+    phone: string;
+  },
   teamId: string,
 ): Promise<void> => {
   try {
@@ -66,7 +74,7 @@ export const initiateTeamPayment = async (
         amount: registrationFee,
         name: formData.team_name,
         email: formData.email,
-        phone: formData.members[0].mobile,
+        phone: formData.phone,
         identification_number: teamId,
       }),
     });
