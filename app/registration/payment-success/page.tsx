@@ -142,13 +142,12 @@ const SuccessContent = () => {
         .select("*")
         .eq("identification_number", identificationNumber)
         .single();
-
       if (fetchError) {
         console.error("Error fetching user data:", fetchError);
         return;
       } else if (
         data?.payment_status === "OFFLINE" ||
-        data?.payment_status === "SUCCESS"
+        data?.payment_status === "DONE"
       ) {
         setBibNumber(data?.bib_num);
         await sendSuccessEmail(data);
@@ -169,7 +168,6 @@ const SuccessContent = () => {
       </main>
     );
   }
-
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-6">
