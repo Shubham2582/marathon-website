@@ -28,7 +28,7 @@ export const PayUPayment = () => {
   const router = useRouter();
   const t = useTranslation();
 
-  const registrationFee = form.isFromNarayanpur ? 0 : 299;
+  const registrationFee = form.isFromNarayanpur || form.city === "Narayanpur" ? 0 : 299;
   const tshirtFee = 200;
   const totalFee = registrationFee + (includeTshirt ? tshirtFee : 0);
 
