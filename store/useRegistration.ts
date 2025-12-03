@@ -32,6 +32,8 @@ const defaultFormState: RegistrationForm = {
 interface RegistrationStore {
   form: RegistrationForm;
   pastRecords: Partial<RegistrationForm>[];
+  identificationNumber: string | null;
+  setIdentificationNumber: (id: string) => void;
   setForm: <K extends keyof RegistrationForm>(
     field: K,
     value: RegistrationForm[K] | File,
@@ -44,6 +46,9 @@ interface RegistrationStore {
 export const useRegistrationStore = create<RegistrationStore>((set, get) => ({
   form: defaultFormState,
   pastRecords: [],
+  identificationNumber: null,
+
+  setIdentificationNumber: (id) => set({ identificationNumber: id }),
 
   setForm: (field, value) =>
     set((state) => ({

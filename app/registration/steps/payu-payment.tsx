@@ -1,7 +1,5 @@
 "use client";
-
 import { useState } from "react";
-
 import { useStep } from "@/store/useStep";
 import { useRouter } from "next/navigation";
 import { initiatePayment } from "@/lib/payu";
@@ -9,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/store/useLanguage";
 import { useRegistrationStore } from "@/store/useRegistration";
-import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Dialog,
@@ -19,84 +17,51 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-
 export const PayUPayment = () => {
-  const { form } = useRegistrationStore();
+  const { form, identificationNumber } = useRegistrationStore();
   const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [includeTshirt, setIncludeTshirt] = useState(true);
   const router = useRouter();
   const t = useTranslation();
-
-  const registrationFee = form.isFromNarayanpur || form.city === "Narayanpur" ? 0 : 299;
+  const registrationFee =
+    form.isFromNarayanpur || form.city === "Narayanpur" ? 0 : 299;
   const tshirtFee = 200;
   const totalFee = registrationFee + (includeTshirt ? tshirtFee : 0);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!acceptedTerms) {
       alert("Please accept the terms and conditions");
       return;
     }
-
-    // If from Narayanpur and wants a t-shirt, go to payment gateway
     if (form.isFromNarayanpur && includeTshirt) {
       handleOnlinePayment();
       return;
     }
-
-    // If from Narayanpur and does not want a t-shirt, do offline payment
     if (form.isFromNarayanpur && !includeTshirt) {
       handleOfflinePayment();
       return;
     }
-
-    // For non-Narayanpur residents, always go to payment gateway
     handleOnlinePayment();
   };
-
   const handleOnlinePayment = async () => {
-    const identificationNumber = await getUniqueIdentificationNumber();
-
-    const registrationData = {
-      first_name: form.firstName,
-      last_name: form.lastName,
-      email: form.email,
-      mobile: form.mobile,
-      gender: form.gender,
-      date_of_birth: form.dateOfBirth,
-      country: form.country || "India",
-      state: form.isInternational ? "International" : form.state,
-      city: form.isInternational ? "International" : form.city,
-      occupation: form.occupation,
-      race_category: form.raceCategory,
-      t_shirt_size: form.tShirtSize,
-      emergency_contact_name: form.emergencyContactName || null,
-      emergency_contact_number: form.emergencyContactNumber || null,
-      blood_group: form.bloodGroup || null,
-      is_from_narayanpur: form.isFromNarayanpur,
-      is_international: form.isInternational || false,
-      needs_accommodation: form.needsAccommodation,
-      identification_number: identificationNumber,
-      govt_id: form.govtId || "N/A",
-      payment_status: "PENDING",
-      previous_marathon_name: form.previousMarathonName || null,
-      previous_marathon_rank: form.previousMarathonRank || null,
-      wants_tshirt: includeTshirt,
-    };
-
     try {
+      if (!identificationNumber) {
+        alert("Identification number is missing.");
+        return;
+      }
       const { error } = await supabase
         .schema("marathon")
         .from("registrations_2026")
-        .insert([registrationData])
-        .select("id");
-
+        .update({
+          payment_status: "PENDING",
+          wants_tshirt: includeTshirt,
+        })
+        .eq("identification_number", identificationNumber);
       if (error) {
-        console.error("Supabase insertion error:", error);
+        console.error("Supabase update error:", error);
         throw error;
       }
-
       await initiatePayment(totalFee, form, identificationNumber);
     } catch (error) {
       console.error("Payment error:", error);
@@ -106,47 +71,19 @@ export const PayUPayment = () => {
 
   const handleOfflinePayment = async () => {
     try {
-      const identificationNumber = await getUniqueIdentificationNumber();
-
-      const registrationData = {
-        first_name: form.firstName,
-        last_name: form.lastName,
-        email: form.email,
-        mobile: form.mobile,
-        gender: form.gender,
-        date_of_birth: form.dateOfBirth,
-        country: form.country || "India",
-        state: form.isInternational ? "International" : form.state,
-        city: form.isInternational ? "International" : form.city,
-        occupation: form.occupation,
-        race_category: form.raceCategory,
-        t_shirt_size: form.tShirtSize,
-        emergency_contact_name: form.emergencyContactName || null,
-        emergency_contact_number: form.emergencyContactNumber || null,
-        blood_group: form.bloodGroup || null,
-        is_from_narayanpur: form.isFromNarayanpur,
-        is_international: form.isInternational || false,
-        needs_accommodation: form.needsAccommodation,
-        identification_number: identificationNumber,
-        govt_id: form.govtId || "N/A",
-        payment_status: "OFFLINE",
-        previous_marathon_name: form.previousMarathonName || null,
-        previous_marathon_rank: form.previousMarathonRank || null,
-        wants_tshirt: includeTshirt,
-      };
-
       const { error } = await supabase
         .schema("marathon")
         .from("registrations_2026")
-        .insert([registrationData]);
+        .update({
+          payment_status: "OFFLINE",
+          wants_tshirt: includeTshirt,
+        })
+        .eq("identification_number", identificationNumber);
 
       if (error) throw error;
-
       const paymentForm = document.createElement("form");
       paymentForm.method = "POST";
       paymentForm.action = `/api/payment-callback?identification_number=${identificationNumber}&offline=true&success=true`;
-
-      // Append form to body and submit
       document.body.appendChild(paymentForm);
       paymentForm.submit();
     } catch (error) {

@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-
 import { useStep } from "@/store/useStep";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,44 +8,34 @@ import { personelFormDetails } from "@/data/personel-fields";
 import { useRegistrationStore } from "@/store/useRegistration";
 import { useLanguage, useTranslation } from "@/store/useLanguage";
 import { fetchAddressFromPincode } from "@/services/pincodeService";
+import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
 
 export const Personel = () => {
-  const { form, handleChange, setForm } = useRegistrationStore();
+  const { form, handleChange, setForm, setIdentificationNumber } =
+    useRegistrationStore();
   const { nextStep, previousStep } = useStep();
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const { language } = useLanguage();
   const t = useTranslation();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-
   const scrollToFirstError = (errorFields: Record<string, string>) => {
     const firstErrorField = Object.keys(errorFields)[0];
     if (!firstErrorField || !scrollContainerRef.current) return;
-
-    // Find the input element with the error
     const errorInput = scrollContainerRef.current.querySelector(
       `[name="${firstErrorField}"]`,
     ) as HTMLElement;
-
     if (errorInput) {
-      // Scroll the container to show the error field
       const container = scrollContainerRef.current;
       const inputRect = errorInput.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
-
-      // Calculate if the input is outside the visible area
       const isAbove = inputRect.top < containerRect.top;
       const isBelow = inputRect.bottom + 8 > containerRect.bottom;
-
       if (isAbove || isBelow) {
-        // Calculate the scroll position to center the input in the container
         const inputOffsetTop = errorInput.offsetTop;
-        const containerScrollTop = container.scrollTop;
         const containerHeight = container.clientHeight;
         const inputHeight = errorInput.offsetHeight;
-
         const targetScroll =
           inputOffsetTop - containerHeight / 2 + inputHeight / 2;
-
         container.scrollTo({
           top: Math.max(0, targetScroll),
           behavior: "smooth",
@@ -54,26 +43,18 @@ export const Personel = () => {
       }
     }
   };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const newErrors: Record<string, string> = {};
     const fields = personelFormDetails(form, handleChange, t.personal);
-
-    // Track if required core fields are filled
     let coreFieldsFilled = true;
-
     fields.forEach((field) => {
-      // Skip validation for ID fields if user is NOT from Narayanpur (including international)
       if (
         !form.isFromNarayanpur &&
         (field.name === "idType" || field.name === "govtId")
       ) {
         return;
       }
-
-      // Skip validation for location fields for international participants
       if (
         form.isInternational &&
         (field.name === "pincode" ||
@@ -83,10 +64,7 @@ export const Personel = () => {
       ) {
         return;
       }
-
       const value = form[field.name as keyof typeof form];
-
-      // Check if field is required and empty
       if (field.required && (!value || value.toString().trim() === "")) {
         newErrors[field.name] =
           language === "en"
@@ -94,8 +72,6 @@ export const Personel = () => {
             : `${field.label} आवश्यक है`;
         coreFieldsFilled = false;
       }
-
-      // Phone number validation - skip length check for international participants
       if (
         !form.isInternational &&
         value &&
@@ -109,8 +85,6 @@ export const Personel = () => {
           coreFieldsFilled = false;
         }
       }
-
-      // For international participants, just verify that phone numbers contain only digits
       if (
         form.isInternational &&
         value &&
@@ -125,17 +99,12 @@ export const Personel = () => {
         }
       }
     });
-
-    // Additional validation for specific fields
-
-    // Only validate ID fields for Narayanpur participants
     if (form.isFromNarayanpur) {
       if (!form.idType || form.idType.trim() === "") {
         newErrors.idType =
           language === "en" ? "ID type is required" : "पहचान प्रकार आवश्यक है";
         coreFieldsFilled = false;
       }
-
       if (!form.govtId || form.govtId.trim() === "") {
         newErrors.govtId =
           language === "en"
@@ -150,26 +119,21 @@ export const Personel = () => {
         }
       }
     }
-
-    // Validate that all other required fields are filled
     if (!form.firstName?.trim()) {
       newErrors.firstName =
         language === "en" ? "First name is required" : "पहला नाम आवश्यक है";
       coreFieldsFilled = false;
     }
-
     if (!form.lastName?.trim()) {
       newErrors.lastName =
         language === "en" ? "Last name is required" : "अंतिम नाम आवश्यक है";
       coreFieldsFilled = false;
     }
-
     if (!form.email?.trim()) {
       newErrors.email =
         language === "en" ? "Email is required" : "ईमेल आवश्यक है";
       coreFieldsFilled = false;
     }
-
     if (!form.mobile?.trim()) {
       newErrors.mobile =
         language === "en"
@@ -177,21 +141,11 @@ export const Personel = () => {
           : "मोबाइल नंबर आवश्यक है";
       coreFieldsFilled = false;
     }
-
     if (!form.dateOfBirth?.trim()) {
       newErrors.dateOfBirth =
         language === "en" ? "Date of birth is required" : "जन्म तिथि आवश्यक है";
       coreFieldsFilled = false;
     }
-
-    // if (!form.raceCategory?.trim()) {
-    //   newErrors.raceCategory =
-    //     language === "en"
-    //       ? "Race category is required"
-    //       : "दौड़ श्रेणी आवश्यक है";
-    //   coreFieldsFilled = false;
-    // }
-
     if (!form.tShirtSize?.trim()) {
       newErrors.tShirtSize =
         language === "en"
@@ -199,7 +153,6 @@ export const Personel = () => {
           : "टी-शर्ट आकार आवश्यक है";
       coreFieldsFilled = false;
     }
-
     if (!form.emergencyContactName?.trim()) {
       newErrors.emergencyContactName =
         language === "en"
@@ -207,7 +160,6 @@ export const Personel = () => {
           : "आपातकालीन संपर्क नाम आवश्यक है";
       coreFieldsFilled = false;
     }
-
     if (!form.emergencyContactNumber?.trim()) {
       newErrors.emergencyContactNumber =
         language === "en"
@@ -215,60 +167,88 @@ export const Personel = () => {
           : "आपातकालीन संपर्क नंबर आवश्यक है";
       coreFieldsFilled = false;
     }
-
     if (!form.bloodGroup?.trim()) {
       newErrors.bloodGroup =
         language === "en" ? "Blood group is required" : "रक्त समूह आवश्यक है";
       coreFieldsFilled = false;
     }
-
-    // Non-international participants need to provide location details
     if (!form.isInternational) {
       if (!form.pincode?.trim()) {
         newErrors.pincode =
           language === "en" ? "Pin code is required" : "पिन कोड आवश्यक है";
         coreFieldsFilled = false;
       }
-
       if (!form.state?.trim()) {
         newErrors.state =
           language === "en" ? "State is required" : "राज्य आवश्यक है";
         coreFieldsFilled = false;
       }
-
       if (!form.city?.trim()) {
         newErrors.city =
           language === "en" ? "City is required" : "शहर आवश्यक है";
         coreFieldsFilled = false;
       }
     }
-
     setErrors(newErrors);
-
     const isValid = coreFieldsFilled && Object.keys(newErrors).length === 0;
-
     if (isValid) {
-      nextStep();
+      const identificationNumber = await getUniqueIdentificationNumber();
+      const registrationData = {
+        first_name: form.firstName,
+        last_name: form.lastName,
+        email: form.email,
+        mobile: form.mobile,
+        gender: form.gender,
+        date_of_birth: form.dateOfBirth,
+        country: form.country || "India",
+        state: form.isInternational ? "International" : form.state,
+        city: form.isInternational ? "International" : form.city,
+        occupation: form.occupation,
+        race_category: form.raceCategory,
+        t_shirt_size: form.tShirtSize,
+        emergency_contact_name: form.emergencyContactName || null,
+        emergency_contact_number: form.emergencyContactNumber || null,
+        blood_group: form.bloodGroup || null,
+        is_from_narayanpur: form.isFromNarayanpur,
+        is_international: form.isInternational || false,
+        needs_accommodation: form.needsAccommodation,
+        identification_number: identificationNumber,
+        govt_id: form.govtId || "N/A",
+        payment_status: "PENDING",
+        previous_marathon_name: form.previousMarathonName || null,
+        previous_marathon_rank: form.previousMarathonRank || null,
+      };
+      try {
+        const { error } = await supabase
+          .schema("marathon")
+          .from("registrations_2026")
+          .insert([registrationData])
+          .select("id");
+        if (error) {
+          console.error("Supabase insertion error:", error);
+          throw error;
+        }
+        setIdentificationNumber(identificationNumber);
+        nextStep();
+      } catch (error) {
+        console.error("Error saving data:", error);
+      }
     } else {
-      // Scroll to the first error field
       setTimeout(() => {
         scrollToFirstError(newErrors);
       }, 100);
     }
   };
-
   const handlePincodeChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     handleChange(e.target.name, e.target.value, "text");
     const pincode = e.target.value;
-
     if (!pincode) {
       setForm("state", "");
       setForm("city", "");
       return;
     }
-
     if (pincode.length === 6) {
       try {
         const addressData = await fetchAddressFromPincode(pincode);
@@ -286,7 +266,6 @@ export const Personel = () => {
       }
     }
   };
-
   return (
     <form onSubmit={handleSubmit} className="animate-fade-in">
       <div>
@@ -296,15 +275,12 @@ export const Personel = () => {
         >
           {personelFormDetails(form, handleChange, t.personal).map(
             (detail, index) => {
-              // CORRECTED: Only show ID fields if the user IS from Narayanpur
               if (
                 !form.isFromNarayanpur &&
                 (detail.name === "idType" || detail.name === "govtId")
               ) {
                 return null;
               }
-
-              // Skip pincode, state, city for international participants
               if (
                 form.isInternational &&
                 (detail.name === "pincode" ||
@@ -313,8 +289,6 @@ export const Personel = () => {
               ) {
                 return null;
               }
-
-              // For country field, no longer making it required for international participants
               if (detail.name === "country") {
                 return (
                   <FormField
@@ -324,7 +298,6 @@ export const Personel = () => {
                   />
                 );
               }
-
               return detail.name === "pincode" ? (
                 <FormField
                   key={index}
@@ -342,7 +315,6 @@ export const Personel = () => {
             },
           )}
         </div>
-
         <div className="space-y-2 mt-4 pt-4 border-t border-purple-100">
           <label
             htmlFor="isRunner"
@@ -359,7 +331,6 @@ export const Personel = () => {
               {t.personal.fields.have_you_participated_in_marathons}
             </p>
           </label>
-
           {form.isRunner && (
             <div className="space-y-2.5 p-3 border border-white rounded-lg bg-white/30 animate-fade-in shadow-sm">
               <div className="space-y-1.5">
@@ -398,7 +369,6 @@ export const Personel = () => {
             </div>
           )}
         </div>
-
         {!form.isFromNarayanpur && (
           <label
             htmlFor="needsAccommodation"
