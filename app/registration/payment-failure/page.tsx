@@ -1,17 +1,17 @@
 "use client";
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-export const preferredRegion = "auto";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
+import { notFound, useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { initiatePayment, initiateTeamPayment } from "@/lib/payu";
+import { toast } from "sonner";
+import { Suspense } from "react";
+import { Loader2 } from "lucide-react";
 
 const PaymentFailure = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const identificationNumber =
     searchParams?.get("identification_number") ?? null;
@@ -81,6 +81,29 @@ const PaymentFailure = () => {
     );
   };
 
+  const handleOfflinePayment = async () => {
+    if (!identificationNumber) return;
+
+    try {
+      const { error } = await supabase
+        .schema("marathon")
+        .from("registrations_2026")
+        .update({ payment_status: "OFFLINE" })
+        .eq("identification_number", identificationNumber);
+
+      if (error) {
+        throw new Error(error?.message);
+      }
+
+      router.push("/");
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong");
+    }
+  };
+
+  if (!identificationNumber) return notFound();
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
       <Card className="max-w-md rounded-2xl w-full p-6">
@@ -97,11 +120,36 @@ const PaymentFailure = () => {
             No worries, we have your registration, so if you want, you can even
             pay offline at the counter.
           </p>
-          <Button onClick={handleRetryPayment}>Retry Payment</Button>
+          <div className="flex space-x-2">
+            {!identificationNumber?.includes("TEAM-") && (
+              <Button
+                className="w-full"
+                variant="secondary"
+                onClick={handleOfflinePayment}
+              >
+                Pay Offline
+              </Button>
+            )}
+            <Button className="w-full" onClick={handleRetryPayment}>
+              Retry Payment
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </main>
   );
 };
 
-export default PaymentFailure;
+export default function Wrapped() {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-screen w-full flex justify-center items-center">
+          <Loader2 className="animate-spin text-primary" />
+        </div>
+      }
+    >
+      <PaymentFailure />
+    </Suspense>
+  );
+}

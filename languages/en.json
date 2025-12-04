@@ -10,6 +10,11 @@
     "past_records": "Past Records",
     "team_details_step": "Team Details"
   },
+  "verification_alert": {
+    "title": "Aadhaar & Place Verification",
+    "description": "Aadhaar and place verification for the people of Narayanpur will be conducted before the marathon. Please be prepared and cooperate with the verification process.",
+    "cancel": "Cancel"
+  },
   "email_verification": {
     "enter_email_error": "Please enter your email.",
     "phone_instruction": "Enter your 10-digit phone number",
@@ -170,4 +175,3 @@
     "return_to_home": "Return to Home"
   }
 }
-

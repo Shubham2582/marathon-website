@@ -9,11 +9,24 @@ import { useRegistrationStore } from "@/store/useRegistration";
 import { useLanguage, useTranslation } from "@/store/useLanguage";
 import { fetchAddressFromPincode } from "@/services/pincodeService";
 import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Personel = () => {
   const { form, handleChange, setForm, setIdentificationNumber } =
     useRegistrationStore();
   const { nextStep, previousStep } = useStep();
+  const [showVerificationAlert, setShowVerificationAlert] =
+    React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const { language } = useLanguage();
   const t = useTranslation();
@@ -43,8 +56,7 @@ export const Personel = () => {
       }
     }
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const newErrors: Record<string, string> = {};
     const fields = personelFormDetails(form, handleChange, t.personal);
     let coreFieldsFilled = true;
@@ -266,8 +278,39 @@ export const Personel = () => {
       }
     }
   };
+
+  const handleBeforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (form.city !== "Narayanpur") {
+      handleSubmit();
+      return;
+    }
+
+    setShowVerificationAlert(true);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="animate-fade-in">
+    <form onSubmit={handleBeforeSubmit} className="animate-fade-in">
+      <AlertDialog
+        open={showVerificationAlert}
+        onOpenChange={setShowVerificationAlert}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t.verification_alert.title}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t.verification_alert.description}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t.verification_alert.cancel}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleSubmit}>
+              {t.personal.next_button}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div>
         <div
           ref={scrollContainerRef}
