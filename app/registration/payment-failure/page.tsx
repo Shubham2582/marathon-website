@@ -35,7 +35,7 @@ const PaymentFailure = () => {
       }
 
       if (teamData[0].city !== "Narayanpur") {
-        amount += 1200;
+        amount += 1196;
       }
 
       for (const person of teamData) {

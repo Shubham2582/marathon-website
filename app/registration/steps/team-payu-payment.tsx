@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { useStep } from "@/store/useStep";
-import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "@/store/useLanguage";
@@ -16,10 +15,9 @@ export const TeamPayUPayment = () => {
   const { teamDetails } = useTeamRegistrationStore();
   const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const router = useRouter();
   const t = useTranslation();
 
-  const baseFee = 1200;
+  const baseFee = 1196;
   const tshirtFee = 200;
   const tshirtsCount = teamDetails.members.filter((m) => m.wantsTshirt).length;
   const totalTshirtFee = tshirtsCount * tshirtFee;
