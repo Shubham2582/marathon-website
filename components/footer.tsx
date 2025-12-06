@@ -103,19 +103,19 @@ export function Footer() {
             {
               id: "twitter",
               Icon: Twitter,
-              url: "https://x.com/i/flow/login?redirect_after_login=%2FAbujhmadRun",
+              url: "https://x.com/AbujhmadRun?t=ePHs1Yg5mIVjyumFguWl8Q&s=09",
               label: "Follow us on X (Twitter)",
             },
             {
               id: "instagram",
               Icon: Instagram,
-              url: "https://www.instagram.com/abujhmadmarathon2025/profilecard/",
+              url: "https://www.instagram.com/abujhmad_marathon/",
               label: "Follow us on Instagram",
             },
             {
               id: "whatsapp",
               Icon: MessageCircle,
-              url: "https://chat.whatsapp.com/EsakdHLKTpJ4SQ6VzVA2FQ",
+              url: "https://chat.whatsapp.com/G80VrVWUKoOKDXu4YZJiit",
               label: "Join our WhatsApp group",
             },
           ].map(({ id, Icon, url, label }) => (
