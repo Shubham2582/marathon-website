@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "favicon/mara_ico.png",
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
