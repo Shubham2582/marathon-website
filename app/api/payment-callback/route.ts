@@ -26,16 +26,23 @@ export async function POST(req: Request) {
       // Generate BIB number
       try {
         console.log("[Payment Callback] Generating BIB number...");
-        await generateBibNumber(identificationNumber, team);
-
         if (!team) {
+          await generateBibNumber(identificationNumber, team);
+
           await supabase
             .schema("marathon")
             .from("registrations_2026")
             .update({ payment_status: offline ? "OFFLINE" : "DONE" })
             .eq("identification_number", identificationNumber);
+
+          console.log("[Payment Callback] BIB generated successfully:");
+        } else {
+          await supabase
+            .schema("marathon")
+            .from("registrations_2026_teams")
+            .update({ payment_status: offline ? "OFFLINE" : "DONE" })
+            .eq("team_id", identificationNumber);
         }
-        console.log("[Payment Callback] BIB generated successfully:");
       } catch (error) {
         console.error("[Payment Callback] Error generating BIB number:", error);
       }

@@ -22,13 +22,6 @@ export function TeamDetails() {
   const { teamDetails, handleTeamChange } = useTeamRegistrationStore();
   const t = useTranslation();
   const [errors, setErrors] = React.useState<Record<string, string>>({});
-  const [wantsTshirt, setWantsTshirt] = React.useState(false);
-
-  const handleTshirtChange = (checked: boolean) => {
-    setWantsTshirt(checked);
-    // Update the store with t-shirt preference to calculate price
-    handleTeamChange("wantsTshirt", checked);
-  };
 
   const teamDetailFields: TeamDetailField[] = [
     {
@@ -64,7 +57,7 @@ export function TeamDetails() {
     // Validate team details
     teamDetailFields.forEach((field) => {
       const value = teamDetails[field.name as keyof typeof teamDetails];
-      
+
       if (field.required && (!value || value.toString().trim() === "")) {
         newErrors[field.name] = `${field.label} is required`;
         allFieldsValid = false;
@@ -91,6 +84,7 @@ export function TeamDetails() {
     setErrors(newErrors);
 
     if (allFieldsValid && Object.keys(newErrors).length === 0) {
+      console.log(teamDetails);
       nextStep();
       setProgress(50);
     } else {
@@ -120,13 +114,18 @@ export function TeamDetails() {
 
       <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
         <input
+          id="team-wants-tshirt"
           type="checkbox"
-          checked={wantsTshirt}
-          onChange={(e) => setWantsTshirt(e.target.checked)}
+          checked={teamDetails.wants_tshirt}
+          onChange={(e) => handleTeamChange("wants_tshirt", e.target.checked)}
           className="size-4 cursor-pointer accent-purple-600"
         />
-        <label className="text-sm font-medium leading-none">
-          {t.team_details.wants_tshirt?.replace("{price}", "200") || "Want T-shirt? (₹200 for 4 members)"}
+        <label
+          htmlFor="team-wants-tshirt"
+          className="text-sm font-medium leading-none"
+        >
+          {t.team_details.wants_tshirt?.replace("{price}", "200") ||
+            "Want T-shirt? (₹200 for 4 members)"}
         </label>
       </div>
 

@@ -19,8 +19,7 @@ export const TeamPayUPayment = () => {
 
   const baseFee = 1196;
   const tshirtFee = 200;
-  const tshirtsCount = teamDetails.members.filter((m) => m.wantsTshirt).length;
-  const totalTshirtFee = tshirtsCount * tshirtFee;
+  const totalTshirtFee = teamDetails.wants_tshirt ? 4 * tshirtFee : 0;
   const totalFee = baseFee + totalTshirtFee;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,59 +32,29 @@ export const TeamPayUPayment = () => {
   };
 
   const handleOnlinePayment = async () => {
-    if (
-      !teamDetails.team_name ||
-      !teamDetails.email ||
-      teamDetails.members.some((m) => !m.name || !m.mobile)
-    ) {
+    if (!teamDetails.team_name || !teamDetails.email) {
       alert("Please go back and fill out all team details.");
       return;
     }
 
     const team_id = `TEAM-${await getUniqueIdentificationNumber()}`;
-    const individual_ids = await Promise.all(
-      Array.from({ length: 4 }).map(() => getUniqueIdentificationNumber()),
-    );
-
-    const individualRegistrationData = teamDetails.members.map(
-      (member, index) => ({
-        first_name: member.name,
-        last_name: "",
-        email: teamDetails.email,
-        mobile: member.mobile,
-        gender: member.gender,
-        date_of_birth: "1900-01-01",
-        country: "",
-        state: "",
-        city: teamDetails.city,
-        occupation: "",
-        race_category: "TEAM_RUN",
-        t_shirt_size: member.tShirtSize,
-        emergency_contact_name: "",
-        emergency_contact_number: "",
-        blood_group: "",
-        is_from_narayanpur: false,
-        is_international: false,
-        needs_accommodation: false,
-        govt_id: "",
-        previous_marathon_name: "",
-        previous_marathon_rank: null,
-        team_id: team_id,
-        identification_number: individual_ids[index],
-        payment_status: "PENDING",
-        is_team_lead: index === 0,
-      }),
-    );
 
     try {
-      const { error: individualError } = await supabase
+      const { error: teamError } = await supabase
         .schema("marathon")
-        .from("registrations_2026")
-        .insert(individualRegistrationData);
+        .from("registrations_2026_teams")
+        .insert({
+          team_id,
+          team_name: teamDetails.team_name,
+          mobile: teamDetails.mobile,
+          email: teamDetails.email,
+          wants_tshirt: teamDetails.wants_tshirt,
+          payment_status: "PENDING",
+        });
 
-      if (individualError) {
-        console.error("Supabase individual insertion error:", individualError);
-        throw individualError;
+      if (teamError) {
+        console.error("insertion error:", teamError);
+        throw teamError;
       }
 
       await initiateTeamPayment(
@@ -93,7 +62,7 @@ export const TeamPayUPayment = () => {
         {
           team_name: teamDetails.team_name,
           email: teamDetails.email,
-          phone: teamDetails.members[0].mobile,
+          phone: teamDetails.mobile,
         },
         team_id,
       );
@@ -120,7 +89,7 @@ ${error}`);
           </div>
           <div className="flex justify-between items-center py-2 border-t">
             <span>
-              {t.payment.tshirts} ({tshirtsCount} x ₹{tshirtFee})
+              {t.payment.tshirts} ({4} x ₹{tshirtFee})
             </span>
             <span>₹{totalTshirtFee}</span>
           </div>
@@ -178,10 +147,7 @@ ${error}`);
       </Card>
 
       <div className="flex justify-between">
-        <Button
-          onClick={() => useStep.getState().setStep(1)}
-          variant="secondary"
-        >
+        <Button onClick={() => previousStep()} variant="secondary">
           {t.payment.back_button}
         </Button>
         <div className="flex gap-2">

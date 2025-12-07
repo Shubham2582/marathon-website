@@ -11,20 +11,14 @@ import { useTranslation } from "@/store/useLanguage";
 
 interface UserData {
   email: string;
-  first_name: string;
-  last_name: string;
-  race_category: string;
-  t_shirt_size: string;
-  payment_status: string;
-  mobile: string;
-  identification_number: string;
+  team_name: string;
+  team_id: string;
 }
 
 const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const [teamId, setTeamId] = useState<string | null>(null);
-  const [members, setMembers] = useState<UserData[]>([]);
   const t = useTranslation();
 
   // Get both identification number and PayU parameters
@@ -76,30 +70,22 @@ const SuccessContent = () => {
 
       const { data, error: fetchError } = await supabase
         .schema("marathon")
-        .from("registrations_2026")
-        .select("*")
-        .eq("team_id", identification_number); // This will now fail to find records, as it's querying team_id with an identification_number
+        .from("registrations_2026_teams")
+        .select("email, team_name, mobile, wants_tshirt, payment_status")
+        .eq("team_id", identification_number)
+        .single();
 
       if (fetchError) {
         console.error("Error fetching user data:", fetchError);
         return;
       }
-      
-      setMembers(data as UserData[]);
 
-      // Update payment status for each member
-      for (const member of data) {
-        const { error: memberUpdateError } = await supabase
-          .schema("marathon")
-          .from("registrations_2026")
-          .update({ payment_status: "DONE" })
-          .eq("identification_number", member.identification_number);
-        
-        if (memberUpdateError) {
-            console.error(`Error updating payment status for member ${member.identification_number}:`, memberUpdateError);
-        } else {
-            await sendSuccessEmail(member);
-        }
+      if (data) {
+        sendSuccessEmail({
+          email: data.email,
+          team_name: data.team_name,
+          team_id: identification_number,
+        });
       }
     };
 
@@ -160,17 +146,15 @@ const SuccessContent = () => {
             Thank you for your registration. Your payment has been processed
             successfully.
           </p>
-          
+
           <div className="mt-6 p-4 bg-black rounded-lg">
-              <p className="text-sm text-gray-400">
-                Your Team ID
-              </p>
-              <p className="text-2xl font-mono font-bold text-white tracking-wider">
-                {teamId}
-              </p>
-              <p className="text-sm text-gray-500 mt-2">
-                Please save this number for future reference
-              </p>
+            <p className="text-sm text-gray-400">Your Team ID</p>
+            <p className="text-2xl font-mono font-bold text-white tracking-wider">
+              {teamId}
+            </p>
+            <p className="text-sm text-gray-500 mt-2">
+              Please save this number for future reference
+            </p>
           </div>
 
           <motion.div
