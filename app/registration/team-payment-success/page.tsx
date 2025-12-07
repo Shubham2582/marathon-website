@@ -13,6 +13,7 @@ interface UserData {
   email: string;
   team_name: string;
   team_id: string;
+  mobile: string;
 }
 
 const SuccessContent = () => {
@@ -21,7 +22,6 @@ const SuccessContent = () => {
   const [teamId, setTeamId] = useState<string | null>(null);
   const t = useTranslation();
 
-  // Get both identification number and PayU parameters
   const identification_number =
     searchParams?.get("identification_number") ?? null;
 
@@ -46,23 +46,84 @@ const SuccessContent = () => {
 
   const sendWhatsAppMessage = async (
     phoneNumber: string,
-    raceCategory: string,
-    tShirtSize: string,
-    identificationNumber: string | null,
-    firstName: string,
-    lastName: string,
+    teamName: string,
+    teamId: string,
   ) => {
-    // ... (rest of the function is unchanged)
+    try {
+      const response = await fetch(
+        "https://runabujhmaad.in/send-marathon-message",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phoneNumber,
+            teamName,
+            teamId,
+          }),
+        },
+      );
+
+      if (!response.ok) {
+        console.error(
+          "Failed to send WhatsApp message, server responded with:",
+          response.status,
+        );
+      }
+    } catch (error) {
+      console.error("Error sending WhatsApp message:", error);
+    }
   };
 
   const sendSuccessEmail = async (userData: UserData) => {
-    // ... (rest of the function is unchanged)
+    if (!userData) {
+      return;
+    }
+
+    try {
+      const emailData = {
+        userData: {
+          personal_info: {
+            email: userData.email,
+            teamName: userData.team_name,
+          },
+          marathon_details: {
+            teamId: userData.team_id,
+          },
+        },
+      };
+
+      const emailResponse = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(emailData),
+      });
+
+      if (!emailResponse.ok) {
+        console.error(
+          "Failed to send confirmation email, server responded with:",
+          emailResponse.status,
+        );
+      }
+
+      if (userData.mobile) {
+        await sendWhatsAppMessage(
+          "91" + userData.mobile,
+          userData.team_name,
+          userData.team_id,
+        );
+      }
+    } catch (emailError) {
+      console.error("Error in sendSuccessEmail function:", emailError);
+    }
   };
 
   useEffect(() => {
     const fetchTeamData = async () => {
       if (!identification_number) {
-        console.error("No identification number provided");
         return;
       }
 
@@ -71,12 +132,12 @@ const SuccessContent = () => {
       const { data, error: fetchError } = await supabase
         .schema("marathon")
         .from("registrations_2026_teams")
-        .select("email, team_name, mobile, wants_tshirt, payment_status")
+        .select("team_id, email, team_name, mobile, payment_status")
         .eq("team_id", identification_number)
         .single();
 
       if (fetchError) {
-        console.error("Error fetching user data:", fetchError);
+        console.error("Error fetching user data from Supabase:", fetchError);
         return;
       }
 
@@ -84,7 +145,8 @@ const SuccessContent = () => {
         sendSuccessEmail({
           email: data.email,
           team_name: data.team_name,
-          team_id: identification_number,
+          team_id: data.team_id,
+          mobile: data.mobile,
         });
       }
     };

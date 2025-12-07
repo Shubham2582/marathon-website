@@ -1,5 +1,5 @@
 import { EmailUserData } from "@/types/mail";
-import { otpMail, successMail } from "@/utils/mail-template";
+import { otpMail, successMail, teamSuccessMail } from "@/utils/mail-template";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
@@ -14,10 +14,12 @@ const transporter = nodemailer.createTransport({
 });
 
 const getEmailTemplate = (userData: EmailUserData) => {
+  if (userData.marathon_details.teamId) {
+    return teamSuccessMail(userData);
+  }
   if (userData.marathon_details.otp) {
     return otpMail(userData);
   }
-
   return successMail(userData);
 };
 
