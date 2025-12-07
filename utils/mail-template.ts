@@ -82,13 +82,13 @@ export const successMail = (userData: EmailUserData) => `
         <div style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #eee;">
           <p style="margin: 0; color: #666; font-size: 14px;">
             Best regards,<br>
-            <strong>Team Abujhmad Marathon 2025</strong>
+            <strong>Team Abujhmad Marathon 2026</strong>
           </p>
 
           <!-- Social Media Links -->
           <div style="margin-top: 20px;">
             <a href="https://tinyurl.com/yc8mmmnr" style="text-decoration: none; color: #666; margin: 0 10px;">Facebook</a>
-            <a href="https://tinyurl.com/6re5awzx" style="text-decoration: none; color: #666; margin: 0 10px;">Instagram</a>
+            <a href="https://www.instagram.com/abujhmad_marathon" style="text-decoration: none; color: #666; margin: 0 10px;">Instagram</a>
             <a href="https://tinyurl.com/788x6zjj" style="text-decoration: none; color: #666; margin: 0 10px;">Twitter</a>
           </div>
         </div>

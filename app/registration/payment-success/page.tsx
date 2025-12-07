@@ -16,6 +16,7 @@ interface UserData {
   t_shirt_size: string;
   payment_status: string;
   mobile: string;
+  bib_num: number;
 }
 
 const SuccessContent = () => {
@@ -82,7 +83,7 @@ const SuccessContent = () => {
     }
   };
 
-  const sendSuccessEmail = async (userData: UserData) => {
+  const sendSuccessEmail = async (userData: UserData, bibNumber: number) => {
     if (!userData) return;
 
     try {
@@ -150,7 +151,7 @@ const SuccessContent = () => {
         data?.payment_status === "DONE"
       ) {
         setBibNumber(data?.bib_num);
-        await sendSuccessEmail(data);
+        await sendSuccessEmail(data, data.bib_num);
       }
     };
 
