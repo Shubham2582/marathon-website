@@ -20,13 +20,13 @@ const eventDetails = [
     icon: Users,
     title: "Participants",
     description: "7000+ Runners",
-    highlight: "All Skill Levels",
+    highlight: "Enjoyed the Abujhmad",
   },
   {
     icon: Trophy,
     title: "Categories",
-    description: "Multiple Distances",
-    highlight: "21KM | 10KM | 5KM",
+    description: "Multiple Regions",
+    highlight: "Open 21KM | Narayanpur 21KM | Bastar 21KM",
   },
 ];
 

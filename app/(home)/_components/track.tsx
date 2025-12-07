@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { useEffect } from "react";
 
 const DecorativeLine = () => (
   <svg
@@ -51,6 +52,49 @@ const RunnerIcon = () => (
 );
 
 const Track = () => {
+  useEffect(() => {
+    // Load Strava embed script
+    const script = document.createElement('script');
+    script.src = 'https://strava-embeds.com/embed.js';
+    script.async = true;
+    document.body.appendChild(script);
+
+    let attempts = 0;
+    const maxAttempts = 40; // Try for 20 seconds (40 * 500ms)
+
+    // Auto-click the flyover play button when it appears
+    const checkForPlayButton = setInterval(() => {
+      attempts++;
+      
+      // Try multiple selectors to find the play button
+      const playButton = 
+        document.querySelector('[data-testid="mre-start-flyover-button"]') as HTMLButtonElement ||
+        document.querySelector('.FlyoverStart_flyoverStart__biDt8') as HTMLButtonElement ||
+        document.querySelector('button[title="Start flyover"]') as HTMLButtonElement ||
+        document.querySelector('.strava-embed-placeholder button') as HTMLButtonElement;
+      
+      if (playButton) {
+        console.log('✅ Found play button, clicking...');
+        setTimeout(() => {
+          playButton.click();
+          console.log('✅ Clicked play button');
+        }, 2000); // Wait 2 seconds after embed loads
+        clearInterval(checkForPlayButton);
+      } else if (attempts >= maxAttempts) {
+        console.log('❌ Play button not found after 20 seconds');
+        clearInterval(checkForPlayButton);
+      }
+    }, 500); // Check every 500ms
+
+    // Cleanup
+    return () => {
+      clearInterval(checkForPlayButton);
+      if (script.parentNode) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
+
   return (
     <section className="relative bg-gradient-to-b from-neutral-950 to-neutral-900 px-4 py-28 sm:px-6 lg:px-8 overflow-hidden">
       <DecorativeLine />
@@ -113,55 +157,24 @@ const Track = () => {
             </div>
           </motion.div>
 
+          {/* RIGHT SIDE: MAP + STRAVA EMBED */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
             className="relative"
           >
-            {/* Elevation Profile */}
-            {/* <div className="absolute  md:-top-10 left-1/2 transform -translate-x-1/2 bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 z-10">
-              <div className="h-16 w-48">
-                <svg viewBox="0 0 200 60" className="w-full h-full">
-                  <path
-                    d="M0 50 Q 40 20 80 40 T 160 30 T 200 50"
-                    fill="none"
-                    stroke="#FF6B6B"
-                    strokeWidth="2"
-                  />
-                  <text
-                    x="85"
-                    y="15"
-                    fill="white"
-                    fontSize="8"
-                    textAnchor="middle"
-                  >
-                    Elevation Profile
-                  </text>
-                </svg>
-              </div>
-            </div> */}
+            <div className="relative h-[500px] mt-20 md:mt-0 rounded-2xl overflow-hidden bg-black/20">
+              
+              {/* ✅ STRAVA EMBED CODE */}
+              <div
+                className="strava-embed-placeholder w-full h-full"
+                data-embed-type="route"
+                data-embed-id="3328472220104883600"
+                data-style="standard"
+                data-from-embed="false"
+              ></div>
 
-            {/* Main Map Container */}
-            <div className="relative h-[500px] mt-20 md:mt-0 rounded-2xl overflow-hidden">
-              <iframe
-                src="https://www.google.com/maps/d/u/0/embed?mid=1bykZyQAdunOefS-6-Sk9XuyCHdmMMYg&ehbc=2E312F&noprof=1"
-                width="100%"
-                height="100%"
-              />
-              {/* <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" /> */}
-
-              {/* Distance Markers */}
-              {/* <div className="absolute bottom-6 left-6 bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/10">
-                <div className="flex items-center space-x-4">
-                  <div className="w-2 h-2 rounded-full bg-primary" />
-                  <span className="text-white text-sm">Start Point</span>
-                </div>
-                <div className="flex items-center space-x-4 mt-2">
-                  <div className="w-2 h-2 rounded-full bg-purple-500" />
-                  <span className="text-white text-sm">Finish Line</span>
-                </div>
-              </div> */}
             </div>
           </motion.div>
         </div>
