@@ -5,10 +5,15 @@
   "steps": {
     "1": "Verification",
     "2": "Personal",
-    "3": "Payment",
+    "3": "Image",
+    "4": "Payment",
     "email": "Email",
     "past_records": "Past Records",
     "team_details_step": "Team Details"
+  },
+  "image": {
+    "description": "Simply upload your photo — we’ll create your marathon-ready image in seconds.",
+    "upload_button": "Upload Image"
   },
   "verification_alert": {
     "title": "Aadhaar & Place Verification",

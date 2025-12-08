@@ -84,7 +84,6 @@ export function TeamDetails() {
     setErrors(newErrors);
 
     if (allFieldsValid && Object.keys(newErrors).length === 0) {
-      console.log(teamDetails);
       nextStep();
       setProgress(50);
     } else {

@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import { CheckCircle2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 import {
@@ -12,16 +14,15 @@ import {
 import { cn } from "@/lib/utils";
 import { useStep } from "@/store/useStep";
 import { Language } from "@/types/language";
+import { useRegistrationStore } from "@/store/useRegistration";
 import { useLanguage, useTranslation } from "@/store/useLanguage";
 
-import { EmailVerification } from "../steps/email-verification";
-import { PastRecords } from "../steps/past-records";
 import { Personel } from "../steps/personel";
+import { PastRecords } from "../steps/past-records";
 import { PayUPayment } from "../steps/payu-payment";
 import { Verification } from "../steps/verification";
-import { useRegistrationStore } from "@/store/useRegistration";
-import { CheckCircle2 } from "lucide-react";
-import Image from "next/image";
+import { MarathonImage } from "../steps/marathon-image";
+import { EmailVerification } from "../steps/email-verification";
 
 const Registration = () => {
   const { currentStep } = useStep();
@@ -41,7 +42,8 @@ const Registration = () => {
     t.steps.past_records,
     t.steps[1], // Verification
     t.steps[2], // Personel
-    t.steps[3], // Payment
+    t.steps[3], // Personel
+    t.steps[4], // Payment
   ];
 
   // Calculate visible steps and current visible step
@@ -72,6 +74,8 @@ const Registration = () => {
       case 4:
         return <Personel />;
       case 5:
+        return <MarathonImage />;
+      case 6:
         return <PayUPayment />;
       default:
         return <EmailVerification />;

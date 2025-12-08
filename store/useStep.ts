@@ -20,7 +20,7 @@ export const useStep = create<StepState>((set) => ({
   nextStep: () =>
     set((state) => ({
       currentStep:
-        state.currentStep < state.totalSteps
+        state.currentStep <= state.totalSteps
           ? state.currentStep + 1
           : state.currentStep,
     })),
@@ -35,7 +35,7 @@ export const useStep = create<StepState>((set) => ({
     set((state) => ({
       currentStep: step >= 1 && step <= state.totalSteps ? step : 1,
     })),
-  
+
   setTotalSteps: (total) => set({ totalSteps: total }),
 
   setProgress: (progress) => set({ progress }),
@@ -43,7 +43,6 @@ export const useStep = create<StepState>((set) => ({
   resetStep: () =>
     set(() => ({
       currentStep: 1,
-      progress: 0
+      progress: 0,
     })),
 }));
-

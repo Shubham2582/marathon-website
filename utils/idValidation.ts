@@ -1,6 +1,5 @@
 export const validateIdNumber = (idType: string, govtId: string, language: string): string => {
   idType = idType.trim().toUpperCase();
-  console.log(govtId)
   govtId = govtId.trim().toUpperCase();
 
   if (!govtId) return language === "en" ? "ID number is required" : "पहचान संख्या आवश्यक है";
