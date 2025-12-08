@@ -113,6 +113,7 @@
         @apply font-bold font-sans;
     }
 }
+
 @keyframes bounce-slow {
     0%,
     100% {
