@@ -45,7 +45,7 @@ export const successMail = (userData: EmailUserData) => `
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
               <div>
                 <p style="margin: 0; font-size: 14px; color: #666;">Race Category</p>
-                <p style="margin: 5px 0 0 0; font-size: 16px; font-weight: 600; color: #333;">${userData.marathon_details.raceCategory}</p>
+                <p style="margin: 5px 0 0 0; font-size: 16px; font-weight: 600; color: #333;">21KM</p>
               </div>
               <div>
                 <p style="margin: 0; font-size: 14px; color: #666;">T-Shirt Size</p>
@@ -172,7 +172,6 @@ export const teamSuccessMail = (userData: EmailUserData) => `
     </div>
 </body>
 `;
-
 
 export const otpMail = (userData: EmailUserData) => `
     <body style="margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background-color: #f4f4f4;">
