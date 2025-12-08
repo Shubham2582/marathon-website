@@ -45,7 +45,8 @@ export const successMail = (userData: EmailUserData) => `
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
               <div>
                 <p style="margin: 0; font-size: 14px; color: #666;">Race Category</p>
-                <p style="margin: 5px 0 0 0; font-size: 16px; font-weight: 600; color: #333;">21KM</p>
+                <p style="margin: 5px 0 0 0; font-size: 16px; font-weight: 600; color: #333;">${userData.marathon_details.mainCategory} 21KM</p>
+
               </div>
               <div>
                 <p style="margin: 0; font-size: 14px; color: #666;">T-Shirt Size</p>

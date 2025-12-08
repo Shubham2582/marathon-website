@@ -1,6 +1,6 @@
 export interface MarathonDetails {
   otp?: string;
-  raceCategory?: string;
+  mainCategory?: string;
   tShirtSize?: string;
   teamId?: string;
   teamName?: string;
