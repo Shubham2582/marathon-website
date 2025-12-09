@@ -178,7 +178,7 @@ const Event = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-gray-600 text-s md:text-lg max-w-2xl mx-auto font-medium mb-8 md:mb-12"
           >
-            Evevt schedule comming soon
+            Event schedule comming soon
           </motion.p>
         </motion.div>
       </div>

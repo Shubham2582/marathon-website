@@ -32,7 +32,9 @@ const SelectionPage = () => {
           <Link href="/registration/individual-run" className="flex-1">
             <Button className="w-full h-auto p-6 flex flex-col items-center text-center rounded-xl shadow-lg bg-primary text-primary-foreground">
               <User className="w-8 h-8 mb-3" />
-              <h3 className="text-xl font-bold">Individual Run</h3>
+              <h3 className="text-xl font-bold">
+                Abujhmad Peace Half Marathon
+              </h3>
               <p className="text-xs mt-2">
                 Register for the marathon as a single participant.
               </p>
