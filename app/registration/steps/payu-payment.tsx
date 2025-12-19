@@ -33,11 +33,17 @@ export const PayUPayment = () => {
       alert("Please accept the terms and conditions");
       return;
     }
-    if (form.isFromNarayanpur && includeTshirt) {
+    if (
+      (form.isFromNarayanpur || form.city.toLowerCase() === "narayanpur") &&
+      includeTshirt
+    ) {
       handleOnlinePayment();
       return;
     }
-    if (form.isFromNarayanpur && !includeTshirt) {
+    if (
+      (form.isFromNarayanpur || form.city.toLowerCase() === "narayanpur") &&
+      !includeTshirt
+    ) {
       handleOfflinePayment();
       return;
     }
