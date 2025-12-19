@@ -7,7 +7,7 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { useRegistrationStore } from "@/store/useRegistration";
 import { useStep } from "@/store/useStep";
-import { Download, Loader2, Image as ImageIcon } from "lucide-react";
+import { Download, Loader2, Image as ImageIcon, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { API_URL } from "@/lib/env";
 
@@ -26,7 +26,6 @@ const SuccessContent = () => {
   const searchParams = useSearchParams();
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
 
-  // Get both identification number and PayU parameters
   const identificationNumber =
     searchParams?.get("identification_number") ?? null;
 
@@ -54,7 +53,6 @@ const SuccessContent = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Cleanup object URL when component unmounts or image changes
   useEffect(() => {
     return () => {
       if (marathonImage) {
@@ -181,6 +179,144 @@ const SuccessContent = () => {
     document.body.removeChild(link);
   };
 
+  // Universal share function using Web Share API
+  const shareImage = async () => {
+    if (!marathonImage || !identificationNumber) return;
+
+    try {
+      const response = await fetch(marathonImage);
+      const blob = await response.blob();
+      
+      const file = new File(
+        [blob], 
+        `RunWithMaad-${identificationNumber}.png`, 
+        { 
+          type: "image/png",
+          lastModified: new Date().getTime()
+        }
+      );
+
+      const shareData = {
+        files: [file],
+        title: "Run with Maad - Marathon Certificate",
+        text: `Check out my marathon certificate! 🏃‍♂️ #Runwithmaad #Marathon #Fitness`,
+      };
+
+      if (navigator.canShare && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        shareFallback();
+      }
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') {
+        console.error("Error sharing:", error);
+        shareFallback();
+      }
+    }
+  };
+
+  const shareFallback = () => {
+    const shareText = encodeURIComponent(`Check out my marathon certificate! 🏃‍♂️ #Runwithmaad #Marathon #Fitness`);
+    const currentUrl = encodeURIComponent(window.location.href);
+    
+    const whatsappUrl = `https://wa.me/?text=${shareText}%20${currentUrl}`;
+    
+    const shareOption = confirm(
+      "Web Share API not supported. Would you like to:\n\n" +
+      "OK - Share via WhatsApp\n" +
+      "Cancel - Copy link to clipboard"
+    );
+    
+    if (shareOption) {
+      window.open(whatsappUrl, '_blank');
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copied to clipboard! You can paste it in Instagram or other apps.");
+    }
+  };
+
+  // WhatsApp direct share
+  const shareToWhatsApp = () => {
+    const text = encodeURIComponent(`Check out my marathon certificate! 🏃‍♂️ #Runwithmaad #Marathon #Fitness`);
+    const url = encodeURIComponent(window.location.href);
+    
+    if (/Android|iPhone/i.test(navigator.userAgent)) {
+      window.open(`whatsapp://send?text=${text}%20${url}`, '_blank');
+    } else {
+      window.open(`https://web.whatsapp.com/send?text=${text}%20${url}`, '_blank');
+    }
+  };
+
+  // Improved Instagram Story share for mobile
+  const shareToInstagramStory = async () => {
+    if (!marathonImage || !identificationNumber) return;
+
+    // For mobile devices, prioritize Web Share API
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      try {
+        const response = await fetch(marathonImage);
+        const blob = await response.blob();
+        
+        const file = new File(
+          [blob], 
+          `RunWithMaad-${identificationNumber}.png`, 
+          { type: "image/png" }
+        );
+
+        // Use Web Share API - Instagram will appear as an option
+        if (navigator.canShare?.({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "Run with Maad 🏃‍♂️",
+            text: "#Runwithmaad #Marathon"
+          });
+          return;
+        }
+      } catch (err) {
+        if ((err as Error).name === 'AbortError') return;
+        console.error('Share failed:', err);
+      }
+    }
+
+    // Fallback: Download image and try to open Instagram
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    
+    if (isIOS || isAndroid) {
+      // Download the image first
+      downloadImage();
+      
+      // Wait a bit for download to start, then try to open Instagram
+      setTimeout(() => {
+        // Try to open Instagram story camera
+        window.location.href = 'instagram://story-camera';
+        
+        // Fallback to Instagram app store if Instagram not installed
+        setTimeout(() => {
+          const appStoreUrl = isIOS 
+            ? 'https://apps.apple.com/app/instagram/id389801252'
+            : 'https://play.google.com/store/apps/details?id=com.instagram.android';
+          
+          const openStore = confirm("Instagram app not found. Would you like to install it?");
+          if (openStore) {
+            window.open(appStoreUrl, '_blank');
+          }
+        }, 1500);
+      }, 500);
+    } else {
+      // Desktop fallback
+      alert(
+        "To share on Instagram:\n\n" +
+        "1. Download the image using the Download button\n" +
+        "2. Open Instagram on your phone\n" +
+        "3. Create a new Story\n" +
+        "4. Select the downloaded image\n" +
+        "5. Add #Runwithmaad hashtag"
+      );
+      downloadImage();
+    }
+  };
+
   useEffect(() => {
     const fetchUserDataAndUpdate = async () => {
       if (!identificationNumber) {
@@ -194,6 +330,7 @@ const SuccessContent = () => {
         .select("*")
         .eq("identification_number", identificationNumber)
         .single();
+      
       if (fetchError) {
         console.error("Error fetching user data:", fetchError);
         return;
@@ -203,7 +340,6 @@ const SuccessContent = () => {
       ) {
         setBibNumber(data?.bib_num);
         await sendSuccessEmail(data, data.bib_num);
-        // Fetch marathon image after successful payment
         await fetchMarathonImage();
       }
     };
@@ -222,6 +358,7 @@ const SuccessContent = () => {
       </main>
     );
   }
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-gray-100 p-4">
       <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 space-y-6 relative overflow-hidden">
@@ -299,7 +436,7 @@ const SuccessContent = () => {
                 Your Marathon Picture
               </h3>
               <p className="text-sm text-gray-600">
-                Download your personalized marathon picture
+                Download and share your personalized marathon picture
               </p>
             </div>
 
@@ -335,20 +472,61 @@ const SuccessContent = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
                 </div>
                 
+                {/* Main Action Buttons */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="mt-4 flex justify-center"
+                  className="mt-4 flex flex-col sm:flex-row gap-3 justify-center"
                 >
                   <Button
                     onClick={downloadImage}
-                    className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-3 rounded-lg font-semibold"
+                    className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-6 py-3 rounded-lg font-semibold"
                   >
                     <Download className="w-5 h-5 mr-2" />
-                    Download Picture
+                    Download
+                  </Button>
+
+                  <Button
+                    onClick={shareImage}
+                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-6 py-3 rounded-lg font-semibold"
+                  >
+                    <Share2 className="w-5 h-5 mr-2" />
+                    Share
                   </Button>
                 </motion.div>
+
+                {/* Platform-Specific Share Buttons */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className="mt-3 flex flex-wrap gap-2 justify-center"
+                >
+                  <button
+                    onClick={shareToWhatsApp}
+                    className="inline-flex items-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                    </svg>
+                    WhatsApp
+                  </button>
+
+                  <button
+                    onClick={shareToInstagramStory}
+                    className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 hover:from-purple-600 hover:via-pink-600 hover:to-orange-600 text-white text-sm font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    Add to Instagram Story
+                  </button>
+                </motion.div>
+
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  Share with #Runwithmaad
+                </p>
               </motion.div>
             )}
           </motion.div>
@@ -368,6 +546,7 @@ const SuccessContent = () => {
           </motion.div>
         </motion.div>
 
+        {/* Animated Background Confetti */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
