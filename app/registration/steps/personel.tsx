@@ -21,6 +21,58 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+// Helper function to get race category
+function getRaceCategory(city: string, gender: string, language: string) {
+  const bastarCities = ["Jagdalpur", "Kondagaon", "Kanker", "Bijapur", "Dantewada", "Sukma", "Bastar"];
+  
+  const normalizedGender = gender ? gender.toUpperCase() : "";
+  
+  if (language === "hi") {
+    if (city === "Narayanpur") {
+      if (normalizedGender === "MALE") {
+        return "नारायणपुर ओपन 21 किमी";
+      } else if (normalizedGender === "FEMALE") {
+        return "नारायणपुर महिला 21 किमी";
+      }
+    } else if (bastarCities.includes(city)) {
+      if (normalizedGender === "MALE") {
+        return "बस्तर पुरुष 21 किमी";
+      } else if (normalizedGender === "FEMALE") {
+        return "बस्तर महिला 21 किमी";
+      }
+    } else {
+      if (normalizedGender === "MALE") {
+        return "ओपन 21 किमी";
+      } else if (normalizedGender === "FEMALE") {
+        return "महिला ओपन 21 किमी";
+      }
+    }
+    return "21 किमी";
+  } else {
+    // English version
+    if (city === "Narayanpur") {
+      if (normalizedGender === "MALE") {
+        return "Narayanpur Open 21 KM";
+      } else if (normalizedGender === "FEMALE") {
+        return "Narayanpur Women 21 KM";
+      }
+    } else if (bastarCities.includes(city)) {
+      if (normalizedGender === "MALE") {
+        return "Bastar Men 21 KM";
+      } else if (normalizedGender === "FEMALE") {
+        return "Bastar Women 21 KM";
+      }
+    } else {
+      if (normalizedGender === "MALE") {
+        return "Open 21 KM";
+      } else if (normalizedGender === "FEMALE") {
+        return "Women Open 21 KM";
+      }
+    }
+    return "21 KM";
+  }
+}
+
 export const Personel = () => {
   const { form, handleChange, setForm, setIdentificationNumber } =
     useRegistrationStore();
@@ -31,6 +83,7 @@ export const Personel = () => {
   const { language } = useLanguage();
   const t = useTranslation();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
   const scrollToFirstError = (errorFields: Record<string, string>) => {
     const firstErrorField = Object.keys(errorFields)[0];
     if (!firstErrorField || !scrollContainerRef.current) return;
@@ -56,17 +109,29 @@ export const Personel = () => {
       }
     }
   };
+  
   const handleSubmit = async () => {
     const newErrors: Record<string, string> = {};
     const fields = personelFormDetails(form, handleChange, t.personal);
     let coreFieldsFilled = true;
+    
     fields.forEach((field) => {
+      // Skip removed fields from validation
+      if (
+        field.name === "occupation" ||
+        field.name === "emergencyContactName" ||
+        field.name === "emergencyContactNumber"
+      ) {
+        return;
+      }
+
       if (
         !form.isFromNarayanpur &&
         (field.name === "idType" || field.name === "govtId")
       ) {
         return;
       }
+      
       if (
         form.isInternational &&
         (field.name === "pincode" ||
@@ -76,6 +141,7 @@ export const Personel = () => {
       ) {
         return;
       }
+      
       const value = form[field.name as keyof typeof form];
       if (field.required && (!value || value.toString().trim() === "")) {
         newErrors[field.name] =
@@ -84,10 +150,11 @@ export const Personel = () => {
             : `${field.label} आवश्यक है`;
         coreFieldsFilled = false;
       }
+      
       if (
         !form.isInternational &&
         value &&
-        (field.name === "emergencyContactNumber" || field.name === "mobile")
+        field.name === "mobile"
       ) {
         if (value.toString().length !== 10) {
           newErrors[field.name] =
@@ -97,10 +164,11 @@ export const Personel = () => {
           coreFieldsFilled = false;
         }
       }
+      
       if (
         form.isInternational &&
         value &&
-        (field.name === "emergencyContactNumber" || field.name === "mobile")
+        field.name === "mobile"
       ) {
         if (!/^\d+$/.test(value.toString())) {
           newErrors[field.name] =
@@ -111,6 +179,7 @@ export const Personel = () => {
         }
       }
     });
+    
     if (form.isFromNarayanpur) {
       if (!form.idType || form.idType.trim() === "") {
         newErrors.idType =
@@ -131,6 +200,7 @@ export const Personel = () => {
         }
       }
     }
+    
     if (!form.firstName?.trim()) {
       newErrors.firstName =
         language === "en" ? "First name is required" : "पहला नाम आवश्यक है";
@@ -165,25 +235,12 @@ export const Personel = () => {
           : "टी-शर्ट आकार आवश्यक है";
       coreFieldsFilled = false;
     }
-    if (!form.emergencyContactName?.trim()) {
-      newErrors.emergencyContactName =
-        language === "en"
-          ? "Emergency contact name is required"
-          : "आपातकालीन संपर्क नाम आवश्यक है";
-      coreFieldsFilled = false;
-    }
-    if (!form.emergencyContactNumber?.trim()) {
-      newErrors.emergencyContactNumber =
-        language === "en"
-          ? "Emergency contact number is required"
-          : "आपातकालीन संपर्क नंबर आवश्यक है";
-      coreFieldsFilled = false;
-    }
     if (!form.bloodGroup?.trim()) {
       newErrors.bloodGroup =
         language === "en" ? "Blood group is required" : "रक्त समूह आवश्यक है";
       coreFieldsFilled = false;
     }
+    
     if (!form.isInternational) {
       if (!form.pincode?.trim()) {
         newErrors.pincode =
@@ -201,10 +258,14 @@ export const Personel = () => {
         coreFieldsFilled = false;
       }
     }
+    
     setErrors(newErrors);
     const isValid = coreFieldsFilled && Object.keys(newErrors).length === 0;
+    
     if (isValid) {
       const identificationNumber = await getUniqueIdentificationNumber();
+      const raceCategory = getRaceCategory(form.city, form.gender, language);
+      
       const registrationData = {
         first_name: form.firstName,
         last_name: form.lastName,
@@ -215,11 +276,11 @@ export const Personel = () => {
         country: form.country || "India",
         state: form.isInternational ? "International" : form.state,
         city: form.isInternational ? "International" : form.city,
-        occupation: form.occupation,
-        race_category: form.raceCategory,
+        occupation: "N/A",
+        race_category: raceCategory,
         t_shirt_size: form.tShirtSize,
-        emergency_contact_name: form.emergencyContactName || null,
-        emergency_contact_number: form.emergencyContactNumber || null,
+        emergency_contact_name: "N/A",
+        emergency_contact_number: "N/A",
         blood_group: form.bloodGroup || null,
         is_from_narayanpur: form.isFromNarayanpur,
         is_international: form.isInternational || false,
@@ -230,6 +291,7 @@ export const Personel = () => {
         previous_marathon_name: form.previousMarathonName || null,
         previous_marathon_rank: form.previousMarathonRank || null,
       };
+      
       try {
         const { error } = await supabase
           .schema("marathon")
@@ -251,6 +313,7 @@ export const Personel = () => {
       }, 100);
     }
   };
+  
   const handlePincodeChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
@@ -281,13 +344,11 @@ export const Personel = () => {
 
   const handleBeforeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (form.city !== "Narayanpur") {
-      handleSubmit();
-      return;
-    }
-
     setShowVerificationAlert(true);
   };
+
+  // Get the race category for the alert
+  const raceCategory = getRaceCategory(form.city, form.gender, language);
 
   return (
     <form onSubmit={handleBeforeSubmit} className="animate-fade-in">
@@ -298,8 +359,14 @@ export const Personel = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t.verification_alert.title}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t.verification_alert.description}
+            <AlertDialogDescription className="space-y-3">
+              <p>{t.verification_alert.description}</p>
+              <div className="p-3 bg-purple-50 rounded-lg border border-purple-200">
+                <p className="text-sm font-semibold text-purple-900">
+                  {language === "en" ? "Category:" : "श्रेणी:"}{" "}
+                  <span className="text-purple-700">{raceCategory}</span>
+                </p>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -318,6 +385,15 @@ export const Personel = () => {
         >
           {personelFormDetails(form, handleChange, t.personal).map(
             (detail, index) => {
+              // Skip rendering removed fields
+              if (
+                detail.name === "occupation" ||
+                detail.name === "emergencyContactName" ||
+                detail.name === "emergencyContactNumber"
+              ) {
+                return null;
+              }
+
               if (
                 !form.isFromNarayanpur &&
                 (detail.name === "idType" || detail.name === "govtId")
