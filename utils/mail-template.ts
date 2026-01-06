@@ -6,7 +6,7 @@ export const successMail = (userData: EmailUserData) => `
         <!-- Header Banner with Marathon Theme -->
         <div style="background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); color: white; padding: 40px 20px; text-align: center; position: relative;">
           <div style="position: relative; z-index: 2;">
-            <h1 style="margin: 0; font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Abujhmad Marathon 2025</h1>
+            <h1 style="margin: 0; font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Abujhmad Marathon 2026</h1>
             <p style="margin: 10px 0 0 0; font-size: 18px; opacity: 0.9;">Registration Confirmed! 🎉</p>
           </div>
           <!-- Decorative running icon -->
@@ -20,7 +20,7 @@ export const successMail = (userData: EmailUserData) => `
           <p style="font-size: 16px; color: #333;">Dear ${userData.personal_info.firstName} ${userData.personal_info.lastName},</p>
 
           <p style="font-size: 16px; color: #333; line-height: 1.6;">
-            Congratulations! You're officially registered for the Abujhmad Marathon 2025. Get ready for an incredible journey ahead!
+            Congratulations! You're officially registered for the Abujhmad Marathon 2026. Get ready for an incredible journey ahead!
           </p>
 
           <!-- Registration Details Card -->
@@ -69,7 +69,7 @@ export const successMail = (userData: EmailUserData) => `
               </li>
               <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
                 <span style="position: absolute; left: 0; top: 2px;">✓</span>
-                Join our community on social media using #AbujhmadMarathon2025
+                Join our community on social media using #AbujhmadMarathon2026
               </li>
             </ul>
           </div>
@@ -103,7 +103,7 @@ export const teamSuccessMail = (userData: EmailUserData) => `
     <!-- Header Banner with Marathon Theme -->
     <div style="background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); color: white; padding: 40px 20px; text-align: center; position: relative;">
         <div style="position: relative; z-index: 2;">
-        <h1 style="margin: 0; font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Abujhmad Marathon 2025</h1>
+        <h1 style="margin: 0; font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Abujhmad Marathon 2026</h1>
         <p style="margin: 10px 0 0 0; font-size: 18px; opacity: 0.9;">Team Registration Confirmed! 🎉</p>
         </div>
         <!-- Decorative running icon -->
@@ -117,7 +117,7 @@ export const teamSuccessMail = (userData: EmailUserData) => `
         <p style="font-size: 16px; color: #333;">Dear ${userData.personal_info.teamName},</p>
 
         <p style="font-size: 16px; color: #333; line-height: 1.6;">
-        Congratulations! Your team is officially registered for the Abujhmad Marathon 2025. Get ready for an incredible journey ahead!
+        Congratulations! Your team is officially registered for the Abujhmad Marathon 2026. Get ready for an incredible journey ahead!
         </p>
 
         <!-- Registration Details Card -->
@@ -146,7 +146,7 @@ export const teamSuccessMail = (userData: EmailUserData) => `
             </li>
             <li style="margin-bottom: 10px; padding-left: 25px; position: relative;">
             <span style="position: absolute; left: 0; top: 2px;">✓</span>
-            Join our community on social media using #AbujhmadMarathon2025
+            Join our community on social media using #AbujhmadMarathon2026
             </li>
         </ul>
         </div>
@@ -180,7 +180,7 @@ export const otpMail = (userData: EmailUserData) => `
         <!-- Header Banner with Marathon Theme -->
         <div style="background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%); color: white; padding: 40px 20px; text-align: center; position: relative;">
           <div style="position: relative; z-index: 2;">
-            <h1 style="margin: 0; font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Abujhmad Marathon 2025</h1>
+            <h1 style="margin: 0; font-size: 28px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Abujhmad Marathon 2026</h1>
             <p style="margin: 10px 0 0 0; font-size: 18px; opacity: 0.9;">Email Verification 🔐</p>
           </div>
           <!-- Decorative shield icon -->
@@ -194,7 +194,7 @@ export const otpMail = (userData: EmailUserData) => `
           <p style="font-size: 16px; color: #333;">Dear ${userData.personal_info.firstName} ${userData.personal_info.lastName},</p>
 
           <p style="font-size: 16px; color: #333; line-height: 1.6;">
-            Thank you for starting your registration for the Abujhmad Marathon 2025. To complete your registration, please verify your email address using the OTP below.
+            Thank you for starting your registration for the Abujhmad Marathon 2026. To complete your registration, please verify your email address using the OTP below.
           </p>
 
           <!-- OTP Card -->
@@ -243,7 +243,7 @@ export const otpMail = (userData: EmailUserData) => `
         <div style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #eee;">
           <p style="margin: 0; color: #666; font-size: 14px;">
             Best regards,<br>
-            <strong>Team Abujhmad Marathon 2025</strong>
+            <strong>Team Abujhmad Marathon</strong>
           </p>
 
           <!-- Social Media Links -->

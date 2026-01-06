@@ -9,7 +9,7 @@ export const siteConfig = {
     "Sports",
     "Running",
     "Narayanpur Marathon",
-    "25th January 2026",
+    "31st January 2026",
     "Peace Half Marathon",
     "21K Run",
     "Marathon India",

@@ -38,7 +38,7 @@ const HeroSection = () => {
 
   // Add countdown timer logic
   const calculateTimeLeft = () => {
-    const targetDate = new Date("2026-01-25T05:00:00+05:30").getTime();
+    const targetDate = new Date("2026-01-31T05:00:00+05:30").getTime();
     const now = new Date().getTime();
     const difference = targetDate - now;
 
@@ -262,7 +262,7 @@ const HeroSection = () => {
                   transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
                   className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1"
                 >
-                  25th
+                  31st
                 </motion.div>
                 <div className="text-white text-xs md:text-sm font-semibold">
                   January

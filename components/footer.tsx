@@ -89,7 +89,7 @@ export function Footer() {
 
       <div className="border-t border-neutral-800 p-4 md:p-8 max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
         <p className="text-neutral-400 text-sm md:text-base">
-          &copy; 2025 Peace Marathon. All rights reserved.
+          &copy; 2026 Peace Marathon. All rights reserved.
         </p>
 
         <div className="flex gap-3 md:gap-6">

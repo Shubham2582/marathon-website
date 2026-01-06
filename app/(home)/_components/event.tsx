@@ -7,7 +7,7 @@ const eventDetails = [
   {
     icon: Calendar,
     title: "Event Date",
-    description: "25th January 2026",
+    description: "31st January 2026",
     highlight: "",
   },
   {

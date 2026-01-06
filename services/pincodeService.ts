@@ -9,6 +9,9 @@ interface PostOffice {
   District: string;
   Country: string;
   Pincode: string;
+  Name?: string;
+  Block?: string;
+  Region?: string;
 }
 
 interface PincodeResponse {
@@ -26,20 +29,35 @@ export const fetchAddressFromPincode = async (
     );
     const data: PincodeResponse[] = await response.json();
 
+    console.log("API Response for pincode", pincode, ":", data);
+
     if (
       data[0].Status === "Success" &&
       data[0].PostOffice &&
       data[0].PostOffice.length > 0
     ) {
       const postOffice = data[0].PostOffice[0];
+      
+      // Fallback logic for District
+      const district = postOffice.District || 
+                       postOffice.Block || 
+                       postOffice.Region || 
+                       postOffice.Name || 
+                       "Unknown";
+      
+      console.log("Extracted District:", district);
+      
       return {
-        State: postOffice.State,
-        District: postOffice.District,
-        Country: postOffice.Country,
+        State: postOffice.State || "Unknown",
+        District: district,
+        Country: postOffice.Country || "India",
       };
     }
+    
+    console.error("Invalid pincode response:", data[0]);
     throw new Error("Invalid pincode or no data found");
   } catch (error) {
+    console.error("Pincode fetch error:", error);
     throw new Error(
       "Failed to fetch address details. Please check your pincode.",
     );
