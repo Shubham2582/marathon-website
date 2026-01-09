@@ -23,10 +23,18 @@ import {
 
 // Helper function to get race category
 function getRaceCategory(city: string, gender: string, language: string) {
-  const bastarCities = ["Jagdalpur", "Kondagaon", "Kanker", "Bijapur", "Dantewada", "Sukma", "Bastar"];
-  
+  const bastarCities = [
+    "Jagdalpur",
+    "Kondagaon",
+    "Kanker",
+    "Bijapur",
+    "Dantewada",
+    "Sukma",
+    "Bastar",
+  ];
+
   const normalizedGender = gender ? gender.toUpperCase() : "";
-  
+
   if (language === "hi") {
     if (city === "Narayanpur") {
       if (normalizedGender === "MALE") {
@@ -83,7 +91,7 @@ export const Personel = () => {
   const { language } = useLanguage();
   const t = useTranslation();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  
+
   const scrollToFirstError = (errorFields: Record<string, string>) => {
     const firstErrorField = Object.keys(errorFields)[0];
     if (!firstErrorField || !scrollContainerRef.current) return;
@@ -109,12 +117,12 @@ export const Personel = () => {
       }
     }
   };
-  
+
   const handleSubmit = async () => {
     const newErrors: Record<string, string> = {};
     const fields = personelFormDetails(form, handleChange, t.personal);
     let coreFieldsFilled = true;
-    
+
     fields.forEach((field) => {
       // Skip removed fields from validation
       if (
@@ -131,7 +139,7 @@ export const Personel = () => {
       ) {
         return;
       }
-      
+
       if (
         form.isInternational &&
         (field.name === "pincode" ||
@@ -141,7 +149,7 @@ export const Personel = () => {
       ) {
         return;
       }
-      
+
       const value = form[field.name as keyof typeof form];
       if (field.required && (!value || value.toString().trim() === "")) {
         newErrors[field.name] =
@@ -150,12 +158,8 @@ export const Personel = () => {
             : `${field.label} आवश्यक है`;
         coreFieldsFilled = false;
       }
-      
-      if (
-        !form.isInternational &&
-        value &&
-        field.name === "mobile"
-      ) {
+
+      if (!form.isInternational && value && field.name === "mobile") {
         if (value.toString().length !== 10) {
           newErrors[field.name] =
             language === "en"
@@ -164,12 +168,8 @@ export const Personel = () => {
           coreFieldsFilled = false;
         }
       }
-      
-      if (
-        form.isInternational &&
-        value &&
-        field.name === "mobile"
-      ) {
+
+      if (form.isInternational && value && field.name === "mobile") {
         if (!/^\d+$/.test(value.toString())) {
           newErrors[field.name] =
             language === "en"
@@ -179,7 +179,7 @@ export const Personel = () => {
         }
       }
     });
-    
+
     if (form.isFromNarayanpur) {
       if (!form.idType || form.idType.trim() === "") {
         newErrors.idType =
@@ -200,7 +200,7 @@ export const Personel = () => {
         }
       }
     }
-    
+
     if (!form.firstName?.trim()) {
       newErrors.firstName =
         language === "en" ? "First name is required" : "पहला नाम आवश्यक है";
@@ -240,7 +240,7 @@ export const Personel = () => {
         language === "en" ? "Blood group is required" : "रक्त समूह आवश्यक है";
       coreFieldsFilled = false;
     }
-    
+
     if (!form.isInternational) {
       if (!form.pincode?.trim()) {
         newErrors.pincode =
@@ -258,14 +258,14 @@ export const Personel = () => {
         coreFieldsFilled = false;
       }
     }
-    
+
     setErrors(newErrors);
     const isValid = coreFieldsFilled && Object.keys(newErrors).length === 0;
-    
+
     if (isValid) {
       const identificationNumber = await getUniqueIdentificationNumber();
       const raceCategory = getRaceCategory(form.city, form.gender, language);
-      
+
       const registrationData = {
         first_name: form.firstName,
         last_name: form.lastName,
@@ -291,7 +291,7 @@ export const Personel = () => {
         previous_marathon_name: form.previousMarathonName || null,
         previous_marathon_rank: form.previousMarathonRank || null,
       };
-      
+
       try {
         const { error } = await supabase
           .schema("marathon")
@@ -299,9 +299,30 @@ export const Personel = () => {
           .insert([registrationData])
           .select("id");
         if (error) {
-          console.error("Supabase insertion error:", error);
+          console.error("Error:", error);
           throw error;
         }
+
+        const visitorId = localStorage.getItem("visitorId");
+        const referralId = localStorage.getItem("referralId");
+        if (visitorId && referralId) {
+          const { error } = await supabase
+            .schema("marathon")
+            .from("registration_referrals")
+            .insert({
+              identification_number: identificationNumber,
+              referral_code: referralId,
+              visitor_id: visitorId,
+            });
+
+          if (error) {
+            console.error("Error:", error);
+            throw error;
+          }
+
+          localStorage.removeItem("referralId");
+        }
+
         setIdentificationNumber(identificationNumber);
         nextStep();
       } catch (error) {
@@ -313,7 +334,7 @@ export const Personel = () => {
       }, 100);
     }
   };
-  
+
   const handlePincodeChange = async (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
