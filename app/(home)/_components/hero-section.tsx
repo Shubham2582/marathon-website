@@ -114,9 +114,11 @@ const HeroSection = () => {
       try {
         const res = await fetch("/api/registration-count");
         const data = await res.json();
-        const count = typeof data.count === "number" ? data.count : 0;
-        setRegistrationCount(count);
-        setDisplayCount(count);
+        const actualCount = typeof data.count === "number" ? data.count : 0;
+        // Subtract 4000 from the actual count
+        const adjustedCount = Math.max(0, actualCount - 4000);
+        setRegistrationCount(adjustedCount);
+        setDisplayCount(adjustedCount);
       } catch (error) {
         console.error("Error fetching registration count:", error);
         setRegistrationCount(0);
