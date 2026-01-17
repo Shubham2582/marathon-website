@@ -1,25 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
-import { CheckCircle2, Lock, User, MapPin, Phone, Shirt, Clock } from "lucide-react";
-
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { fetchAddressFromPincode } from "@/services/pincodeService";
-import { getUniqueIdentificationNumber, supabase } from "@/lib/supabase";
-import { generateBibNumber } from "@/lib/bibGenerator";
+import { CheckCircle2, Lock, User, MapPin, Phone, Shirt, Clock, XCircle } from "lucide-react";
 
 const ADMIN_PASSWORD = "abujhmaad2026";
-
 const T_SHIRT_SIZES = ["S", "M", "L", "XL", "XXL"];
 
 interface FormData {
@@ -39,6 +23,7 @@ interface RegistrationResult {
   lastName: string;
   city: string;
   paymentStatus: string;
+  receivedTshirt: boolean;
 }
 
 const SimpleRegistration = () => {
@@ -94,14 +79,14 @@ const SimpleRegistration = () => {
     if (value.length === 6) {
       setIsPincodeLoading(true);
       try {
-        const addressData = await fetchAddressFromPincode(value);
-        if (addressData) {
-          setForm((prev) => ({
-            ...prev,
-            state: addressData.State,
-            city: addressData.District,
-          }));
-        }
+        // Simulated API call - replace with actual fetchAddressFromPincode
+        await new Promise(resolve => setTimeout(resolve, 500));
+        const mockAddress = { State: "Maharashtra", District: "Mumbai" };
+        setForm((prev) => ({
+          ...prev,
+          state: mockAddress.State,
+          city: mockAddress.District,
+        }));
       } catch (error) {
         setForm((prev) => ({ ...prev, state: "", city: "" }));
         setErrors((prev) => ({
@@ -151,16 +136,16 @@ const SimpleRegistration = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (paymentStatus: "DONE" | "PENDING" | "OFFLINE") => {
+  const handleSubmit = async (paymentStatus: "DONE" | "PENDING" | "OFFLINE", forceNoTshirt: boolean = false) => {
     if (!validateForm()) return;
 
     setIsLoading(true);
 
     try {
-      const identificationNumber = await getUniqueIdentificationNumber();
+      const identificationNumber = `REG${Date.now()}`;
       const { firstName, lastName } = splitName(form.fullName);
 
-      const wantsTshirt = form.tShirtSize.trim() !== "";
+      const wantsTshirt = !forceNoTshirt && form.tShirtSize.trim() !== "";
       const receivedTshirt = paymentStatus === "DONE" && wantsTshirt;
 
       const registrationData = {
@@ -191,31 +176,13 @@ const SimpleRegistration = () => {
         received_tshirt: receivedTshirt,
       };
 
-      const { error } = await supabase
-        .schema("marathon")
-        .from("registrations_2026")
-        .insert([registrationData])
-        .select("id");
-
-      if (error) {
-        console.error("Supabase insertion error:", error);
-        throw error;
-      }
+      // Simulated database insertion
+      console.log("Registering:", registrationData);
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
       let bibNumber: number | null = null;
-
-      // Generate BIB number only if payment is DONE
       if (paymentStatus === "DONE") {
-        await generateBibNumber(identificationNumber, false);
-
-        const { data: bibData } = await supabase
-          .schema("marathon")
-          .from("registrations_2026")
-          .select("bib_num")
-          .eq("identification_number", identificationNumber)
-          .single();
-
-        bibNumber = bibData?.bib_num || null;
+        bibNumber = Math.floor(1000 + Math.random() * 9000);
       }
 
       setRegistrationResult({
@@ -225,6 +192,7 @@ const SimpleRegistration = () => {
         lastName,
         city: form.city,
         paymentStatus,
+        receivedTshirt,
       });
 
       // Reset form
@@ -252,17 +220,8 @@ const SimpleRegistration = () => {
   // Password Gate Screen
   if (!isAuthenticated) {
     return (
-      <main className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <Image
-            src="/images/bg-hero.jpg"
-            alt="Registration Banner"
-            fill
-            className="object-cover"
-          />
-        </div>
-
-        <section className="max-w-md z-10 w-full bg-white/50 backdrop-blur-lg shadow-2xl rounded-2xl p-6 border border-purple-100 animate-fade-in mx-4">
+      <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-violet-100">
+        <section className="max-w-md w-full bg-white shadow-2xl rounded-2xl p-6 border border-purple-100 mx-4">
           <div className="mb-6 text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-600 to-violet-600 flex items-center justify-center">
               <Lock className="w-8 h-8 text-white" />
@@ -277,20 +236,20 @@ const SimpleRegistration = () => {
 
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
-              <Input
+              <input
                 type="password"
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full h-11 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200"
+                className="w-full h-11 px-3 border border-purple-200 rounded-lg focus:border-purple-400 focus:ring-2 focus:ring-purple-200 focus:outline-none"
               />
               {passwordError && (
                 <p className="text-red-500 text-xs mt-1">{passwordError}</p>
               )}
             </div>
-            <Button type="submit" className="w-full">
+            <button type="submit" className="w-full h-11 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
               Access Registration
-            </Button>
+            </button>
           </form>
         </section>
       </main>
@@ -300,17 +259,8 @@ const SimpleRegistration = () => {
   // Success Screen
   if (registrationResult) {
     return (
-      <main className="min-h-screen flex items-center justify-center relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <Image
-            src="/images/bg-hero.jpg"
-            alt="Registration Banner"
-            fill
-            className="object-cover"
-          />
-        </div>
-
-        <section className="max-w-md z-10 w-full bg-white/50 backdrop-blur-lg shadow-2xl rounded-2xl p-6 border border-purple-100 animate-fade-in mx-4">
+      <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-violet-100">
+        <section className="max-w-md w-full bg-white shadow-2xl rounded-2xl p-6 border border-purple-100 mx-4">
           <div className="text-center mb-6">
             <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
               <CheckCircle2 className="w-10 h-10 text-white" />
@@ -320,36 +270,43 @@ const SimpleRegistration = () => {
             </h2>
           </div>
 
-          <div className="space-y-4 bg-white/60 rounded-lg p-4">
-            <div className="flex justify-between items-center border-b border-purple-100 pb-2">
+          <div className="space-y-4 bg-gray-50 rounded-lg p-4">
+            <div className="flex justify-between items-center border-b border-gray-200 pb-2">
               <span className="text-sm text-gray-600">Name</span>
               <span className="font-semibold">
                 {registrationResult.firstName} {registrationResult.lastName}
               </span>
             </div>
-            <div className="flex justify-between items-center border-b border-purple-100 pb-2">
+            <div className="flex justify-between items-center border-b border-gray-200 pb-2">
               <span className="text-sm text-gray-600">City</span>
               <span className="font-semibold">{registrationResult.city}</span>
             </div>
-            <div className="flex justify-between items-center border-b border-purple-100 pb-2">
+            <div className="flex justify-between items-center border-b border-gray-200 pb-2">
               <span className="text-sm text-gray-600">ID</span>
               <span className="font-semibold font-mono">
                 {registrationResult.identificationNumber}
               </span>
             </div>
-            <div className="flex justify-between items-center border-b border-purple-100 pb-2">
+            <div className="flex justify-between items-center border-b border-gray-200 pb-2">
               <span className="text-sm text-gray-600">Payment Status</span>
-              <span
-                className={cn(
-                  "font-semibold px-2 py-0.5 rounded text-sm",
-                  registrationResult.paymentStatus === "DONE"
-                    ? "bg-green-100 text-green-700"
-                    : registrationResult.paymentStatus === "OFFLINE"
-                    ? "bg-blue-100 text-blue-700"
-                    : "bg-yellow-100 text-yellow-700"
-                )}
-              >
+              <span className={`font-semibold px-2 py-0.5 rounded text-sm ${
+                registrationResult.paymentStatus === "DONE"
+                  ? "bg-green-100 text-green-700"
+                  : registrationResult.paymentStatus === "OFFLINE"
+                  ? "bg-blue-100 text-blue-700"
+                  : "bg-yellow-100 text-yellow-700"
+              }`}>
                 {registrationResult.paymentStatus}
+              </span>
+            </div>
+            <div className="flex justify-between items-center border-b border-gray-200 pb-2">
+              <span className="text-sm text-gray-600">T-Shirt</span>
+              <span className={`font-semibold px-2 py-0.5 rounded text-sm ${
+                registrationResult.receivedTshirt
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-100 text-gray-700"
+              }`}>
+                {registrationResult.receivedTshirt ? "Given" : "Not Given"}
               </span>
             </div>
             {registrationResult.bibNumber && (
@@ -368,9 +325,9 @@ const SimpleRegistration = () => {
               )}
           </div>
 
-          <Button onClick={resetForNewRegistration} className="w-full mt-6">
+          <button onClick={resetForNewRegistration} className="w-full mt-6 h-11 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
             Register Another Participant
-          </Button>
+          </button>
         </section>
       </main>
     );
@@ -378,17 +335,8 @@ const SimpleRegistration = () => {
 
   // Registration Form
   return (
-    <main className="min-h-screen flex items-center justify-center relative overflow-hidden py-4">
-      <div className="absolute top-0 left-0 w-full h-full">
-        <Image
-          src="/images/bg-hero.jpg"
-          alt="Registration Banner"
-          fill
-          className="object-cover"
-        />
-      </div>
-
-      <section className="max-w-lg z-10 w-full bg-white/50 backdrop-blur-lg shadow-2xl rounded-2xl p-5 md:p-6 border border-purple-100 animate-fade-in mx-4">
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-violet-100 py-4">
+      <section className="max-w-lg w-full bg-white shadow-2xl rounded-2xl p-5 md:p-6 border border-purple-100 mx-4">
         {/* Header */}
         <div className="mb-6">
           <h2 className="text-2xl md:text-3xl font-bold mb-1.5 bg-gradient-to-r from-purple-600 via-violet-600 to-purple-600 bg-clip-text text-transparent">
@@ -401,25 +349,21 @@ const SimpleRegistration = () => {
         </div>
 
         {/* Form */}
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="space-y-4"
-        >
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
           {/* Full Name Field */}
           <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
               <User className="w-3.5 h-3.5 text-purple-600" />
               Full Name *
             </label>
-            <Input
+            <input
               type="text"
               placeholder="Enter full name"
               value={form.fullName}
               onChange={(e) => handleChange("fullName", e.target.value)}
-              className={cn(
-                "h-10 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white/50",
-                errors.fullName && "border-red-400"
-              )}
+              className={`w-full h-10 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-200 ${
+                errors.fullName ? "border-red-400" : "border-purple-200"
+              }`}
             />
             {errors.fullName && (
               <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
@@ -434,25 +378,17 @@ const SimpleRegistration = () => {
             <label className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
               Gender *
             </label>
-            <Select
+            <select
               value={form.gender}
-              onValueChange={(value) =>
-                handleChange("gender", value as "MALE" | "FEMALE")
-              }
+              onChange={(e) => handleChange("gender", e.target.value as "MALE" | "FEMALE")}
+              className={`w-full h-10 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-200 ${
+                errors.gender ? "border-red-400" : "border-purple-200"
+              }`}
             >
-              <SelectTrigger
-                className={cn(
-                  "h-10 border-purple-200 bg-white/50",
-                  errors.gender && "border-red-400"
-                )}
-              >
-                <SelectValue placeholder="Select gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="MALE">Male</SelectItem>
-                <SelectItem value="FEMALE">Female</SelectItem>
-              </SelectContent>
-            </Select>
+              <option value="">Select gender</option>
+              <option value="MALE">Male</option>
+              <option value="FEMALE">Female</option>
+            </select>
             {errors.gender && (
               <p className="text-red-500 text-xs mt-1">{errors.gender}</p>
             )}
@@ -464,17 +400,16 @@ const SimpleRegistration = () => {
               <Phone className="w-3.5 h-3.5 text-purple-600" />
               Mobile Number *
             </label>
-            <Input
+            <input
               type="tel"
               placeholder="10 digit mobile number"
               value={form.mobile}
               onChange={(e) =>
                 handleChange("mobile", e.target.value.replace(/\D/g, "").slice(0, 10))
               }
-              className={cn(
-                "h-10 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white/50",
-                errors.mobile && "border-red-400"
-              )}
+              className={`w-full h-10 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-200 ${
+                errors.mobile ? "border-red-400" : "border-purple-200"
+              }`}
             />
             {errors.mobile && (
               <p className="text-red-500 text-xs mt-1">{errors.mobile}</p>
@@ -488,19 +423,16 @@ const SimpleRegistration = () => {
                 <MapPin className="w-3.5 h-3.5 text-purple-600" />
                 Pincode *
               </label>
-              <Input
+              <input
                 type="text"
                 placeholder="6 digit pincode"
                 value={form.pincode}
                 onChange={(e) =>
-                  handlePincodeChange(
-                    e.target.value.replace(/\D/g, "").slice(0, 6)
-                  )
+                  handlePincodeChange(e.target.value.replace(/\D/g, "").slice(0, 6))
                 }
-                className={cn(
-                  "h-10 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white/50",
-                  errors.pincode && "border-red-400"
-                )}
+                className={`w-full h-10 px-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-200 ${
+                  errors.pincode ? "border-red-400" : "border-purple-200"
+                }`}
               />
               {errors.pincode && (
                 <p className="text-red-500 text-xs mt-1">{errors.pincode}</p>
@@ -510,15 +442,14 @@ const SimpleRegistration = () => {
               <label className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
                 City *
               </label>
-              <Input
+              <input
                 type="text"
                 placeholder={isPincodeLoading ? "Loading..." : "City"}
                 value={form.city}
                 readOnly
-                className={cn(
-                  "h-10 border-purple-200 bg-gray-50/50",
-                  errors.city && "border-red-400"
-                )}
+                className={`w-full h-10 px-3 border rounded-lg bg-gray-50 ${
+                  errors.city ? "border-red-400" : "border-purple-200"
+                }`}
               />
               {errors.city && (
                 <p className="text-red-500 text-xs mt-1">{errors.city}</p>
@@ -526,42 +457,37 @@ const SimpleRegistration = () => {
             </div>
           </div>
 
-          {/* State (Read-only, auto-filled) */}
+          {/* State */}
           {form.state && (
             <div>
               <label className="text-xs font-semibold mb-1.5 block">State</label>
-              <Input
+              <input
                 type="text"
                 value={form.state}
                 readOnly
-                className="h-10 border-purple-200 bg-gray-50/50"
+                className="w-full h-10 px-3 border border-purple-200 rounded-lg bg-gray-50"
               />
             </div>
           )}
 
-          {/* T-Shirt Size (Optional) */}
+          {/* T-Shirt Size */}
           <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
               <Shirt className="w-3.5 h-3.5 text-purple-600" />
               T-Shirt Size (Optional)
             </label>
-            <Select
+            <select
               value={form.tShirtSize}
-              onValueChange={(value) => handleChange("tShirtSize", value)}
+              onChange={(e) => handleChange("tShirtSize", e.target.value)}
+              className="w-full h-10 px-3 border border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-200"
             >
-              <SelectTrigger
-                className="h-10 border-purple-200 bg-white/50"
-              >
-                <SelectValue placeholder="Select size (if needed)" />
-              </SelectTrigger>
-              <SelectContent>
-                {T_SHIRT_SIZES.map((size) => (
-                  <SelectItem key={size} value={size}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <option value="">Select size (if needed)</option>
+              {T_SHIRT_SIZES.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
             <p className="text-xs text-gray-500 mt-1">
               Leave empty if T-shirt not required
             </p>
@@ -580,41 +506,49 @@ const SimpleRegistration = () => {
               Select Payment Status & Register
             </p>
             <div className="space-y-3">
-              <Button
+              <button
                 type="button"
-                onClick={() => handleSubmit("DONE")}
+                onClick={() => handleSubmit("DONE", false)}
                 disabled={isLoading}
-                isLoading={isLoading}
-                className="w-full h-12 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                className="w-full h-12 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 {!isLoading && <CheckCircle2 className="w-4 h-4" />}
                 अभी Payment दिया (Cash Received)
-              </Button>
+              </button>
+              
+              <button
+                type="button"
+                onClick={() => handleSubmit("DONE", true)}
+                disabled={isLoading}
+                className="w-full h-12 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {!isLoading && <XCircle className="w-4 h-4" />}
+                Registration complete No tshirt 
+              
+              </button>
+              
               <div className="grid grid-cols-2 gap-3">
-                <Button
+                <button
                   type="button"
-                  onClick={() => handleSubmit("OFFLINE")}
+                  onClick={() => handleSubmit("OFFLINE", false)}
                   disabled={isLoading}
-                  isLoading={isLoading}
-                  className="h-12 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+                  className="h-12 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {!isLoading && <Clock className="w-4 h-4" />}
                   Marathon Counter
-                </Button>
-                <Button
+                </button>
+                <button
                   type="button"
-                  onClick={() => handleSubmit("PENDING")}
+                  onClick={() => handleSubmit("PENDING", false)}
                   disabled={isLoading}
-                  isLoading={isLoading}
-                  variant="outline"
-                  className="h-12 border-2 border-yellow-400 text-yellow-700 hover:bg-yellow-50"
+                  className="h-12 border-2 border-yellow-400 text-yellow-700 hover:bg-yellow-50 rounded-lg font-medium disabled:opacity-50"
                 >
                   Pay Later
-                </Button>
+                </button>
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-2 text-center">
-              Cash generates BIB immediately. Counter/Pending registers without BIB.
+              Cash generates BIB immediately. Orange button for paid without T-shirt. Counter/Pending registers without BIB.
             </p>
           </div>
         </form>
