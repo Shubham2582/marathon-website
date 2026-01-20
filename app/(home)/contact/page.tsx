@@ -89,15 +89,6 @@ const Contact = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            className="inline-block px-6 py-2 rounded-full bg-primary/10 backdrop-blur-sm text-primary mb-6 border border-primary/40"
-          >
-            Get in Touch
-          </motion.div>
-
           <motion.h1
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
@@ -128,7 +119,7 @@ const Contact = () => {
             icon={<Globe className="w-6 h-6" />}
             label="Website"
             value="www.runabhujhmad.in"
-            link="https://www.runabhujhmad.in"
+            link="https://runabhujhmad.in/"
           />
           <ContactItem
             icon={<Phone className="w-6 h-6" />}
@@ -144,20 +135,20 @@ const Contact = () => {
             <SocialLink
               icon={<FaXTwitter />}
               platform="Twitter"
-              username="@abujhmadmarathon2025"
-              link="https://twitter.com/abujhmadmarathon2025"
+              username="@AbujhmadRun"
+              link="https://x.com/AbujhmadRun?t=ePHs1Yg5mIVjyumFguWl8Q&s=09"
             />
             <SocialLink
               icon={<FaInstagram />}
               platform="Instagram"
-              username="@abujhmadmarathon2025"
-              link="https://instagram.com/abujhmadmarathon2025"
+              username="@abujhmad_marathon"
+              link="https://www.instagram.com/abujhmad_marathon/"
             />
             <SocialLink
               icon={<FaFacebook />}
               platform="Facebook"
-              username="@abujhmadmarathon2025"
-              link="https://facebook.com/abujhmadmarathon2025"
+              username="@abujhmadmarathon"
+              link="https://www.facebook.com/profile.php?id=61571143190587&mibextid=wwXIfr&rdid=zmvwjSUPVjjRCBD1&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F15ptyfBNnX%2F%3Fmibextid%3DwwXIfr"
             />
           </div>
         </div>
