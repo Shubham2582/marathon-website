@@ -8,11 +8,10 @@ import Link from "next/link";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const frameCount = 32; // Total number of frames (img1.webp to img32.webp)
-const imagePath = "/imgAnimation/img"; // Base path for images
+const frameCount = 32;
+const imagePath = "/imgAnimation/img";
 
-const currentFrame = (index: number) =>
-  `${imagePath}${index}.webp`;
+const currentFrame = (index: number) => `${imagePath}${index}.webp`;
 
 export function ProductShowcase() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -30,10 +29,8 @@ export function ProductShowcase() {
     const context = contextRef.current;
     if (!context) return;
 
-    // Set canvas dimensions based on the first image or a default
-    // We'll adjust this after the first image loads
-    canvas.width = 1080; // Placeholder, will be updated
-    canvas.height = 1080; // Placeholder, will be updated
+    canvas.width = 1080;
+    canvas.height = 1080;
 
     // Preload images
     for (let i = 1; i <= frameCount; i++) {
@@ -41,12 +38,10 @@ export function ProductShowcase() {
       img.src = currentFrame(i);
       img.onload = () => {
         loadedImagesCount.current += 1;
-        imagesRef.current[i - 1] = img; // Store images from index 0
+        imagesRef.current[i - 1] = img;
         if (loadedImagesCount.current === 1) {
-          // Set canvas dimensions based on the first loaded image
           canvas.width = img.naturalWidth;
           canvas.height = img.naturalHeight;
-          // Draw the first frame immediately
           context.drawImage(img, 0, 0, canvas.width, canvas.height);
         }
         if (loadedImagesCount.current === frameCount) {
@@ -73,7 +68,7 @@ export function ProductShowcase() {
 
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Expo.easeOut
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     });
 
     lenis.on("scroll", ScrollTrigger.update);
@@ -95,8 +90,8 @@ export function ProductShowcase() {
     gsap.to(
       { frame: 0 },
       {
-        frame: frameCount - 1, // Animate from 0 to last frame index
-        snap: "frame", // Snap to whole numbers
+        frame: frameCount - 1,
+        snap: "frame",
         ease: "none",
         onUpdate: function () {
           const frameIndex = Math.floor(this.targets()[0].frame);
@@ -104,12 +99,12 @@ export function ProductShowcase() {
         },
         scrollTrigger: {
           trigger: animationContainerRef.current,
-          scrub: 0.5, // Smooth scrubbing
+          scrub: 0.5,
           start: "top top",
-          end: "+=3000px", // Scroll distance, 3000px roughly 300vh
-          pin: true, // Pin the container
-          anticipatePin: 1, // Improve pinning behavior
-          // markers: true, // For debugging
+          end: "+=2000px",
+          pin: true,
+          anticipatePin: 1,
+          // markers: true,
         },
       },
     );
@@ -129,7 +124,7 @@ export function ProductShowcase() {
     <div
       ref={animationContainerRef}
       className="relative w-full flex justify-center items-center overflow-hidden bg-neutral-100 text-neutral-900"
-      style={{ height: "100vh" }} // Ensure it takes full viewport height when pinned
+      style={{ height: "100vh" }}
     >
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-neutral-100 to-neutral-200 pointer-events-none opacity-80" />
@@ -147,16 +142,13 @@ export function ProductShowcase() {
           ultimate comfort with our premium moisture-wicking fabric.
         </p>
         <Link href="/registration" passHref>
-          <Button
-            size="lg"
-            className="shadow-purple-900/20 shadow-lg"
-          >
+          <Button size="lg" className="shadow-purple-900/20 shadow-lg mt-4">
             Register Now <ArrowRight className="ml-2 w-4 h-4" />
           </Button>
         </Link>
       </div>
 
-      {/* Mobile Title (visible only on small screens) */}
+      {/* Mobile Title*/}
       <div className="absolute top-20 left-0 w-full text-center md:hidden px-4 z-10">
         <h2 className="text-3xl font-bold font-sans tracking-tighter text-neutral-900">
           Official Runner's Kit
@@ -196,7 +188,9 @@ export function ProductShowcase() {
             <h3 className="text-lg font-bold font-sans text-neutral-900 group-hover:text-purple-600 transition-colors">
               Moisture Wicking
             </h3>
-            <p className="text-sm font-serif text-neutral-500">Keeps you dry & cool</p>
+            <p className="text-sm font-serif text-neutral-500">
+              Keeps you dry & cool
+            </p>
           </div>
           <div className="p-3 rounded-full bg-white border border-neutral-200 shadow-sm group-hover:border-purple-300 group-hover:shadow-purple-100 transition-all duration-300">
             <Shirt className="w-6 h-6 text-neutral-400 group-hover:text-purple-600" />
@@ -208,7 +202,9 @@ export function ProductShowcase() {
             <h3 className="text-lg font-bold font-sans text-neutral-900 group-hover:text-purple-600 transition-colors">
               Ultra Lightweight
             </h3>
-            <p className="text-sm font-serif text-neutral-500">Zero drag performance</p>
+            <p className="text-sm font-serif text-neutral-500">
+              Zero drag performance
+            </p>
           </div>
           <div className="p-3 rounded-full bg-white border border-neutral-200 shadow-sm group-hover:border-purple-300 group-hover:shadow-purple-100 transition-all duration-300">
             <Feather className="w-6 h-6 text-neutral-400 group-hover:text-purple-600" />
@@ -220,7 +216,9 @@ export function ProductShowcase() {
             <h3 className="text-lg font-bold font-sans text-neutral-900 group-hover:text-purple-600 transition-colors">
               Breathable Mesh
             </h3>
-            <p className="text-sm font-serif text-neutral-500">Maximum airflow</p>
+            <p className="text-sm font-serif text-neutral-500">
+              Maximum airflow
+            </p>
           </div>
           <div className="p-3 rounded-full bg-white border border-neutral-200 shadow-sm group-hover:border-purple-300 group-hover:shadow-purple-100 transition-all duration-300">
             <Wind className="w-6 h-6 text-neutral-400 group-hover:text-purple-600" />
@@ -228,12 +226,10 @@ export function ProductShowcase() {
         </div>
       </div>
 
-      {/* Mobile CTA (visible only on small screens at bottom) */}
+      {/* Mobile CTA */}
       <div className="absolute bottom-10 left-0 w-full flex justify-center md:hidden z-10">
         <Link href="/registration" passHref>
-          <Button className="rounded-full px-8 shadow-lg">
-            Get Your Kit
-          </Button>
+          <Button className="rounded-full px-8 shadow-lg">Get Your Kit</Button>
         </Link>
       </div>
     </div>
