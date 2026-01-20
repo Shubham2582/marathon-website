@@ -7,6 +7,7 @@ import Media from "./_components/media";
 import Track from "./_components/track";
 import Mission from "./_components/mission";
 import HeroSection from "./_components/hero-section";
+import { ProductShowcase } from "./_components/product-showcase";
 import { InstagramFeed } from "./_components/instagram-feed";
 import { ReachNarayanpur } from "./_components/reach-narayanpur";
 
@@ -25,6 +26,8 @@ export default function Home() {
       transition={{ duration: 0.8 }}
     >
       <HeroSection />
+
+      <ProductShowcase />
 
       <motion.div {...fadeInUp}>
         <InstagramFeed />
