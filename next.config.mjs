@@ -3,17 +3,17 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'hebbkx1anhila5yf.public.blob.vercel-storage.com',
+        protocol: "https",
+        hostname: "hebbkx1anhila5yf.public.blob.vercel-storage.com",
       },
       {
-        protocol: 'https',
-        hostname: 'drive.google.com',
+        protocol: "https",
+        hostname: "drive.google.com",
       },
       {
-        protocol: 'https',
-        hostname: '*.googleusercontent.com',
-      }
+        protocol: "https",
+        hostname: "*.googleusercontent.com",
+      },
     ],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -27,8 +27,9 @@ const nextConfig = {
     SMTP_USER: process.env.SMTP_USER,
     SMTP_PASS: process.env.SMTP_PASS,
     PAYU_KEY: process.env.PAYU_KEY,
-    PAYU_SALT: process.env.PAYU_SALT
-  }
-}
+    PAYU_SALT: process.env.PAYU_SALT,
+    GOOGLE_DRIVE_CREDENTIALS: process.env.GOOGLE_DRIVE_CREDENTIALS,
+  },
+};
 
-export default nextConfig
+export default nextConfig;
