@@ -35,11 +35,11 @@ export const successMail = (userData: EmailUserData) => `
             </div>
 
             <!-- Registration ID -->
-            <div style="background-color: #e3f2fd; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+            <!-- <div style="background-color: #e3f2fd; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
               <p style="margin: 0; font-size: 14px; color: #1565c0;">Bib Number</p>
               <p style="margin: 5px 0 0 0; font-size: 24px; font-weight: bold; color: #0d47a1; font-family: monospace;">${userData.bibNumber}</p>
               <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">Please save this ID for future reference</p>
-            </div>
+            </div> -->
 
             <!-- Other Details -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">

@@ -27,7 +27,8 @@ export async function POST(req: Request) {
       try {
         console.log("[Payment Callback] Generating BIB number...");
         if (!team) {
-          await generateBibNumber(identificationNumber, team);
+          // No Bib generation required.
+          // await generateBibNumber(identificationNumber, team);
 
           await supabase
             .schema("marathon")
