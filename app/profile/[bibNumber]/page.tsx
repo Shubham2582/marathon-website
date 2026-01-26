@@ -11,13 +11,22 @@ import { Loader } from "lucide-react";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getDriveFileByName } from "@/lib/google-drive";
-import Image from "next/image";
 
 interface ProfileProps {
   params: Promise<{
-    bibNumber: number;
+    bibNumber: string;
   }>;
 }
+
+const sanitizeBibNumber = (bibNumber: string): number => {
+  const regex = /^[A-Za-z]{2}/;
+
+  if (regex.test(bibNumber)) {
+    return Number(bibNumber.slice(2));
+  }
+
+  return Number(bibNumber);
+};
 
 export default async function ProfilePage({ params }: ProfileProps) {
   const { bibNumber } = await params;
@@ -26,10 +35,12 @@ export default async function ProfilePage({ params }: ProfileProps) {
     return notFound();
   }
 
+  console.log(sanitizeBibNumber(bibNumber));
+
   return (
     <main>
       <Suspense fallback={<Skeleton />}>
-        <LoadingProfile bibNumber={bibNumber} />
+        <LoadingProfile bibNumber={sanitizeBibNumber(bibNumber)} />
       </Suspense>
     </main>
   );
@@ -82,12 +93,12 @@ const LoadingProfile = async ({ bibNumber }: { bibNumber: number }) => {
             </CardHeader>
             <CardContent>
               {profileImage && profileImage.thumbnailLink ? (
-                <Image
+                <img
                   src={profileImage.thumbnailLink.replace("=s220", "=s400")}
                   alt={`Profile image of ${profile.first_name}`}
-                  width={400}
-                  height={400}
-                  className="aspect-square object-contain rounded-md"
+                  loading="lazy"
+                  referrerPolicy="no-referrer"
+                  className="aspect-square object-contain w-full rounded-md"
                 />
               ) : (
                 <div className="aspect-square bg-gray-200 rounded-md flex items-center justify-center">

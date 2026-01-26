@@ -7,7 +7,7 @@ if (!credentialsString) {
 }
 
 const credentials = JSON.parse(credentialsString);
-console.log(credentials);
+
 const auth = new google.auth.GoogleAuth({
   credentials: {
     client_email: credentials.client_email,
