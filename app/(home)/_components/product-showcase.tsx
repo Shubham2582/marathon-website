@@ -3,8 +3,7 @@ import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Button } from "@/components/ui/button";
-import { Shirt, Wind, Feather, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Shirt, Wind, Feather } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -141,11 +140,9 @@ export function ProductShowcase() {
           Engineered for the challenging terrain of Abujhmaad. Experience
           ultimate comfort with our premium moisture-wicking fabric.
         </p>
-        <Link href="/registration" passHref>
-          <Button size="lg" className="shadow-purple-900/20 shadow-lg mt-4">
-            Register Now <ArrowRight className="ml-2 w-4 h-4" />
-          </Button>
-        </Link>
+        <Button size="lg" className="shadow-purple-900/20 shadow-lg mt-4 disabled:opacity-100" disabled>
+          Registration Closed
+        </Button>
       </div>
 
       {/* Mobile Title*/}
@@ -228,9 +225,7 @@ export function ProductShowcase() {
 
       {/* Mobile CTA */}
       <div className="absolute bottom-10 left-0 w-full flex justify-center md:hidden z-10">
-        <Link href="/registration" passHref>
-          <Button className="rounded-full px-8 shadow-lg">Get Your Kit</Button>
-        </Link>
+        <Button className="rounded-full px-8 shadow-lg disabled:opacity-100" disabled>Registration Closed</Button>
       </div>
     </div>
   );
