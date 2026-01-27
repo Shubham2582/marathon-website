@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { CheckCircle2, Lock, User, MapPin, Phone, Shirt, Clock } from "lucide-react";
+import { CheckCircle2, Lock, User, MapPin, Phone, Clock } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -20,8 +20,6 @@ import { generateBibNumber } from "@/lib/bibGenerator";
 
 const ADMIN_PASSWORD = "abujhmaad2026";
 
-const T_SHIRT_SIZES = ["S", "M", "L", "XL", "XXL"];
-
 interface FormData {
   fullName: string;
   gender: "MALE" | "FEMALE" | "";
@@ -29,7 +27,6 @@ interface FormData {
   pincode: string;
   state: string;
   city: string;
-  tShirtSize: string;
 }
 
 interface RegistrationResult {
@@ -53,7 +50,6 @@ const SimpleRegistration = () => {
     pincode: "",
     state: "",
     city: "",
-    tShirtSize: "",
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -160,9 +156,6 @@ const SimpleRegistration = () => {
       const identificationNumber = await getUniqueIdentificationNumber();
       const { firstName, lastName } = splitName(form.fullName);
 
-      const wantsTshirt = form.tShirtSize.trim() !== "";
-      const receivedTshirt = paymentStatus === "DONE" && wantsTshirt;
-
       const registrationData = {
         first_name: firstName,
         last_name: lastName,
@@ -175,7 +168,7 @@ const SimpleRegistration = () => {
         city: form.city,
         occupation: "N/A",
         race_category: "21KM",
-        t_shirt_size: wantsTshirt ? form.tShirtSize : "N/A",
+        t_shirt_size: "N/A",
         emergency_contact_name: "N/A",
         emergency_contact_number: form.mobile,
         blood_group: "O+",
@@ -187,8 +180,8 @@ const SimpleRegistration = () => {
         payment_status: paymentStatus,
         previous_marathon_name: null,
         previous_marathon_rank: null,
-        wants_tshirt: wantsTshirt,
-        received_tshirt: receivedTshirt,
+        wants_tshirt: false,
+        received_tshirt: false,
       };
 
       const { error } = await supabase
@@ -235,7 +228,6 @@ const SimpleRegistration = () => {
         pincode: "",
         state: "",
         city: "",
-        tShirtSize: "",
       });
     } catch (error) {
       console.error("Error saving registration:", error);
@@ -538,34 +530,6 @@ const SimpleRegistration = () => {
               />
             </div>
           )}
-
-          {/* T-Shirt Size (Optional) */}
-          <div>
-            <label className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
-              <Shirt className="w-3.5 h-3.5 text-purple-600" />
-              T-Shirt Size (Optional)
-            </label>
-            <Select
-              value={form.tShirtSize}
-              onValueChange={(value) => handleChange("tShirtSize", value)}
-            >
-              <SelectTrigger
-                className="h-10 border-purple-200 bg-white/50"
-              >
-                <SelectValue placeholder="Select size (if needed)" />
-              </SelectTrigger>
-              <SelectContent>
-                {T_SHIRT_SIZES.map((size) => (
-                  <SelectItem key={size} value={size}>
-                    {size}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-gray-500 mt-1">
-              Leave empty if T-shirt not required
-            </p>
-          </div>
 
           {/* Error message */}
           {errors.submit && (
