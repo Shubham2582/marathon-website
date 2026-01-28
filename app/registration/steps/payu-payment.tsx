@@ -97,7 +97,7 @@ export const PayUPayment = () => {
       if (error) throw error;
       const paymentForm = document.createElement("form");
       paymentForm.method = "POST";
-      paymentForm.action = `/api/payment-callback?identification_number=${identificationNumber}&offline=true&success=true`;
+      paymentForm.action = `/api/payment-callback?identification_number=${identificationNumber}&offline=true&narayanpur=true&success=true`;
       document.body.appendChild(paymentForm);
       paymentForm.submit();
     } catch (error) {

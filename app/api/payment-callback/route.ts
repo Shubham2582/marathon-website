@@ -9,6 +9,7 @@ export async function POST(req: Request) {
   const success = url.searchParams.get("success");
   const team = Boolean(url.searchParams.get("team"));
   const offline = Boolean(url.searchParams.get("offline"));
+  const narayanpur = Boolean(url.searchParams.get("narayanpur"));
 
   try {
     if (!identificationNumber) {
@@ -33,7 +34,9 @@ export async function POST(req: Request) {
           await supabase
             .schema("marathon")
             .from("registrations_2026")
-            .update({ payment_status: offline ? "OFFLINE" : "DONE" })
+            .update({
+              payment_status: offline && !narayanpur ? "OFFLINE" : "DONE",
+            })
             .eq("identification_number", identificationNumber);
 
           console.log("[Payment Callback] BIB generated successfully:");
