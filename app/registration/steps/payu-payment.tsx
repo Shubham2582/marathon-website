@@ -21,7 +21,7 @@ export const PayUPayment = () => {
   const { form, identificationNumber } = useRegistrationStore();
   const { previousStep } = useStep();
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [includeTshirt, setIncludeTshirt] = useState(true);
+  const [includeTshirt, setIncludeTshirt] = useState(false);
   const t = useTranslation();
   const registrationFee =
     form.isFromNarayanpur || form.city === "Narayanpur" ? 0 : 299;
@@ -117,7 +117,7 @@ export const PayUPayment = () => {
             <span>{t.payment.registration_fee}</span>
             <span>₹{registrationFee}</span>
           </div>
-          <div className="flex justify-between items-center py-2 border-b">
+          {/*<div className="flex justify-between items-center py-2 border-b">
             <div className="flex items-center gap-2">
               <Input
                 type="checkbox"
@@ -153,7 +153,7 @@ export const PayUPayment = () => {
                 </DialogContent>
               </Dialog>
             </div>
-          </div>
+          </div>*/}
           <div className="flex justify-between items-center py-2 font-bold">
             <span>Total</span>
             <span>₹{totalFee}</span>

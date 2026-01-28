@@ -111,7 +111,7 @@ export function TeamDetails() {
         ))}
       </div>
 
-      <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
+      {/*<div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4">
         <input
           id="team-wants-tshirt"
           type="checkbox"
@@ -126,7 +126,7 @@ export function TeamDetails() {
           {t.team_details.wants_tshirt?.replace("{price}", "200") ||
             "Want T-shirt? (₹200 for 4 members)"}
         </label>
-      </div>
+      </div>*/}
 
       <div className="flex justify-end">
         <Button type="submit">{t.personal.next_button}</Button>

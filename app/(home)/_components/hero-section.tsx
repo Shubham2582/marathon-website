@@ -11,14 +11,14 @@ import React from "react";
 const AnimatedNumber = ({ value }: { value: string }) => {
   return (
     <span className="tabular-nums">
-      {value.split('').map((digit, index) => (
+      {value.split("").map((digit, index) => (
         <motion.span
           key={`${digit}-${index}`}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ 
+          transition={{
             duration: 0.3,
-            delay: index * 0.05
+            delay: index * 0.05,
           }}
           className="inline-block"
         >
@@ -82,29 +82,29 @@ const HeroSection = () => {
   const animateCount = React.useCallback((targetCount: number) => {
     setIsAnimating(true);
     setDisplayCount(0);
-    
+
     const duration = 2500; // 2.5 seconds animation
     const fps = 60;
     const totalFrames = (duration / 1000) * fps;
     let frame = 0;
-    
+
     const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
-    
+
     const counterAnimation = setInterval(() => {
       frame++;
       const progress = frame / totalFrames;
       const easedProgress = easeOutQuart(progress);
       const currentCount = Math.floor(easedProgress * targetCount);
-      
+
       setDisplayCount(currentCount);
-      
+
       if (frame >= totalFrames) {
         clearInterval(counterAnimation);
         setDisplayCount(targetCount);
         setTimeout(() => setIsAnimating(false), 500);
       }
     }, 1000 / fps);
-    
+
     return () => clearInterval(counterAnimation);
   }, []);
 
@@ -141,17 +141,18 @@ const HeroSection = () => {
     }, 2000);
 
     // Repeat every 5 minutes
-    const animationInterval = setInterval(() => {
-      animateCount(registrationCount);
-    }, 5 * 60 * 1000);
+    const animationInterval = setInterval(
+      () => {
+        animateCount(registrationCount);
+      },
+      5 * 60 * 1000,
+    );
 
     return () => {
       clearTimeout(initialTimeout);
       clearInterval(animationInterval);
     };
   }, [registrationCount, isLoading, animateCount]);
-
-
 
   return (
     <section className="min-h-screen relative overflow-hidden">
@@ -166,7 +167,7 @@ const HeroSection = () => {
         />
       </div>
 
-      <div className="w-full min-h-screen flex flex-col justify-center md:px-16 lg:px-24 relative z-10">
+      <div className="w-full min-h-screen mt-28 md:mt-12 flex flex-col justify-center md:px-16 lg:px-24 relative z-10">
         <motion.p
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -211,10 +212,10 @@ const HeroSection = () => {
         <div className="flex justify-center items-center">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
-              disabled
+              onClick={() => router.push("/registration")}
               className="md:py-3 h-auto md:px-6 text-xs md:text-base rounded-3xl shadow font-semibold disabled:opacity-100 disabled:cursor-not-allowed"
             >
-              Registration Closed
+              Register now
             </Button>
           </motion.div>
         </div>
@@ -312,26 +313,38 @@ const HeroSection = () => {
                   </div>
                   <span className="text-xs md:text-sm font-semibold">Days</span>
                 </div>
-                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">:</span>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">
+                  :
+                </span>
                 <div className="flex flex-col items-center gap-1">
                   <div className="text-3xl md:text-4xl lg:text-5xl font-bold h-12 md:h-14 lg:h-16 flex items-center">
                     <AnimatedNumber value={timeLeft.hours} />
                   </div>
-                  <span className="text-xs md:text-sm font-semibold">Hours</span>
+                  <span className="text-xs md:text-sm font-semibold">
+                    Hours
+                  </span>
                 </div>
-                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">:</span>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">
+                  :
+                </span>
                 <div className="flex flex-col items-center gap-1">
                   <div className="text-3xl md:text-4xl lg:text-5xl font-bold h-12 md:h-14 lg:h-16 flex items-center">
                     <AnimatedNumber value={timeLeft.minutes} />
                   </div>
-                  <span className="text-xs md:text-sm font-semibold">Minutes</span>
+                  <span className="text-xs md:text-sm font-semibold">
+                    Minutes
+                  </span>
                 </div>
-                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">:</span>
+                <span className="text-2xl md:text-3xl lg:text-4xl font-bold -mt-6">
+                  :
+                </span>
                 <div className="flex flex-col items-center gap-1">
                   <div className="text-3xl md:text-4xl lg:text-5xl font-bold h-12 md:h-14 lg:h-16 flex items-center">
                     <AnimatedNumber value={timeLeft.seconds} />
                   </div>
-                  <span className="text-xs md:text-sm font-semibold">Seconds</span>
+                  <span className="text-xs md:text-sm font-semibold">
+                    Seconds
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -347,14 +360,18 @@ const HeroSection = () => {
               {/* Animated Background Glow */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary-light/30 to-primary/20"
-                animate={isAnimating ? {
-                  opacity: [0.3, 0.8, 0.3],
-                  scale: [1, 1.2, 1],
-                } : { opacity: 0.3 }}
+                animate={
+                  isAnimating
+                    ? {
+                        opacity: [0.3, 0.8, 0.3],
+                        scale: [1, 1.2, 1],
+                      }
+                    : { opacity: 0.3 }
+                }
                 transition={{
                   duration: 4,
                   repeat: isAnimating ? Infinity : 0,
-                  ease: "easeInOut"
+                  ease: "easeInOut",
                 }}
               />
 
@@ -370,19 +387,19 @@ const HeroSection = () => {
                           left: "50%",
                           top: "50%",
                           opacity: 1,
-                          scale: 0
+                          scale: 0,
                         }}
                         animate={{
                           left: `${50 + Math.cos((i * Math.PI * 2) / 8) * 80}%`,
                           top: `${50 + Math.sin((i * Math.PI * 2) / 8) * 80}%`,
                           opacity: 0,
-                          scale: [0, 1.5, 0]
+                          scale: [0, 1.5, 0],
                         }}
                         exit={{ opacity: 0 }}
                         transition={{
                           duration: 1.5,
                           ease: "easeOut",
-                          delay: i * 0.08
+                          delay: i * 0.08,
                         }}
                       />
                     ))}
@@ -394,59 +411,81 @@ const HeroSection = () => {
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
                 initial={{ x: "-200%" }}
-                animate={isAnimating ? {
-                  x: ["200%", "200%", "-200%"]
-                } : { x: "-200%" }}
+                animate={
+                  isAnimating
+                    ? {
+                        x: ["200%", "200%", "-200%"],
+                      }
+                    : { x: "-200%" }
+                }
                 transition={{
                   duration: 2,
                   repeat: isAnimating ? 2 : 0,
                   ease: "easeInOut",
-                  times: [0, 0.5, 1]
+                  times: [0, 0.5, 1],
                 }}
               />
 
               <div className="relative z-10 flex flex-col items-center justify-center text-white min-w-[120px]">
                 <motion.div
                   className="text-3xl md:text-4xl lg:text-5xl font-bold tabular-nums"
-                  animate={isAnimating ? {
-                    scale: [1, 1.15, 1.05, 1],
-                  } : {}}
+                  animate={
+                    isAnimating
+                      ? {
+                          scale: [1, 1.15, 1.05, 1],
+                        }
+                      : {}
+                  }
                   transition={{
                     duration: 0.6,
                     repeat: isAnimating ? 3 : 0,
-                    ease: "easeInOut"
+                    ease: "easeInOut",
                   }}
                   style={{
-                    textShadow: isAnimating 
+                    textShadow: isAnimating
                       ? "0 0 20px rgba(167, 139, 250, 0.8), 0 0 40px rgba(167, 139, 250, 0.4)"
                       : "0 2px 4px rgba(0,0,0,0.3)",
-                    filter: isAnimating ? "brightness(1.3)" : "brightness(1)"
+                    filter: isAnimating ? "brightness(1.3)" : "brightness(1)",
                   }}
                 >
                   {isLoading ? (
                     <span>...</span>
                   ) : (
                     <motion.span
-                      animate={isAnimating ? {
-                        color: ["#ffffff", "#e9d5ff", "#c4b5fd", "#a78bfa", "#ffffff"],
-                      } : { color: "#ffffff" }}
+                      animate={
+                        isAnimating
+                          ? {
+                              color: [
+                                "#ffffff",
+                                "#e9d5ff",
+                                "#c4b5fd",
+                                "#a78bfa",
+                                "#ffffff",
+                              ],
+                            }
+                          : { color: "#ffffff" }
+                      }
                       transition={{
                         duration: 2.5,
-                        ease: "easeInOut"
+                        ease: "easeInOut",
                       }}
                     >
                       {displayCount.toLocaleString()}
                     </motion.span>
                   )}
                 </motion.div>
-                <motion.span 
+                <motion.span
                   className="text-xs md:text-sm font-semibold mt-1"
-                  animate={isAnimating ? {
-                    opacity: [1, 0.7, 1]
-                  } : { opacity: 1 }}
+                  animate={
+                    isAnimating
+                      ? {
+                          opacity: [1, 0.7, 1],
+                        }
+                      : { opacity: 1 }
+                  }
                   transition={{
                     duration: 1,
-                    repeat: isAnimating ? 2 : 0
+                    repeat: isAnimating ? 2 : 0,
                   }}
                 >
                   Registrations till now
@@ -462,13 +501,13 @@ const HeroSection = () => {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{
                         scale: [0, 2, 0],
-                        opacity: [0, 1, 0]
+                        opacity: [0, 1, 0],
                       }}
                       exit={{ opacity: 0 }}
                       transition={{
                         duration: 0.8,
                         repeat: 2,
-                        delay: 0.2
+                        delay: 0.2,
                       }}
                     />
                     <motion.div
@@ -476,13 +515,13 @@ const HeroSection = () => {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{
                         scale: [0, 2, 0],
-                        opacity: [0, 1, 0]
+                        opacity: [0, 1, 0],
                       }}
                       exit={{ opacity: 0 }}
                       transition={{
                         duration: 0.8,
                         repeat: 2,
-                        delay: 0.5
+                        delay: 0.5,
                       }}
                     />
                     <motion.div
@@ -490,13 +529,13 @@ const HeroSection = () => {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{
                         scale: [0, 2, 0],
-                        opacity: [0, 1, 0]
+                        opacity: [0, 1, 0],
                       }}
                       exit={{ opacity: 0 }}
                       transition={{
                         duration: 0.8,
                         repeat: 2,
-                        delay: 0.8
+                        delay: 0.8,
                       }}
                     />
                     <motion.div
@@ -504,13 +543,13 @@ const HeroSection = () => {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{
                         scale: [0, 2, 0],
-                        opacity: [0, 1, 0]
+                        opacity: [0, 1, 0],
                       }}
                       exit={{ opacity: 0 }}
                       transition={{
                         duration: 0.8,
                         repeat: 2,
-                        delay: 0.1
+                        delay: 0.1,
                       }}
                     />
                   </>

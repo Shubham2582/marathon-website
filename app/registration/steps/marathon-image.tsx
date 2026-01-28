@@ -25,7 +25,7 @@ export const MarathonImage = () => {
     if (!file) return;
 
     const ext = file.name.split(".").pop();
-    if(ext !== "jpg" && ext !== "jpeg" && ext !== "png") {
+    if (ext !== "jpg" && ext !== "jpeg" && ext !== "png") {
       toast.error("Please upload a valid image (jpg, jpeg, png)");
       return;
     }

@@ -87,12 +87,12 @@ ${error}`);
             <span>{t.payment.base_fee}</span>
             <span>₹{baseFee}</span>
           </div>
-          <div className="flex justify-between items-center py-2 border-t">
+          {/*<div className="flex justify-between items-center py-2 border-t">
             <span>
               {t.payment.tshirts} ({4} x ₹{tshirtFee})
             </span>
             <span>₹{totalTshirtFee}</span>
-          </div>
+          </div>*/}
           <div className="flex justify-between items-center py-2 border-t font-bold text-lg">
             <span>{t.payment.total}</span>
             <span>₹{totalFee}</span>
