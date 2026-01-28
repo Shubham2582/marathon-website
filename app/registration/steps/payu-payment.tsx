@@ -89,7 +89,7 @@ export const PayUPayment = () => {
         .schema("marathon")
         .from("registrations_2026")
         .update({
-          payment_status: "OFFLINE",
+          payment_status: "DONE",
           wants_tshirt: includeTshirt,
         })
         .eq("identification_number", identificationNumber);
