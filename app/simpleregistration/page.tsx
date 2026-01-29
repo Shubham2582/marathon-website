@@ -147,7 +147,9 @@ const SimpleRegistration = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (paymentStatus: "DONE" | "PENDING" | "OFFLINE") => {
+  const handleSubmit = async (
+    paymentStatus: "DONE" | "PENDING" | "OFFLINE",
+  ) => {
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -198,18 +200,18 @@ const SimpleRegistration = () => {
       let bibNumber: number | null = null;
 
       // Generate BIB number only if payment is DONE
-      if (paymentStatus === "DONE") {
-        await generateBibNumber(identificationNumber, false);
+      // if (paymentStatus === "DONE") {
+      //   await generateBibNumber(identificationNumber, false);
 
-        const { data: bibData } = await supabase
-          .schema("marathon")
-          .from("registrations_2026")
-          .select("bib_num")
-          .eq("identification_number", identificationNumber)
-          .single();
+      //   const { data: bibData } = await supabase
+      //     .schema("marathon")
+      //     .from("registrations_2026")
+      //     .select("bib_num")
+      //     .eq("identification_number", identificationNumber)
+      //     .single();
 
-        bibNumber = bibData?.bib_num || null;
-      }
+      //   bibNumber = bibData?.bib_num || null;
+      // }
 
       setRegistrationResult({
         identificationNumber,
@@ -337,27 +339,27 @@ const SimpleRegistration = () => {
                   registrationResult.paymentStatus === "DONE"
                     ? "bg-green-100 text-green-700"
                     : registrationResult.paymentStatus === "OFFLINE"
-                    ? "bg-blue-100 text-blue-700"
-                    : "bg-yellow-100 text-yellow-700"
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-yellow-100 text-yellow-700",
                 )}
               >
                 {registrationResult.paymentStatus}
               </span>
             </div>
-            {registrationResult.bibNumber && (
+            {/*{registrationResult.bibNumber && (
               <div className="flex justify-between items-center pt-2">
                 <span className="text-sm text-gray-600">BIB Number</span>
                 <span className="font-bold text-xl text-purple-600">
                   {registrationResult.bibNumber}
                 </span>
               </div>
-            )}
-            {!registrationResult.bibNumber &&
+            )}*/}
+            {/*{!registrationResult.bibNumber &&
               registrationResult.paymentStatus !== "DONE" && (
                 <p className="text-xs text-yellow-600 mt-2">
                   BIB will be generated when payment is marked as DONE
                 </p>
-              )}
+              )}*/}
           </div>
 
           <Button onClick={resetForNewRegistration} className="w-full mt-6">
@@ -393,10 +395,7 @@ const SimpleRegistration = () => {
         </div>
 
         {/* Form */}
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="space-y-4"
-        >
+        <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
           {/* Full Name Field */}
           <div>
             <label className="flex items-center gap-1.5 text-xs font-semibold mb-1.5">
@@ -410,7 +409,7 @@ const SimpleRegistration = () => {
               onChange={(e) => handleChange("fullName", e.target.value)}
               className={cn(
                 "h-10 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white/50",
-                errors.fullName && "border-red-400"
+                errors.fullName && "border-red-400",
               )}
             />
             {errors.fullName && (
@@ -435,7 +434,7 @@ const SimpleRegistration = () => {
               <SelectTrigger
                 className={cn(
                   "h-10 border-purple-200 bg-white/50",
-                  errors.gender && "border-red-400"
+                  errors.gender && "border-red-400",
                 )}
               >
                 <SelectValue placeholder="Select gender" />
@@ -461,11 +460,14 @@ const SimpleRegistration = () => {
               placeholder="10 digit mobile number"
               value={form.mobile}
               onChange={(e) =>
-                handleChange("mobile", e.target.value.replace(/\D/g, "").slice(0, 10))
+                handleChange(
+                  "mobile",
+                  e.target.value.replace(/\D/g, "").slice(0, 10),
+                )
               }
               className={cn(
                 "h-10 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white/50",
-                errors.mobile && "border-red-400"
+                errors.mobile && "border-red-400",
               )}
             />
             {errors.mobile && (
@@ -486,12 +488,12 @@ const SimpleRegistration = () => {
                 value={form.pincode}
                 onChange={(e) =>
                   handlePincodeChange(
-                    e.target.value.replace(/\D/g, "").slice(0, 6)
+                    e.target.value.replace(/\D/g, "").slice(0, 6),
                   )
                 }
                 className={cn(
                   "h-10 border-purple-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-200 bg-white/50",
-                  errors.pincode && "border-red-400"
+                  errors.pincode && "border-red-400",
                 )}
               />
               {errors.pincode && (
@@ -509,7 +511,7 @@ const SimpleRegistration = () => {
                 readOnly
                 className={cn(
                   "h-10 border-purple-200 bg-gray-50/50",
-                  errors.city && "border-red-400"
+                  errors.city && "border-red-400",
                 )}
               />
               {errors.city && (
@@ -521,7 +523,9 @@ const SimpleRegistration = () => {
           {/* State (Read-only, auto-filled) */}
           {form.state && (
             <div>
-              <label className="text-xs font-semibold mb-1.5 block">State</label>
+              <label className="text-xs font-semibold mb-1.5 block">
+                State
+              </label>
               <Input
                 type="text"
                 value={form.state}
@@ -578,7 +582,8 @@ const SimpleRegistration = () => {
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-2 text-center">
-              Cash generates BIB immediately. Counter/Pending registers without BIB.
+              Cash generates BIB immediately. Counter/Pending registers without
+              BIB.
             </p>
           </div>
         </form>
