@@ -215,7 +215,7 @@ const HeroSection = () => {
               onClick={() => router.push("/registration")}
               className="md:py-3 h-auto md:px-6 text-xs md:text-base rounded-3xl shadow font-semibold disabled:opacity-100 disabled:cursor-not-allowed"
             >
-              Register now
+              Registration Closed
             </Button>
           </motion.div>
         </div>

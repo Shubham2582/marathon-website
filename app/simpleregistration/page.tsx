@@ -41,6 +41,7 @@ interface RegistrationResult {
 
 const SimpleRegistration = () => {
   notFound();
+  
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -320,17 +321,17 @@ const SimpleRegistration = () => {
             <div className="flex justify-between items-center border-b border-purple-100 pb-2">
               <span className="text-sm text-gray-600">Name</span>
               <span className="font-semibold">
-                {registrationResult.firstName} {registrationResult.lastName}
+                {registrationResult?.firstName} {registrationResult?.lastName}
               </span>
             </div>
             <div className="flex justify-between items-center border-b border-purple-100 pb-2">
               <span className="text-sm text-gray-600">City</span>
-              <span className="font-semibold">{registrationResult.city}</span>
+              <span className="font-semibold">{registrationResult?.city}</span>
             </div>
             <div className="flex justify-between items-center border-b border-purple-100 pb-2">
               <span className="text-sm text-gray-600">ID</span>
               <span className="font-semibold font-mono">
-                {registrationResult.identificationNumber}
+                {registrationResult?.identificationNumber}
               </span>
             </div>
             <div className="flex justify-between items-center border-b border-purple-100 pb-2">
@@ -338,30 +339,16 @@ const SimpleRegistration = () => {
               <span
                 className={cn(
                   "font-semibold px-2 py-0.5 rounded text-sm",
-                  registrationResult.paymentStatus === "DONE"
+                  registrationResult?.paymentStatus === "DONE"
                     ? "bg-green-100 text-green-700"
-                    : registrationResult.paymentStatus === "OFFLINE"
+                    : registrationResult?.paymentStatus === "OFFLINE"
                       ? "bg-blue-100 text-blue-700"
                       : "bg-yellow-100 text-yellow-700",
                 )}
               >
-                {registrationResult.paymentStatus}
+                {registrationResult?.paymentStatus}
               </span>
             </div>
-            {/*{registrationResult.bibNumber && (
-              <div className="flex justify-between items-center pt-2">
-                <span className="text-sm text-gray-600">BIB Number</span>
-                <span className="font-bold text-xl text-purple-600">
-                  {registrationResult.bibNumber}
-                </span>
-              </div>
-            )}*/}
-            {/*{!registrationResult.bibNumber &&
-              registrationResult.paymentStatus !== "DONE" && (
-                <p className="text-xs text-yellow-600 mt-2">
-                  BIB will be generated when payment is marked as DONE
-                </p>
-              )}*/}
           </div>
 
           <Button onClick={resetForNewRegistration} className="w-full mt-6">
