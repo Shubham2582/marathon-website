@@ -5,5 +5,6 @@ export default function RegistrationLayout({
 }: {
   children: React.ReactNode;
 }) {
+  notFound();
   return <>{children}</>;
 }

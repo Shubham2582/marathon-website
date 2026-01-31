@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import { CheckCircle2, Lock, User, MapPin, Phone, Clock } from "lucide-react";
 
@@ -39,6 +40,7 @@ interface RegistrationResult {
 }
 
 const SimpleRegistration = () => {
+  notFound();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
