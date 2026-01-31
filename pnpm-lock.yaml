@@ -113,12 +113,18 @@ importers:
       '@supabase/supabase-js':
         specifier: ^2.48.1
         version: 2.93.1
+      '@types/canvas-confetti':
+        specifier: ^1.9.0
+        version: 1.9.0
       '@vercel/analytics':
         specifier: ^1.5.0
         version: 1.6.1(next@14.2.35(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.23(postcss@8.5.6)
+      canvas-confetti:
+        specifier: ^1.9.4
+        version: 1.9.4
       cashfree-pg:
         specifier: ^4.3.10
         version: 4.3.10
@@ -1273,6 +1279,9 @@ packages:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
 
+  '@types/canvas-confetti@1.9.0':
+    resolution: {integrity: sha512-aBGj/dULrimR1XDZLtG9JwxX1b4HPRF6CX9Yfwh3NvstZEm1ZL7RBnel4keCPSqs1ANRu1u2Aoz9R+VmtjYuTg==}
+
   '@types/caseless@0.12.5':
     resolution: {integrity: sha512-hWtVTC2q7hc7xZ/RLbxapMvDMgUnDvKvMOpKal4DrMyfGBUfB1oKaZlIRr6mJL+If3bAP6sV/QneGzF6tJjZDg==}
 
@@ -1469,6 +1478,9 @@ packages:
 
   caniuse-lite@1.0.30001766:
     resolution: {integrity: sha512-4C0lfJ0/YPjJQHagaE9x2Elb69CIqEPZeG0anQt9SIvIoOH4a4uaRl73IavyO+0qZh6MDLH//DrXThEYKHkmYA==}
+
+  canvas-confetti@1.9.4:
+    resolution: {integrity: sha512-yxQbJkAVrFXWNbTUjPqjF7G+g6pDotOUHGbkZq2NELZUMDpiJ85rIEazVb8GTaAptNW2miJAXbs1BtioA251Pw==}
 
   cashfree-pg@4.3.10:
     resolution: {integrity: sha512-A8GYvZ8Zam0YH9q5QGzR1bwru+ARYTIxXVyqfNYe7noMc9IgaG4hq/ZSpV3eA2pT5ekze74yPqZbSQMPqN9AvQ==}
@@ -3670,6 +3682,8 @@ snapshots:
 
   '@tootallnate/once@2.0.0': {}
 
+  '@types/canvas-confetti@1.9.0': {}
+
   '@types/caseless@0.12.5': {}
 
   '@types/d3-array@3.2.2': {}
@@ -3843,6 +3857,8 @@ snapshots:
   camelcase-css@2.0.1: {}
 
   caniuse-lite@1.0.30001766: {}
+
+  canvas-confetti@1.9.4: {}
 
   cashfree-pg@4.3.10:
     dependencies:
