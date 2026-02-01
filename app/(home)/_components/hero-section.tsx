@@ -100,7 +100,7 @@ const HeroSection = () => {
           </motion.span>
         </motion.h1>
 
-        <div className="flex justify-center items-center">
+        {/*<div className="flex justify-center items-center">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               onClick={() => router.push("/registration")}
@@ -109,7 +109,7 @@ const HeroSection = () => {
               Registration Closed
             </Button>
           </motion.div>
-        </div>
+        </div>*/}
 
         {/* Horizontal Stats Section - Prize Pool + Previous Edition */}
         <div className="flex flex-col justify-center items-center gap-6 md:gap-8 lg:gap-12 mt-8 md:mt-12 px-4">
