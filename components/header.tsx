@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -85,6 +86,18 @@ export function Header() {
             </button>
 
             <nav className="hidden lg:flex items-center gap-8">
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+              >
+                <Button size="sm">
+                  <Link href="/search_profile" className="">
+                    Profile
+                  </Link>
+                </Button>
+              </motion.div>
+
               {routes.map((route) => (
                 <motion.div
                   key={route.href}
@@ -131,6 +144,12 @@ export function Header() {
             className="lg:hidden w-48 z-20 fixed top-16 right-4 bg-white/70 backdrop-blur-md border border-gray-200 p-2 shadow-lg rounded-xl"
           >
             <nav className="flex flex-col text-sm">
+              <Link
+                className="font-medium py-3 px-4 bg-primary text-white transition-colors rounded-lg"
+                href="/search_profile"
+              >
+                Profile
+              </Link>
               {routes.map((route) => (
                 <Link
                   key={route.href}
