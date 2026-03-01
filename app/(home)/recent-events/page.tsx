@@ -18,6 +18,24 @@ interface EventData {
   winners: Winner[];
 }
 
+const fifthEditionImages = [
+  {
+    path: "/images/previous_events/bastar_female.jpeg",
+    category: "Bastar Female",
+  },
+  { path: "/images/previous_events/bastar_male.jpeg", category: "Bastar Male" },
+  {
+    path: "/images/previous_events/npr_female.jpeg",
+    category: "Narayanpur Female",
+  },
+  {
+    path: "/images/previous_events/npr_male.jpeg",
+    category: "Narayanpur Male",
+  },
+  { path: "/images/previous_events/open_female.jpeg", category: "Open Female" },
+  { path: "/images/previous_events/open_male.jpeg", category: "Open Male" },
+];
+
 const recentEvents: EventData[] = [
   {
     title: "21K OPEN MALE",
@@ -134,10 +152,46 @@ const RecentEvents = () => {
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Discover the highlights and results from the previous Abujhmad
-            Marathon, featuring the top 10 finishers from each event.
+            Marathon.
           </p>
         </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 md:mb-20"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
+            Abujhmad Marathon 5th Edition - 2026
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+            {fifthEditionImages.map((image, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+                viewport={{ once: true }}
+                className="flex flex-col items-center gap-2"
+              >
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg shadow-md">
+                  <Image
+                    src={image.path}
+                    alt={image.category}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <p className="text-gray-800 font-medium text-sm text-center">
+                  {image.category}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
+        <h2 className="text-3xl md:text-4xl font-bold text-primary text-center mb-8">
+          Previous Edition
+        </h2>
         {/* Grid Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
           {recentEvents.map((event, index) => (
