@@ -9,6 +9,7 @@ import {
   FaEnvelope,
 } from "react-icons/fa6";
 import { Globe, Phone } from "lucide-react";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 const ContactItem = ({
   icon,
@@ -151,6 +152,10 @@ const Contact = () => {
               link="https://www.facebook.com/profile.php?id=61571143190587&mibextid=wwXIfr&rdid=zmvwjSUPVjjRCBD1&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F15ptyfBNnX%2F%3Fmibextid%3DwwXIfr"
             />
           </div>
+        </div>
+
+        <div className="flex justify-center">
+          <PoweredByEventloops />
         </div>
       </div>
     </div>

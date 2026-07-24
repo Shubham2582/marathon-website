@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 interface FAQItemProps {
   question: string;
@@ -167,6 +168,10 @@ const FAQ = () => {
               Contact our support team
             </a>
           </p>
+
+          <div className="mt-8 flex justify-center">
+            <PoweredByEventloops />
+          </div>
         </motion.div>
       </div>
     </main>

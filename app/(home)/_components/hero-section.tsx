@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 const HeroSection = () => {
   const router = useRouter();
@@ -63,6 +64,15 @@ const HeroSection = () => {
             5th Edition
           </motion.span>
         </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="flex justify-center mt-4"
+        >
+          <PoweredByEventloops variant="dark" className="text-white/90 drop-shadow" />
+        </motion.div>
 
         {/*<div className="flex justify-center items-center">
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>

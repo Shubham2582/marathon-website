@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 export default function SearchProfile() {
   const [bibNumber, setBibNumber] = useState("");
@@ -44,6 +45,10 @@ export default function SearchProfile() {
             Search
           </motion.button>
         </form>
+
+        <div className="mt-4 flex justify-center">
+          <PoweredByEventloops variant="dark" className="text-white/90" />
+        </div>
       </motion.div>
     </main>
   );
