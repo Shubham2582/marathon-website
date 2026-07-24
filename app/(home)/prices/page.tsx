@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Trophy, Award } from "lucide-react";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 const PriceCard = ({
   category,
@@ -193,6 +194,10 @@ const Prices = () => {
           <p className="text-gray-600 text-sm">
             * All prizes are subject to applicable taxes and terms & conditions
           </p>
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <PoweredByEventloops />
         </div>
       </div>
     </div>
