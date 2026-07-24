@@ -9,6 +9,7 @@ import { useRegistrationStore } from "@/store/useRegistration";
 import { useStep } from "@/store/useStep";
 import { Download, Loader2, Image as ImageIcon, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 import { API_URL } from "@/lib/env";
 
 interface UserData {
@@ -560,6 +561,15 @@ const SuccessContent = () => {
             >
               Return to Home
             </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-6 flex justify-center"
+          >
+            <PoweredByEventloops />
           </motion.div>
         </motion.div>
 

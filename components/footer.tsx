@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Facebook, Twitter, Instagram, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 export function Footer() {
   return (
@@ -91,6 +92,8 @@ export function Footer() {
         <p className="text-neutral-400 text-sm md:text-base">
           &copy; ABUJHMAD MARATHON organized by Baster Event Management
         </p>
+
+        <PoweredByEventloops variant="dark" />
 
         <div className="flex gap-3 md:gap-6">
           {[

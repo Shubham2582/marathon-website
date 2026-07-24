@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import { useStep } from "@/store/useStep";
 import { useTeamRegistrationStore } from "@/store/useTeamRegistration";
 import { useTranslation } from "@/store/useLanguage";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 interface UserData {
   email: string;
@@ -231,6 +232,15 @@ const SuccessContent = () => {
             >
               {t.success_page.return_to_home}
             </Link>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+            className="mt-6 flex justify-center"
+          >
+            <PoweredByEventloops />
           </motion.div>
         </motion.div>
 

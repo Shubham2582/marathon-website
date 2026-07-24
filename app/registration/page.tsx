@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { User, Users } from "lucide-react";
+import { PoweredByEventloops } from "@/components/powered-by-eventloops";
 
 const SelectionPage = () => {
   return (
@@ -50,6 +51,10 @@ const SelectionPage = () => {
               </p>
             </Button>
           </Link>
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <PoweredByEventloops variant="dark" className="text-white/80" />
         </div>
       </section>
     </main>
